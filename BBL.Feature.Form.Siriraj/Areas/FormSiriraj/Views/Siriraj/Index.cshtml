@@ -1,0 +1,770 @@
+﻿@model Sitecore.Data.Items.Item
+
+@using System;
+@using System.Collections.Specialized;
+@using System.Linq.Expressions;
+
+@using Sitecore.Data.Fields
+@using Sitecore.Data.Items
+@using Sitecore.Resources.Media
+
+<script src="~/assets/Siriraj/js/jquery-1.10.2.min.js"></script>
+<script src="~/assets/Siriraj/js/vue.min.js"></script>
+<script src="~/assets/Siriraj/js/vue-form.min.js"></script>
+<script src="~/assets/Siriraj/js/axios.min.js"></script>
+<script src="~/assets/Siriraj/js/stringformat.js"></script>
+<script src="~/assets/Siriraj/js/vue-thai-address-input.js"></script>
+
+<script src="~/assets/Siriraj/js/vue-qrcode.js"></script>
+<script src="~/assets/Siriraj/js/vue-barcode.js"></script>
+<link href="~/assets/Siriraj/css/Style.css" rel="stylesheet" />
+<link href="~/assets/Siriraj/css/vue-thai-address-input.css" rel="stylesheet" />
+
+
+@functions{
+    public static string GetImageURL(Sitecore.Data.Fields.ImageField imageField)
+    {
+        string imageURL = string.Empty;
+        if (imageField != null && imageField.MediaItem != null)
+        {
+            Sitecore.Data.Items.MediaItem image = new Sitecore.Data.Items.MediaItem(imageField.MediaItem);
+            imageURL = Sitecore.StringUtil.EnsurePrefix('/', Sitecore.Resources.Media.MediaManager.GetMediaUrl(image));
+        }
+        return imageURL;
+    }
+}
+<div id="app" class="inner-container">
+    <div class="panel panel-default panel-body general-form">
+        <div class="row">
+            <div id="divstg" class="col-md-8 col-md-offset-2 text-center">
+                <img class="img-responsive" src="@GetImageURL(Model.Fields["ImageHeader"])">
+                @*<h1 class="title-2 small pad-bot">@Model.Fields["Head"]</h1>*@
+                @*<h4 class="pad-bot">@Model.Fields["Title"]</h4>*@
+            </div>
+        </div>
+
+@*
+    //
+    // Main form section
+    //
+*@
+
+        <div id="MainForm">
+            <input type="hidden" id="Type1" name="Type1" value="@Model.Fields["ButtonType1"]">
+            <input type="hidden" id="Type2" name="Type2" value="@Model.Fields["ButtonType2"]">
+            <input type="hidden" id="Type3" name="Type3" value="@Model.Fields["ButtonType3"]">
+            <input type="hidden" id="Summary" name="Summary" value="@Model.Fields["Total"]">
+            <input type="hidden" id="TaxID" name="TaxID" value="@Model.Fields["TaxID"]">
+            <input type="hidden" id="Suffix" name="Suffix" value="@Model.Fields["Suffix"]">
+            <input type="hidden" id="ServiceCode" name="ServiceCode" value="@Model.Fields["ServiceCode"]">
+
+            <vue-form :state="formstate" v-model="formstate" @@submit.prevent="dummy" class="general-form" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div class="item-shadow">
+                    <div id="divstg" class="title-label" v-show="false">
+                        @Html.Raw(Model.Fields["Title"])
+                    </div>
+                    <div id="divstg">
+                        <h4 class="text-label">@Model.Fields["PersonalLabel"]</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Name)">
+                                <input type="text" name="Name" class="form-control" placeholder="@Model.Fields["Name"] *" required size="50" maxlength="50" v-model="model.Name">
+
+                                <field-messages auto-label name="Name" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                </field-messages>
+                            </validate>
+                        </div>
+                        <div class="col-md-6">
+                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Surname)">
+                                <input type="text" name="Surname" class="form-control" placeholder="@Model.Fields["Surname"] *" required size="50" maxlength="50" v-model="model.Surname">
+
+                                <field-messages auto-label name="Surname" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                </field-messages>
+                            </validate>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <validate auto-label class="form-group required-field" :custom="{validateThaiCitizenID: validateThaiCitizenID}" :class="fieldClassName(formstate.PersonalID)">
+                                <input type="number" name="PersonalID" class="form-control" placeholder="@Model.Fields["PersonalID"] *" required size="13" maxlength="13" minlength="13" v-model="model.PersonalID">
+
+                                <field-messages auto-label name="PersonalID" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    <div class="small-pad" slot="validateThaiCitizenID">@Model.Fields["ValPersonalID"] ({{model.PersonalID.length}})</div>
+                                    <div class="small-pad" slot="maxlength">@Model.Fields["ValMaxPersonalID"]</div>
+                                </field-messages>
+                            </validate>
+                        </div>
+                        <div class="col-md-6">
+                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Mobile)">
+                                <input type="number" name="Mobile" class="form-control" placeholder="@Model.Fields["Mobile"] *" pattern="^0\d{9,11}$" required size="11" maxlength="11" v-model="model.Mobile">
+
+                                <field-messages auto-label name="Mobile" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    <div class="small-pad" slot="pattern">@Model.Fields["ValMobileZero"]</div>
+                                    <div class="small-pad" slot="maxlength">@Model.Fields["ValMobile"]</div>
+                                </field-messages>
+                            </validate>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Mobile2)">
+                                <input type="number" name="Mobile2" class="form-control" placeholder="@Model.Fields["Mobile2"]" pattern="^0\d{9,11}$" size="10" maxlength="10" v-model="model.Mobile2">
+
+                                <field-messages auto-label name="Mobile2" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                    <div class="small-pad" slot="pattern">@Model.Fields["ValMobileZero"]</div>
+                                    <div class="small-pad" slot="maxlength">@Model.Fields["ValMobile"]</div>
+                                </field-messages>
+                            </validate>
+                        </div>
+                        <div class="col-md-6">
+                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Email)">
+                                <input type="email" name="Email" class="form-control" placeholder="@Model.Fields["Email"]" size="50" maxlength="50" v-model="model.Email">
+
+                                <field-messages auto-label name="Email" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    <div class="small-pad" slot="email">@Model.Fields["ValEmail"]</div>
+                                </field-messages>
+                            </validate>
+                        </div>
+                    </div>
+                    @*<div id="divstg">
+                <h4 class="text-label">@Model.Fields["SelectLabel"]</h4>
+            </div>*@
+
+                    <div class="row scroll-x">
+                        <validate auto-label class="required-field" :class="fieldClassName(formstate.Type)">
+                            <div class="col-md-4 col-sm-4 text-center">
+                                <div class="frame form-group">
+                                    <label for="squaredTwo">
+                                        <input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" :required="required.Type">
+                                        <span class="checkmark">
+                                            <img class="img-responsive pointer" v-on:click="ClickBtn(1)" src="@GetImageURL(Model.Fields["Type1"])">
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 text-center">
+                                <div class="frame form-group">
+                                    <label for="squaredTwo">
+                                        <input name="Type" type="checkbox" class="checkbox" value="radio" v-on:change="Calculate" v-model="model.Type[1]" :required="required.Type">
+                                        <span class="checkmark">
+                                            <img class="img-responsive pointer" v-on:click="ClickBtn(2)" src="@GetImageURL(Model.Fields["Type2"])">
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 text-center">
+                                <div class="frame form-group">
+                                    <label for="squaredTwo">
+                                        <input name="Type" type="checkbox" class="checkbox" value="camera" v-on:change="Calculate" v-model="model.Type[2]" :required="required.Type">
+                                        <span class="checkmark">
+                                            <img class="img-responsive pointer" v-on:click="ClickBtn(3)" src="@GetImageURL(Model.Fields["Type3"])">
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <field-messages auto-label name="Type" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                @*<div class="text-center small-pad" slot="validateType">@Model.Fields["ReqType"]</div>*@
+                                <div class="text-center small-pad pad-bot" slot="required" v-if="validateType">@Model.Fields["ReqType"]</div>                               
+                            </field-messages>
+                        </validate>
+                    </div>
+                    <div class="row">
+                        @*<div id="divstg" class="col-md-12">
+                <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
+            </div>*@
+                        @{
+                            string Receipt = Model.Fields["ReceiptOption"].Value;
+                            NameValueCollection ReceiptValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(Receipt);
+                            foreach (string key in ReceiptValueCollection.Keys)
+                            {
+                                string[] values = ReceiptValueCollection.GetValues(key);
+                                foreach (string value in values)
+                                {
+                                    <div class="col-md-6 col-sm-6">
+                                        <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Receipt)">
+                                            <input type="radio" name="Receipt" class="form-control radio-align" v-model="model.Receipt" value="@key" v-on:change="ReceiptClick"><label class="radiovalue-align">@value</label>
+
+                                            <field-messages auto-label name="Receipt" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                                <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                            </field-messages>
+                                        </validate>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+
+                    <div id="Receipt" v-show="false">
+                        <div id="divstg">
+                            <h4 class="text-label">@Model.Fields["AddressLabel"]</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Address)">
+                                    <input type="text" name="Address" class="form-control" placeholder="@Model.Fields["Address"] *" v-on:keyup="AddressOptionClick" :required="required.Receipt" size="20" maxlength="20" v-model="model.Address">
+
+                                    <field-messages auto-label name="Address" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Building)">
+                                    <input type="text" name="Building" class="form-control" placeholder="@Model.Fields["Building"] *" v-on:keyup="AddressOptionClick" :required="required.Receipt" size="50" maxlength="50" v-model="model.Building">
+
+                                    <field-messages auto-label name="Building" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Soi)">
+                                    <input type="text" name="Soi" class="form-control" placeholder="@Model.Fields["Soi"] *" v-on:keyup="AddressOptionClick" :required="required.Receipt" size="20" maxlength="20" v-model="model.Soi">
+
+                                    <field-messages auto-label name="Soi" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Road)">
+                                    <input type="text" name="Road" class="form-control" placeholder="@Model.Fields["Road"] *" v-on:keyup="AddressOptionClick" :required="required.Receipt" size="50" maxlength="50" v-model="model.Road">
+
+                                    <field-messages auto-label name="Road" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Subdisticnt)">
+                                    @*<input type="text" name="Subdisticnt" class="form-control" placeholder="@Model.Fields["Subdistrict"] *" v-on:keyup="AddressOptionClick" required size="20" maxlength="20" v-model="model.Subdisticnt">*@
+                                    <thai-address-input name="Subdisticnt" placeholder="@Model.Fields["Subdistinct"] *" type="subdistrict" v-model="model.Subdistrict" input-class="form-control" @@selected="onSelected" v-on:keyup="copyAddressBack" :required="required.Receipt"></thai-address-input>
+                                    
+                                    <field-messages auto-label name="Subdisticnt" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Distinct)">
+                                    @*<input type="text" name="Distinct" class="form-control" placeholder="@Model.Fields["Distinct"] *" v-on:keyup="AddressOptionClick" required size="50" maxlength="50" v-model="model.Distinct">*@
+                                    <thai-address-input name="Distinct" placeholder="@Model.Fields["Distinct"] *" type="district" v-model="model.District" input-class="form-control" @@selected="onSelected" v-on:keyup="copyAddressBack" :required="required.Receipt"></thai-address-input>
+
+                                    <field-messages auto-label name="Distinct" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Province)">
+                                    @*<input type="text" name="Province" class="form-control" placeholder="@Model.Fields["Province"] *" v-on:keyup="AddressOptionClick" required size="20" maxlength="20" v-model="model.Province">*@
+                                    <thai-address-input name="Province" placeholder="@Model.Fields["Province"] *" type="province" v-model="model.Province" input-class="form-control" @@selected="onSelected" v-on:keyup="copyAddressBack" :required="required.Receipt"></thai-address-input>
+
+                                    <field-messages auto-label name="Province" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Zip)">
+                                    @*<input type="number" name="Zip" class="form-control" placeholder="@Model.Fields["Postcode"] *" v-on:keyup="AddressOptionClick" required size="5" maxlength="5" v-model="model.Zip">*@
+                                    <thai-address-input name="Zip" placeholder="@Model.Fields["Postcode"] *" type="postalCode" v-model="model.Zip" input-class="form-control" @@selected="onSelected" v-on:keyup="copyAddressBack" :required="required.Receipt"></thai-address-input>
+
+                                    <field-messages auto-label name="Zip" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                        <div class="small-pad" slot="maxlength">@Model.Fields["ValMaxZip"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*<div class="col-md-12">
+                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Donate)">
+                                <input type="number" name="Donate" class="form-control" placeholder="@Model.Fields["Donate"]" v-on:keyup="Calculate" v-model="model.Donate" size="50" maxlength="50" v-model="model.Donate">
+
+                                <field-messages auto-label name="Donate" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                            <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                        </field-messages>
+                            </validate>
+                        </div>*@
+                        <div id="divstg" class="col-md-12">
+                            <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
+                        </div>
+                        @{
+                            string Deliver = Model.Fields["Deliver"].Value;
+                            NameValueCollection nameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(Deliver);
+                            foreach (string key in nameValueCollection.Keys)
+                            {
+                                string[] values = nameValueCollection.GetValues(key);
+                                foreach (string value in values)
+                                {
+                                    <div class="col-md-6 col-sm-6">
+                                        <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Delivery)">
+                                            <input type="radio" name="Delivery" class="form-control radio-align" v-model="model.Delivery" value="@key" v-on:change="DeliveryClick"><label class="radiovalue-align">@value</label>
+
+                                            <field-messages auto-label name="Delivery" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                                <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                            </field-messages>
+                                        </validate>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="row" id="AddressOption" v-show="false">
+                        @*<div id="divstg" class="col-md-12">
+                <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
+            </div>*@
+                        @{
+                            string addressoption = Model.Fields["AddressOption"].Value;
+                            NameValueCollection addressoptionCollection = Sitecore.Web.WebUtil.ParseUrlParameters(addressoption);
+                            foreach (string key in addressoptionCollection.Keys)
+                            {
+                                string[] values = addressoptionCollection.GetValues(key);
+                                foreach (string value in values)
+                                {
+                                    <div class="col-md-6 col-sm-6">
+                                        <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.AddressOption)">
+                                            <input type="radio" name="AddressOption" class="form-control radio-align" v-model="model.AddressOption" value="@key" v-on:change="AddressOptionClick"><label class="radiovalue-align">@value</label>
+
+                                            <field-messages auto-label name="AddressOption" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                                <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                            </field-messages>
+                                        </validate>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="row" id="ShowBranch" v-show="true">
+                        @*<div id="divstg" class="col-md-12">
+                    <h4 class="text-label">@Model.Fields["BranchLabel"]</h4>
+                </div>*@
+                        <div class="col-md-6">
+                            <validate auto-label class="form-group cust-select required-field" :class="fieldClassName(formstate.SelectProvince)">
+                                <select name="SelectProvince" class="form-control none-bgd" id="selProvince" v-model="model.BranchProvince"> 
+                                    <option value="" selected disabled>@Model.Fields["BranchProvince"]</option>
+                                    <option v-for="(p, index) in Provinces" v-bind:value="p.Province" v-bind:key="index">{{p.Province}}</option>
+                                </select>
+                                <field-messages auto-label name="SelectProvince" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                </field-messages>
+                            </validate>
+                        </div>
+                        <div class="col-md-6">
+                            <validate auto-label class="form-group cust-select required-field" :class="fieldClassName(formstate.SelectBranch)">
+                                <select name="SelectBranch" class="form-control none-bgd" id="selBranch" v-model="model.Branch">
+                                    <option value="" selected disabled>@Model.Fields["Branch"]</option>
+                                    <option v-for="(c, index) in Branches" v-bind:value="c.BranchCode" v-bind:key="index">{{c.BranchName}}</option>
+                                </select>
+                                <field-messages auto-label name="SelectBranch" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                </field-messages>
+                            </validate>
+                        </div>
+                    </div>
+                    <div id="PostNote" v-show="false">
+                        <div id="divstg">
+                            <h4 class="text-label">@Model.Fields["DeliverAddressLabel"]</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostAddress)">
+                                    <input type="text" name="PostAddress" class="form-control" placeholder="@Model.Fields["Address"] *" v-on:keyup="copyAddressBack" :required="required.Post" size="20" maxlength="20" v-model="model.PostAddress">
+
+                                    <field-messages auto-label name="PostAddress" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostBuilding)">
+                                    <input type="text" name="PostBuilding" class="form-control" placeholder="@Model.Fields["Building"] *" v-on:keyup="copyAddressBack" :required="required.Post" size="50" maxlength="50" v-model="model.PostBuilding">
+
+                                    <field-messages auto-label name="PostBuilding" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostSoi)">
+                                    <input type="text" name="PostSoi" class="form-control" placeholder="@Model.Fields["Soi"] *" v-on:keyup="copyAddressBack" :required="required.Post" size="20" maxlength="20" v-model="model.PostSoi">
+
+                                    <field-messages auto-label name="PostSoi" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostRoad)">
+                                    <input type="text" name="PostRoad" class="form-control" placeholder="@Model.Fields["Road"] *" v-on:keyup="copyAddressBack" :required="required.Post" size="50" maxlength="50" v-model="model.PostRoad">
+
+                                    <field-messages auto-label name="PostRoad" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostSubdisticnt)">
+                                    @*<input type="text" name="PostSubdisticnt" class="form-control" placeholder="@Model.Fields["Subdistinct"] *" v-on:keyup="copyAddressBack" required size="20" maxlength="20" v-model="model.PostSubdisticnt">*@
+                                    <thai-address-input name="PostSubdisticnt" placeholder="@Model.Fields["Subdistinct"] *" type="subdistrict" v-model="model.PostSubdistrict" input-class="form-control" @@selected="onPostSelected" v-on:keyup="copyAddressBack" :required="required.Post"></thai-address-input>
+
+                                    <field-messages auto-label name="PostSubdisticnt" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostDistinct)">
+                                    @*<input type="text" name="PostDistinct" class="form-control" placeholder="@Model.Fields["Distinct"] *" v-on:keyup="copyAddressBack" required size="50" maxlength="50" v-model="model.PostDistinct">*@
+                                    <thai-address-input name="PostDistinct" placeholder="@Model.Fields["Distinct"] *" type="distinct" v-model="model.PostDistrict" input-class="form-control" @@selected="onPostSelected" v-on:keyup="copyAddressBack" :required="required.Post"></thai-address-input>
+
+                                    <field-messages auto-label name="PostDistinct" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostProvince)">
+                                    @*<input type="text" name="PostProvince" class="form-control" placeholder="@Model.Fields["Province"] *" v-on:keyup="copyAddressBack" required size="20" maxlength="20" v-model="model.PostProvince">*@
+                                    <thai-address-input name="PostProvince" placeholder="@Model.Fields["Province"] *" type="province" v-model="model.PostProvince" input-class="form-control" @@selected="onPostSelected" v-on:keyup="copyAddressBack" :required="required.Post"></thai-address-input>
+
+                                    <field-messages auto-label name="PostProvince" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+
+                            <div class="col-md-6">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostZip)">
+                                    @*<input type="number" name="PostZip" class="form-control" placeholder="@Model.Fields["Postcode"] *" v-on:keyup="copyAddressBack" required size="5" maxlength="5" v-model="model.PostZip">*@
+                                    <thai-address-input name="PostZip" placeholder="@Model.Fields["Postcode"] *" type="postalCode" v-model="model.PostZip" input-class="form-control" @@selected="onPostSelected" v-on:keyup="copyAddressBack" :required="required.Post"></thai-address-input>
+
+                                    <field-messages auto-label name="PostZip" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                        <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                        <div class="small-pad" slot="maxlength">@Model.Fields["ValMaxZip"]</div>
+                                    </field-messages>
+                                </validate>
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <p class="pad-bot">@Model.Fields["PostNote"]</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="divstg" class="col-md-12">
+                            @*<h4 class="text-label">@Model.Fields["TotalLabel"]</h4>*@
+                            <p class="total text-center">{{AmountSummary}}</p>
+                        </div>
+                    </div>
+                    <div id="SaveData" class="text-label pad-top">
+                        <div class="row text-center">
+                            <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onConfirm" type="submit">@Model.Fields["Submit"]</button></div>
+                            <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="resetForm" type="reset">@Model.Fields["Cancel"]</button></div>
+                        </div>
+                    </div>
+                    <div id="divstg" class="title-label">
+                        @Html.Raw(Model.Fields["Remark"])
+                    </div>
+                </div>
+            </vue-form>
+        </div>
+@*
+    //
+    // Confirm section
+    //        
+*@
+        <div id="ConfirmForm" class="general-form" v-show="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="divstg">
+                        <h4 class="text-label">@Model.Fields["PersonalLabel"]</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Name"] </p> <p class="result-label">{{result.Name}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Surname"] </p> <p class="result-label">{{result.Surname}}</p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{result.PersonalID}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{result.Mobile}}</p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{result.Mobile2}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Email"] </p> <p class="result-label">{{result.Email}}</p></div>
+            </div>
+            <div id="ConfirmAddress" class="pad-bot" v-if="model.Receipt == '1'">
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.Address}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.Soi}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.Road}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.Subdistrict}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.District}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.Province}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.Zip}}</p></div>
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+            <div class="row pad-top pad-bot">
+                <div class="col-md-12">
+                    <div class="table-overflow">
+                        <table class="result-table">
+                            <tbody>
+                                <tr>
+                                    <th class="left">@Model.Fields["ResultType"]</th>
+                                    <th class="right">@Model.Fields["ResultSelect"]</th>
+                                    <th class="right">@Model.Fields["ResultTotal"]</th>
+                                </tr>
+                                <tr v-for="Pig in model.Piggy">
+                                    <td class="left">{{Pig.Text}}</td>
+                                    <td class="right">{{Pig.Count}}</td>
+                                    <td class="right">{{Pig.Amount}}</td>
+                                </tr>
+                                <tr v-if="model.Delivery === '1'">
+                                    <td colspan="2">@Model.Fields["ResultDelivery"]</td>
+                                    <td class="right">{{this.twoDigit(model.DeliveryAmount)}}</td>
+                                </tr>
+                                <tr class="totalamount">
+                                    <td colspan="2" class="result-bold">@Model.Fields["ResultGrandTotal"]</td>
+                                    <td class="right result-bold">{{this.twoDigit(model.GrandTotal)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="divstg">
+                        <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
+                    </div>
+                </div>
+                    @{
+                        string ResDeliver = Model.Fields["Deliver"].Value;
+                        NameValueCollection ResnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(ResDeliver);
+                        foreach (string key in ResnameValueCollection.Keys)
+                        {
+                            string[] values = ResnameValueCollection.GetValues(key);
+                            foreach (string value in values)
+                            {
+                                <div class="col-md-12 col-sm-12" v-if="model.Delivery == @key">
+                                    <p class="result-label" v-if="model.Delivery == '1'">@value</p>
+                                    <p class="result-label" v-if="model.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.Branch}}</p>
+                                </div>
+                            }
+                        }
+                    }
+            </div>
+
+            <div id="ConfirmPostAddress" class="pad-bot" v-if="model.Delivery == '1'">
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.PostAddress}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.PostSoi}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.PostRoad}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.PostSubdistrict}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.PostDistrict}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.PostProvince}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.PostZip}}</p></div>
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+            <div class="text-label pad-top">
+                <div class="row text-center">
+                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onSubmit" type="submit">@Model.Fields["ConfirmButton"]</button></div>
+                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onCancelConfirm" type="reset">@Model.Fields["BackButton"]</button></div>
+                </div>
+            </div>
+        </div>
+
+@*
+    //
+    // Receipt section
+    //
+*@
+        <div id="FinalForm" class="general-form" v-show="true">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="divstg">
+                        <h4 class="text-label">@Model.Fields["PersonalLabel"]</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Name"] </p> <p class="result-label">{{result.Name}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Surname"] </p> <p class="result-label">{{result.Surname}}</p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{this.maskID(model.PersonalID)}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{result.Mobile}}</p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{result.Mobile2}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Email"] </p> <p class="result-label">{{result.Email}}</p></div>
+            </div>
+            <div id="ReceiptAddress" class="pad-bot" v-if="model.Receipt == '1'">
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.Address}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.Soi}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.Road}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.Subdistrict}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.District}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.Province}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.Zip}}</p></div>
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+            <div class="row pad-top pad-bot">
+                <div class="col-md-12">
+                    <div class="table-overflow">
+                        <table class="result-table">
+                            <tbody>
+                                <tr>
+                                    <th class="left">@Model.Fields["ResultType"]</th>
+                                    <th class="right">@Model.Fields["ResultSelect"]</th>
+                                    <th class="right">@Model.Fields["ResultTotal"]</th>
+                                </tr>
+                                <tr v-for="Pig in model.Piggy">
+                                    <td class="left">{{Pig.Text}}</td>
+                                    <td class="right">{{Pig.Count}}</td>
+                                    <td class="right">{{Pig.Amount}}</td>
+                                </tr>
+                                <tr v-if="model.Delivery === '1'">
+                                    <td colspan="2">@Model.Fields["ResultDelivery"]</td>
+                                    <td class="right">{{this.twoDigit(model.DeliveryAmount)}}</td>
+                                </tr>
+                                <tr class="totalamount">
+                                    <td colspan="2" class="result-bold">@Model.Fields["ResultGrandTotal"]</td>
+                                    <td class="right result-bold">{{this.twoDigit(model.GrandTotal)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="divstg">
+                        <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
+                    </div>
+                </div>
+                @{
+                    string FinDeliver = Model.Fields["Deliver"].Value;
+                    NameValueCollection FinnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(FinDeliver);
+                    foreach (string key in FinnameValueCollection.Keys)
+                    {
+                        string[] values = FinnameValueCollection.GetValues(key);
+                        foreach (string value in values)
+                        {
+                            <div class="col-md-12 col-sm-12" v-if="model.Delivery == @key">
+                                <p class="result-label" v-if="model.Delivery == '1'">@value</p>
+                                <p class="result-label" v-if="model.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.Branch}}</p>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <div id="ReceiptPostAddress" class="pad-bot" v-if="model.Delivery == '1'">
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.PostAddress}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.PostSoi}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.PostRoad}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.PostSubdistrict}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.PostDistrict}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.PostProvince}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.PostZip}}</p></div>
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+            <div class="row pad-top">
+                <div class="col-md-6 col-sm-6 pad-bot">
+                    <div class="row">
+                        <div class="col-md-6 result-label">@Model.Fields["ServiceCodeLabel"]</div><div class="col-md-6 result-label">{{model.ServiceCode}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 result-label">@Model.Fields["RefNoLabel"]</div><div class="col-md-6 result-label">{{result.Ref1}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 result-label">@Model.Fields["BillerNameLabel"]</div><div class="col-md-6 result-label">{{model.BillerName}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 result-label">@Model.Fields["AmountLabel"]</div><div class="col-md-6 result-label">{{this.twoDigit(result.GrandTotal)}}</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 text-center pad-bot">
+                    <qrcode v-bind:value="result.QRCode" :options="{ size: 150 }"></qrcode>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center pad-top pad-bot">
+                </div>
+                <div class="col-md-12 text-center fit-width pad-top pad-bot">
+                    <barcode v-bind:value="result.Barcode" tag="img"></barcode>
+                </div>
+            </div>
+            <div class="text-label pad-top">
+                <div class="row text-center">
+                    <div class="col-md-12 col-sm-12 col-xs-12"><button class="btn btn-primary" v-on:click="onPrint" type="submit">@Model.Fields["PrintButton"]</button></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="pad-bot"></div>
+
+<script src="~/assets/Siriraj/js/index.js"></script>
+

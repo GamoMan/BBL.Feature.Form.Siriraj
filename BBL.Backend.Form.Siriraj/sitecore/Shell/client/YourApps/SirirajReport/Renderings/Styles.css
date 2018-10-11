@@ -1,0 +1,13 @@
+﻿/*.sc-tabl {border:2px solid red;}
+.sc-tabl{table-layout: fixed; margin:40px auto 0px auto; }
+.sc-tabl, td, th{border-collapse:collapse; border:1px solid #777;}
+th{padding:20px 7px; font-size:15px; color:#444; background:#66C2E0;}
+td{padding:5px 10px; height:35px;}*/
+
+.sc-table {
+    overflow-x: scroll;
+}
+
+    .sc-table th, .sc-table td {
+        min-width: 200px;
+    }

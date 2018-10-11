@@ -1,0 +1,232 @@
+﻿@model Sitecore.Data.Items.Item
+
+@using System;
+@using System.Collections.Specialized;
+@using System.Linq.Expressions;
+
+@using Sitecore.Data.Fields
+@using Sitecore.Data.Items
+@using Sitecore.Resources.Media
+
+<script src="~/assets/Siriraj/js/jquery-1.10.2.min.js"></script>
+<script src="~/assets/Siriraj/js/vue.min.js"></script>
+<script src="~/assets/Siriraj/js/vue-form.min.js"></script>
+<script src="~/assets/Siriraj/js/axios.min.js"></script>
+<script src="~/assets/Siriraj/js/stringformat.js"></script>
+
+<script src="~/assets/Siriraj/js/vue-qrcode.js"></script>
+<script src="~/assets/Siriraj/js/vue-barcode.js"></script>
+<link href="~/assets/Siriraj/css/Style.css" rel="stylesheet" />
+
+
+@functions{
+    public static string GetImageURL(Sitecore.Data.Fields.ImageField imageField)
+    {
+        string imageURL = string.Empty;
+        if (imageField != null && imageField.MediaItem != null)
+        {
+            Sitecore.Data.Items.MediaItem image = new Sitecore.Data.Items.MediaItem(imageField.MediaItem);
+            imageURL = Sitecore.StringUtil.EnsurePrefix('/', Sitecore.Resources.Media.MediaManager.GetMediaUrl(image));
+        }
+        return imageURL;
+    }
+}
+<div id="app" class="inner-container">
+    <div class="panel panel-default panel-body general-form">
+        <div class="row">
+            <div id="divstg" class="col-md-8 col-md-offset-2 text-center">
+                <img class="img-responsive" src="@GetImageURL(Model.Fields["ImageHeader"])">
+                @*<h1 class="title-2 small pad-bot">@Model.Fields["Head"]</h1>*@
+                @*<h4 class="pad-bot">@Model.Fields["Title"]</h4>*@
+            </div>
+        </div>
+
+        @*
+            //
+            // Main form section
+            //
+        *@
+
+        <div id="MainForm">
+            <input type="hidden" id="DeleteSuccess" name="DeleteSuccess" value="@Model.Fields["DeleteSuccess"]">
+            <input type="hidden" id="DeleteFailed" name="DeleteFailed" value="@Model.Fields["DeleteFailed"]">
+            <input type="hidden" id="Type1" name="Type1" value="@Model.Fields["ButtonType1"]">
+            <input type="hidden" id="Type2" name="Type2" value="@Model.Fields["ButtonType2"]">
+            <input type="hidden" id="Type3" name="Type3" value="@Model.Fields["ButtonType3"]">
+            <input type="hidden" id="Summary" name="Summary" value="@Model.Fields["Total"]">
+            <input type="hidden" id="TaxID" name="TaxID" value="@Model.Fields["TaxID"]">
+            <input type="hidden" id="Suffix" name="Suffix" value="@Model.Fields["Suffix"]">
+            <input type="hidden" id="ServiceCode" name="ServiceCode" value="@Model.Fields["ServiceCode"]">
+
+            <vue-form :state="formstate" v-model="formstate" @@submit.prevent="dummy" class="general-form" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div class="item-shadow">
+                    <div id="divstg" class="title-label" v-show="false">
+                        @Html.Raw(Model.Fields["Title"])
+                    </div>
+                    <div id="divstg">
+                        <h4 class="text-label text-center small-pad-top small-pad-bot">@Model.Fields["DeleteLabel"]</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3">
+                            <validate auto-label class="form-group required-field" :custom="{validateThaiCitizenID: validateThaiCitizenID}" :class="fieldClassName(formstate.PersonalID)">
+                                <input type="number" name="PersonalID" class="form-control" placeholder="@Model.Fields["PersonalID"] *" required size="13" maxlength="13" minlength="13" v-model="model.PersonalID">
+
+                                <field-messages auto-label name="PersonalID" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    <div class="small-pad" slot="validateThaiCitizenID">@Model.Fields["ValPersonalID"] ({{model.PersonalID.length}})</div>
+                                    <div class="small-pad" slot="maxlength">@Model.Fields["ValMaxPersonalID"]</div>
+                                </field-messages>
+                            </validate>
+                        </div>
+                        <div class="col-md-6 col-md-offset-3">
+                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.SecretCode)">
+                                <input type="password" name="SecretCode" class="form-control" placeholder="@Model.Fields["SecretCode"] *" required size="8" maxlength="8" v-model="model.Secretcode" autocomplete="off">
+
+                                <field-messages auto-label name="SecretCode" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                    @*<div class="small-pad" slot="maxlength">@Model.Fields["ValSecretCode"]</div>*@
+                                </field-messages>
+                            </validate>
+                        </div>
+                    </div>
+
+                    @*<div class="row">
+                        <div id="divstg" class="col-md-12">
+                            <h4 class="text-label">@Model.Fields["TotalLabel"]</h4>
+                            <p class="total text-center">{{AmountSummary}}</p>
+                        </div>
+                    </div>*@
+                    <div id="SaveData" class="text-label">
+                        <div class="row text-center">
+                            <div><button class="btn btn-primary" v-on:click="onSubmit" type="submit">@Model.Fields["DeleteButton"]</button></div>
+                        </div>
+                    </div>
+                    @*<div id="divstg" class="title-label">
+                        @Html.Raw(Model.Fields["Remark"])
+                    </div>*@
+                </div>
+            </vue-form>
+        </div>
+        @*
+            //
+            // Confirm section
+            //
+        *@
+        <div id="ConfirmForm" class="general-form" v-show="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="divstg">
+                        <h4 class="text-label">@Model.Fields["PersonalLabel"]</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{model.PersonalID}}</p></div>
+                @{
+                    var language = Sitecore.Context.Culture.Name.ToLower();
+                    if (language == "th-th")
+                    {
+                        <div class="col-md-6 text-right"><p class="result-label">@Model.Fields["CreateDate"] </p> <p class="result-label">{{formatThaiDate(result.CreateDate)}}</p></div>
+                    }
+                    else
+                    {
+                        <div class="col-md-6 text-right"><p class="result-label">@Model.Fields["CreateDate"] </p> <p class="result-label">{{formatDate(result.CreateDate)}}</p></div>
+                    }
+                }                
+            </div>
+            <div class="row">
+                @*<div id="divstg" class="col-md-12">
+                <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
+            </div>*@
+                @{
+                    string Receipt = Model.Fields["ReceiptOption"].Value;
+                    NameValueCollection ReceiptValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(Receipt);
+                    foreach (string key in ReceiptValueCollection.Keys)
+                    {
+                        string[] values = ReceiptValueCollection.GetValues(key);
+                        foreach (string value in values)
+                        {
+                            <div class="col-md-12 col-sm-12" v-if="result.Receipt == @key">
+                                <p class="result-label" v-if="result.Receipt == '1'">@value</p>
+                                <p class="result-label" v-if="result.Receipt == '0'">@value</p>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <div class="row pad-top pad-bot">
+                <div class="col-md-12">
+                    <div class="table-overflow">
+                        <table class="result-table">
+                            <tbody>
+                                <tr>
+                                    <th class="left">@Model.Fields["ResultType"]</th>
+                                    <th class="right">@Model.Fields["ResultSelect"]</th>
+                                    <th class="right">@Model.Fields["ResultTotal"]</th>
+                                </tr>
+                                <tr v-for="Pig in result.Piggy">
+                                    <td class="left">{{Pig.Text}}</td>
+                                    <td class="right">{{Pig.Count}}</td>
+                                    <td class="right">{{Pig.Amount}}</td>
+                                </tr>
+                                <tr v-if="result.Delivery === '1'">
+                                    <td colspan="2">@Model.Fields["ResultDelivery"]</td>
+                                    <td class="right">{{this.twoDigit(result.DeliveryAmount)}}</td>
+                                </tr>
+                                <tr class="totalamount">
+                                    <td colspan="2" class="result-bold">@Model.Fields["ResultGrandTotal"]</td>
+                                    <td class="right result-bold">{{this.twoDigit(result.GrandTotal)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="divstg">
+                        <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
+                    </div>
+                </div>
+                @{
+                    string ResDeliver = Model.Fields["Deliver"].Value;
+                    NameValueCollection ResnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(ResDeliver);
+                    foreach (string key in ResnameValueCollection.Keys)
+                    {
+                        string[] values = ResnameValueCollection.GetValues(key);
+                        foreach (string value in values)
+                        {
+                            <div class="col-md-12 col-sm-12" v-if="result.Delivery == @key">
+                                <p class="result-label" v-if="result.Delivery == '1'">@value</p>
+                                <p class="result-label" v-if="result.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.Branch}}</p>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+
+            <div class="text-label pad-top">
+                <div class="row text-center">
+                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onDelete" type="submit">@Model.Fields["DeleteConfirmButton"]</button></div>
+                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onCancelConfirm" type="reset">@Model.Fields["DeleteCancelButton"]</button></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="MainResult" class="form-group control-label text-default pad-top mainresult" v-show:false>
+            <div id="ResultMessage" class="text-center"></div>
+            <div class="text-label pad-top">
+                <div class="row text-center">
+                    <div class="col-md-12"><button class="btn btn-primary" v-on:click="onGoBack" type="reset">@Model.Fields["DeleteButton"]</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="pad-bot"></div>
+
+<script src="~/assets/Siriraj/js/delete.js"></script>
+

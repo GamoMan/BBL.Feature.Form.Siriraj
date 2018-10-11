@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BBL.Feature.Form.Siriraj", "BBL.Feature.Form.Siriraj\BBL.Feature.Form.Siriraj.csproj", "{3A7CB93A-46B7-4915-A85F-A9032621EAD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BBL.Backend.Form.Siriraj", "BBL.Backend.Form.Siriraj\BBL.Backend.Form.Siriraj.csproj", "{BA2701D0-BA98-4EDA-A34B-0B6E0BC55FD6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3A7CB93A-46B7-4915-A85F-A9032621EAD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A7CB93A-46B7-4915-A85F-A9032621EAD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A7CB93A-46B7-4915-A85F-A9032621EAD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A7CB93A-46B7-4915-A85F-A9032621EAD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA2701D0-BA98-4EDA-A34B-0B6E0BC55FD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA2701D0-BA98-4EDA-A34B-0B6E0BC55FD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA2701D0-BA98-4EDA-A34B-0B6E0BC55FD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA2701D0-BA98-4EDA-A34B-0B6E0BC55FD6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://it-tfsapp1101:8080/tfs/bblcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = BBL.Feature.Form.Siriraj\\BBL.Feature.Form.Siriraj.csproj
+		SccProjectName1 = BBL.Feature.Form.Siriraj
+		SccLocalPath1 = BBL.Feature.Form.Siriraj
+		SccProjectUniqueName2 = BBL.Backend.Form.Siriraj\\BBL.Backend.Form.Siriraj.csproj
+		SccProjectName2 = BBL.Backend.Form.Siriraj
+		SccLocalPath2 = BBL.Backend.Form.Siriraj
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,7 @@
+﻿<Project>
+  <FolderSync SynchronizeProjectOutputFolderOnBuild="False">
+    <Folder SourceFolder="Areas\Siriraj\Views\" DestinationFolder="Areas\Siriraj\Views\" Mode="Mirror" Pattern="*.*" />
+    <Folder SourceFolder="Areas\FormSiriraj\Views\" DestinationFolder="Areas\FormSiriraj\Views\" Mode="Mirror" Pattern="*.*" />
+    <Folder SourceFolder="assets\Siriraj\" DestinationFolder="assets\Siriraj\" Mode="Mirror" Pattern="*.*" />
+  </FolderSync>
+</Project>

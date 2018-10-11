@@ -1,0 +1,48 @@
+.thai-address-input {
+  position: relative;
+}
+
+.thai-address-input .suggestion-list {
+    z-index: 1000;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+
+.thai-address-input .suggestion-list-item {
+  border: solid 1px #ddd;
+  border-top-style: none;
+  background: #fff;
+  padding: 10px 5px;
+  cursor: pointer;
+}
+
+.thai-address-input .suggestion-list-item:first-child {
+  border-top-style: solid;
+}
+
+.thai-address-input .suggestion-list-item.cursor,
+.thai-address-input .suggestion-list-item:hover {
+  background: #eee;
+}
+
+/*.form-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}*/
