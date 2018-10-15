@@ -142,7 +142,7 @@
                             <div class="col-md-4 col-sm-4 text-center">
                                 <div class="frame form-group">
                                     <label for="squaredTwo">
-                                        <input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" :required="required.Type">
+                                        <input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" :required="required.Type" :disabled="!app.data.haveCar">
                                         <span class="checkmark">
                                             <img class="img-responsive pointer" v-on:click="ClickBtn(1)" src="@GetImageURL(Model.Fields["Type1"])">
                                         </span>
@@ -152,7 +152,7 @@
                             <div class="col-md-4 col-sm-4 text-center">
                                 <div class="frame form-group">
                                     <label for="squaredTwo">
-                                        <input name="Type" type="checkbox" class="checkbox" value="radio" v-on:change="Calculate" v-model="model.Type[1]" :required="required.Type">
+                                        <input name="Type" type="checkbox" class="checkbox" value="radio" v-on:change="Calculate" v-model="model.Type[1]" :required="required.Type" :disabled="!app.data.haveCame">
                                         <span class="checkmark">
                                             <img class="img-responsive pointer" v-on:click="ClickBtn(2)" src="@GetImageURL(Model.Fields["Type2"])">
                                         </span>
@@ -162,7 +162,7 @@
                             <div class="col-md-4 col-sm-4 text-center">
                                 <div class="frame form-group">
                                     <label for="squaredTwo">
-                                        <input name="Type" type="checkbox" class="checkbox" value="camera" v-on:change="Calculate" v-model="model.Type[2]" :required="required.Type">
+                                        <input name="Type" type="checkbox" class="checkbox" value="camera" v-on:change="Calculate" v-model="model.Type[2]" :required="required.Type" :disabled="!app.data.haveRadio">
                                         <span class="checkmark">
                                             <img class="img-responsive pointer" v-on:click="ClickBtn(3)" src="@GetImageURL(Model.Fields["Type3"])">
                                         </span>

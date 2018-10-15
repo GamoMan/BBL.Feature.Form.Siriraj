@@ -197,5 +197,25 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
 
             return query.ToArray();
         }
+
+
+
+
+        public object AvailableItems()
+        {
+            DataSet ds = new DataSet();
+            List<IDataParameter> parms = new List<IDataParameter>();
+            ds = Db.GetDataSet("sp_RemainItems");
+            DataTable dt = ds.Tables[0];
+
+            var query = (from temp in dt.AsEnumerable()
+                         select new
+                         {
+                             Car = temp.Field<Int32>("Car") > 0,
+                             Camera = temp.Field<Int32>("Camera") > 0,
+                             Radio = temp.Field<Int32>("Radio") > 0,
+                         });
+            return query.ToArray();
+        }
     }
 }

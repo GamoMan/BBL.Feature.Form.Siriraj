@@ -21,6 +21,10 @@ var app = new Vue({
         Province: '',
         Branches: [],
         Provinces: [],
+        AvailableItems: [],
+        haveCar: false,
+        haveCamera: false,
+        haveRadio: false,
         model: {
             Name: '',
             Surname: '',
@@ -89,10 +93,19 @@ var app = new Vue({
             Type: true,
             Post: false,
             Receipt: false
-        }
+        },
+       
     },
     mounted: function () {
         this.getAllBranches();
+
+        this.getAvailableItems();
+         
+         //var a= AvailableItems.haveCar;
+        //this.data.haveRadio = true
+        //this.data.haveCar = true
+        //this.data.haveCame = false
+
         this.model.TypeText[0] = $('#Type1').val();
         this.model.TypeText[1] = $('#Type2').val();
         this.model.TypeText[2] = $('#Type3').val();
@@ -128,6 +141,9 @@ var app = new Vue({
                 }
             });
 
+
+           
+
         });
 
     },
@@ -136,10 +152,21 @@ var app = new Vue({
         },
         Calculate: function(){
             this.model.Piggy = [];
+
+             
+
             var self = this;
             var cnt = 0;
             this.required.Type = true;
-            for(var i=0;i<this.model.Type.length;i++) {
+
+           
+        
+           
+            for (var i = 0; i < this.model.Type.length; i++) {
+                //if (app.AvailableItems[0].Car this.model.Type[i] === true)   //1
+                //if (app.AvailableItems[0].Radio )  //2
+                // if  (app.AvailableItems[0].Camera)  //3
+
                 if (this.model.Type[i] === true) {
                     self.model.Piggy.push({ "Text": self.model.TypeText[i], "Count": 1, "Amount": self.twoDigit(self.Price) });
                     cnt++;
@@ -152,6 +179,12 @@ var app = new Vue({
                 this.model.Donate = '';
         },
         ClickBtn: function (val) {
+
+            debugger
+            //if (this.haveCar == false && val == 1) { return; }
+            //if (this.haveRadio == false && val == 2) { return; }
+            //if (this.haveCamera == false && val == 3) { return; }
+
             this.model.Type[val-1] = !this.model.Type[val-1];
             this.Calculate();
             event.preventDefault();
@@ -231,6 +264,33 @@ var app = new Vue({
                 }
             });
         },
+
+        getAvailableItems: function () {
+            var data = {};
+            data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
+            var self = this;
+            $.ajax({
+                async: false,
+                method: 'post',
+                url: '/FormSiriraj/Siriraj/AvailableItems',
+                data: data,
+                success: function (response) {
+                    //self.Provinces = JSON.parse(response);
+                    self.AvailableItems = response;
+                    
+                    //self.data.haveRadio = response[0].Radio;
+                    //self.data.haveCar = response[0].Car;
+                    //self.data.haveCamera = response[0].Camera;
+                    self.haveRadio = false;
+                    self.haveCar = false;
+                    self.haveCamera = true;
+                  
+                     
+                }
+            });
+        },
+
+
         //getBarcode: function () {
         //    var data = {
         //        "TaxID": $('#TaxID').val(),

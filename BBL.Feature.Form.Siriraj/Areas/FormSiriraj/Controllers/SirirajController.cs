@@ -287,6 +287,25 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             }
         }
 
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AvailableItems()
+        {
+            Object data = "";
+            Init();
+
+            SirirajDb db = new SirirajDb();
+
+            data = db.AvailableItems();
+
+            //Item it = new Item(data);
+
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public String GenQRCode(string Data,int Pixel)
@@ -332,12 +351,22 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             var webappKey = "";
             if (AppSettings.HasKey == false)
             {
+
                 webappKey = "Landlord#1";
-                AppSettings.FormConnectionString = "Data Source = (local); Initial Catalog = Siriraj; Integrated Security = False; User ID = sa; Password = P@ssw0rd";
+                //AppSettings.FormConnectionString = "Data Source = (local); Initial Catalog = Siriraj; Integrated Security = False; User ID = sa; Password = P@ssw0rd";
+                AppSettings.FormConnectionString = "Server=tcp:bblpwsdb.database.windows.net,1433;Initial Catalog=Siriraj;Persist Security Info=False;User ID=pwsadmin@bblpwsdb.database.windows.net;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
                 AppSettings.FormKey = "x8r9ho0GGR";
 
                 AppSettings.HasKey = true;
                 AppSettings.SecretCode = "P@ssw0rd";
+
+                //webappKey = "Landlord#1";
+                //AppSettings.FormConnectionString = "Data Source = (local); Initial Catalog = Siriraj; Integrated Security = False; User ID = sa; Password = P@ssw0rd";
+                //AppSettings.FormKey = "x8r9ho0GGR";
+
+                //AppSettings.HasKey = true;
+                //AppSettings.SecretCode = "P@ssw0rd";
             }
 
             //if (AppSettings.HasKey == false)
