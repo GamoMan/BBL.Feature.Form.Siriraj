@@ -777,6 +777,9 @@ input[disabled].form-control {
     .showdate{
         text-align:left;
     }
+    #MainForm .text-right{
+        text-align:left !important;
+    }
 }
 /*
     //
