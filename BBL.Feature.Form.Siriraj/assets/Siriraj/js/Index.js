@@ -30,7 +30,7 @@ var app = new Vue({
             Surname: '',
             PersonalID: '',
             Mobile: '',
-            Mobile2:'',
+            Mobile2: '',
             Email: '',
             LineID: '',
             Address: '',
@@ -53,7 +53,7 @@ var app = new Vue({
             Type: [],
             TypeText: [],
             Receipt: '0',
-            BranchProvince: '', 
+            BranchProvince: '',
             BranchCode: '',
             BranchName: '',
             Delivery: '0',
@@ -61,7 +61,7 @@ var app = new Vue({
             Donate: 0,
             DeliveryAmount: 0,
             GrandTotal: 0,
-            Total:0,
+            Total: 0,
             QRcode: '',
             Barcode: '',
             SummaryText: '',
@@ -94,17 +94,11 @@ var app = new Vue({
             Post: false,
             Receipt: false
         },
-       
     },
     mounted: function () {
         this.getAllBranches();
 
         this.getAvailableItems();
-         
-         //var a= AvailableItems.haveCar;
-        //this.data.haveRadio = true
-        //this.data.haveCar = true
-        //this.data.haveCame = false
 
         this.model.TypeText[0] = $('#Type1').val();
         this.model.TypeText[1] = $('#Type2').val();
@@ -116,52 +110,47 @@ var app = new Vue({
 
         $(document).ready(function () {
 
+
             $('#selProvince').selectmenu({
                 change: function (event, ui) {
                     app.Branches = app.Provinces[ui.item.index - 1].Data;
+                    
                     app.model.BranchProvince = $('#selProvince').val();
                     Vue.nextTick(function () {
                         // DOM updated
                         $('#selBranch').selectmenu();
-                        $('#selBranch').val('');
+                        //$('#selBranch').val('dflkjdk');
                         $('#selBranch').selectmenu('refresh');
                     })
-
                 }
             });
 
             $('#selBranch').selectmenu({
                 change: function (event, ui) {
+
+                    
                     app.model.BranchCode = $('#selBranch').val();
                     Vue.nextTick(function () {
                         // DOM updated
-                        app.model.BranchName = $('#selBranch option:selected').text();
-                    })
 
+                        app.model.BranchName = $('#selBranch option:selected').text();
+                         
+                        //$('#selBranch').selectmenu('refresh');
+                    })
                 }
             });
-
-
-           
-
         });
-
     },
     methods: {
         dummy: function () {
         },
-        Calculate: function(){
+        Calculate: function () {
             this.model.Piggy = [];
-
-             
 
             var self = this;
             var cnt = 0;
             this.required.Type = true;
 
-           
-        
-           
             for (var i = 0; i < this.model.Type.length; i++) {
                 //if (app.AvailableItems[0].Car this.model.Type[i] === true)   //1
                 //if (app.AvailableItems[0].Radio )  //2
@@ -179,28 +168,27 @@ var app = new Vue({
                 this.model.Donate = '';
         },
         ClickBtn: function (val) {
+            //Set Non Check
+            if (this.haveCar == false && val == 1) { return; }
+            if (this.haveRadio == false && val == 2) { return; }
+            if (this.haveCamera == false && val == 3) { return; }
 
-            debugger
-            //if (this.haveCar == false && val == 1) { return; }
-            //if (this.haveRadio == false && val == 2) { return; }
-            //if (this.haveCamera == false && val == 3) { return; }
-
-            this.model.Type[val-1] = !this.model.Type[val-1];
+            this.model.Type[val - 1] = !this.model.Type[val - 1];
             this.Calculate();
             event.preventDefault();
         },
         validateThaiCitizenID: function (id) {
-            if(
+            if (
                 id.length !== 13 ||
                 id.charAt(0).match(/[09]/)
             ) return false;
 
             var sum = 0;
-            for( i=0; i < 12; i++ ){
-                sum += parseInt(id.charAt(i))*(13-i);
+            for (i = 0; i < 12; i++) {
+                sum += parseInt(id.charAt(i)) * (13 - i);
             }
 
-            if( (11 - sum%11 )%10 !== parseInt(id.charAt(12)) ){
+            if ((11 - sum % 11) % 10 !== parseInt(id.charAt(12))) {
                 return false;
             }
 
@@ -226,7 +214,7 @@ var app = new Vue({
             }
             this.Calculate();
         },
-        AddressOptionClick : function(){
+        AddressOptionClick: function () {
             if (this.model.AddressOption === "1") {
                 this.resetPostAddress();
             } else {
@@ -277,18 +265,22 @@ var app = new Vue({
                 success: function (response) {
                     //self.Provinces = JSON.parse(response);
                     self.AvailableItems = response;
-                    
-                    //self.data.haveRadio = response[0].Radio;
-                    //self.data.haveCar = response[0].Car;
-                    //self.data.haveCamera = response[0].Camera;
-                    self.haveRadio = false;
-                    self.haveCar = false;
-                    self.haveCamera = true;
+              
+                    self.haveRadio = response[0].Radio;
+                    self.haveCar = response[0].Car;
+                    self.haveCamera = response[0].Camera;
+
+                    if (self.haveRadio == false)
+                        $('#txtTipRadio').html('หมด');
+                    if (self.haveCar == false)
+                        $('#txtTipCar').html('หมด');
+                    if (self.haveCamera == false)
+                        $('#txtTipCamera').html('หมด');
                   
-                     
                 }
             });
         },
+
         maskID: function (id) {
             if (id !== '')
                 return id.replace(id.substring(7, 10), "xxxx")
@@ -299,7 +291,7 @@ var app = new Vue({
                 return id.replace(id.substring(4, 7), "xxxx")
             else return '';
         },
-        twoDigit:function(val){
+        twoDigit: function (val) {
             return val.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         },
         fieldClassName: function (field) {
@@ -335,7 +327,7 @@ var app = new Vue({
                 this.model.Zip = this.model.PostZip;
             }
         },
-        resetPostAddress: function(){
+        resetPostAddress: function () {
             this.model.PostAddress = '';
             this.model.PostBuilding = '';
             this.model.PostSoi = '';
@@ -355,15 +347,16 @@ var app = new Vue({
             this.model.Province = '';
             this.model.Zip = '';
         },
-        resetPersonal: function() {
+        resetPersonal: function () {
             this.model.Name = '';
             this.model.Surname = '';
             this.model.PersonalID = '';
             this.model.Mobile = '';
+            this.model.Mobile2 = '';
             this.model.Email = '';
             this.model.LineID = '';
         },
-        resetReserve: function(){
+        resetReserve: function () {
             this.model.Type = [];
             this.model.TypeText = [];
             this.model.BranchProvince = '';
@@ -383,23 +376,23 @@ var app = new Vue({
             //$("#MainForm").slideUp(300);
             //$("#ConfirmForm").slideDown(300);
         },
-        onSelected: function(address) {
+        onSelected: function (address) {
             this.model.Subdistrict = address.subdistrict;
             this.model.District = address.district;
             this.model.Province = address.province;
             this.model.Zip = address.postalCode;
         },
-        onPostSelected: function(address) {
+        onPostSelected: function (address) {
             this.model.PostSubdistrict = address.subdistrict;
             this.model.PostDistrict = address.district;
             this.model.PostProvince = address.province;
             this.model.PostZip = address.postalCode;
         },
-        onConfirm: function(e){
+        onConfirm: function (e) {
             if (!app.formstate.$invalid) {
                 var data = {
                     "CitizenID": this.model.PersonalID,//.replace(SpacialCharacter, ''),
-                    "Car":this.model.Type[0]===true?1:0,
+                    "Car": this.model.Type[0] === true ? 1 : 0,
                     "Camera": this.model.Type[2] === true ? 1 : 0,
                     "Radio": this.model.Type[1] === true ? 1 : 0,
                     "Receipt": this.model.Receipt,
@@ -415,28 +408,70 @@ var app = new Vue({
                     "Suffix": this.model.Suffix
                 };
                 data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
-                var self = this;
 
+                //dataCitizenID.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
+                var self = this;
+                //check Register ไปแล้ว
                 $.ajax({
                     async: false,
                     method: 'post',
-                    url: '/FormSiriraj/Siriraj/SaveRegister',
+                    url: '/FormSiriraj/Siriraj/getRegister',
                     data: data,
                     success: function (response) {
-                        self.result.Ref1 = response[0].Barcode.substring(14, 25);
-                        if (response.Success === 'true') {
-                            var strHTML = '';
-                            if (response.Success === 'true') {
-                                strHTML += "<br><br>";
-                                $('#ConfirmForm').slideDown(100);
-                                $('#MainForm').slideUp(100);
-                                $("html, body").animate({ scrollTop: 0 }, "slow");
-                            } else {
-                                strHTML += "<br><br>";
-                            }
+                         
+                          
+                        if (response.length > 0) {
+                            $('#AlertForm').slideDown(100);
+                            $("#errorDupplicateID").slideDown();
+
+                            //Regist แล้ว
+                            $('#ConfirmForm').slideUp(100);
+                            $('#MainForm').slideUp(100);
+                            return;
                         }
+
+                        //self.result.Ref1 = response[0].Barcode.substring(14, 25);
+                        //if (response.Success === 'true') {
+                        var strHTML = '';
+                        //if (response.Success === 'true') {
+                        strHTML += "<br><br>";
+                        $('#ConfirmForm').slideDown(100);
+                        $('#MainForm').slideUp(100);
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                        //} else {
+                        //  strHTML += "<br><br>";
+                        //}
+                        //}
                     }
                 });
+
+                //$.ajax({
+                //    async: false,
+                //    method: 'post',
+                //    url: '/FormSiriraj/Siriraj/SaveRegister',
+                //    data: data,
+                //    success: function (response) {
+                //        if (response[0].Result ==-100) {
+                //            $('#AlertForm').slideDown(100);
+                //            $('#MainForm').slideUp(100);
+                //            return;
+                //        }
+
+                //            self.result.Ref1 = response[0].Barcode.substring(14, 25);
+                //            if (response.Success === 'true') {
+                //                var strHTML = '';
+                //                if (response.Success === 'true') {
+                //                    strHTML += "<br><br>";
+                //                    $('#ConfirmForm').slideDown(100);
+                //                    $('#MainForm').slideUp(100);
+                //                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                //                } else {
+                //                    strHTML += "<br><br>";
+                //                }
+                //            }
+
+                //    }
+                //});
             }
         },
         onCancelConfirm: function (e) {
@@ -444,12 +479,61 @@ var app = new Vue({
             $('#ConfirmForm').slideUp(100);
             $("html, body").animate({ scrollTop: 0 }, "slow");
         },
-        onPrint: function(){
+        onPrint: function () {
             window.print();
         },
         onSubmit: function (e) {
             if (!app.formstate.$invalid) {
+               
                 var data = {
+                    
+                    Personal: {
+                        "Name": this.model.Name,
+                        "Surname": this.model.Surname,
+                        "PersonalID": this.model.PersonalID,
+                        "Mobile": this.model.Mobile,
+                        "Mobile2": this.model.Mobile2,
+                        "Mobile2": this.model.Email,
+                        "LineID": this.model.LineID,
+                        "Address": this.model.Address,
+                        "Building": this.model.Building,
+                        "Soi": this.model.Soi,
+                        "Road": this.model.Road,
+                        "Subdistrict": this.model.Subdistrict,
+                        "District": this.model.District,
+                        "Province": this.model.Province,
+                        "Zip": this.model.Zip,
+                        "PostAddress": this.model.PostAddress,
+                        "PostBuilding": this.model.PostBuilding,
+                        "PostSoi": this.model.PostSoi,
+                        "PostRoad": this.model.PostRoad,
+                        "PostSubdistrict": this.model.PostSubdistrict,
+                        "PostDistrict": this.model.PostDistrict,
+                        "PostProvince": this.model.PostProvince,
+                        "PostZip": this.model.PostZip,
+                        "Piggy": this.model.Piggy,
+                        "Type": this.model.Type,
+                        "TypeText": this.model.TypeText,
+                        "Receipt": this.model.Receipt,
+                        "BranchProvince": this.model.BranchProvince,
+                        "BranchCode": this.model.BranchCode,
+                        "BranchName": this.model.BranchName,
+                        "Delivery": this.model.Delivery,
+                        "AddressOption": this.model.AddressOption,
+                        "Donate": this.model.Donate,
+                        "DeliveryAmount": this.model.DeliveryAmount,
+                        "GrandTotal": this.model.GrandTotal,
+                        "QRcode": this.model.QRcode,
+                        "Barcode": this.model.Barcode,
+                        "SummaryText": this.model.SummaryText,
+                        "Summary": this.model.Summary,
+                        "ServiceCode": this.model.ServiceCode,
+                        "Ref1": this.model.Ref1,
+                        "BillerName": this.model.BillerName,
+
+
+            },
+
                     "CitizenID": this.model.PersonalID,//.replace(SpacialCharacter, ''),
                     "Car": this.model.Type[0] === true ? 1 : 0,
                     "Camera": this.model.Type[2] === true ? 1 : 0,
@@ -461,10 +545,26 @@ var app = new Vue({
                     "BranchProvince": this.model.BranchProvince,//.replace(SpacialCharacter, ''),
                     "Barcode": this.model.Barcode,//.replace(SpacialCharacter, ''),
                     "QRcode": this.model.QRcode,//.replace(SpacialCharacter, ''),
-                    "Amount": this.model.Amount,
+                    "Amount": this.model.GrandTotal,
                     "Donate": this.model.Donate,
                     "TaxID": this.model.TaxID,
                     "Suffix": this.model.Suffix
+
+                    //"CitizenID": this.model.PersonalID,//.replace(SpacialCharacter, ''),
+                    //"Car": this.model.Type[0] === true ? 1 : 0,
+                    //"Camera": this.model.Type[2] === true ? 1 : 0,
+                    //"Radio": this.model.Type[1] === true ? 1 : 0,
+                    //"Receipt": this.model.Receipt,
+                    //"DeliveryType": this.model.Delivery,
+                    //"BranchCode": this.model.BranchCode,
+                    //"BranchName": this.model.BranchName,//.replace(SpacialCharacter, ''),
+                    //"BranchProvince": this.model.BranchProvince,//.replace(SpacialCharacter, ''),
+                    //"Barcode": this.model.Barcode,//.replace(SpacialCharacter, ''),
+                    //"QRcode": this.model.QRcode,//.replace(SpacialCharacter, ''),
+                    //"Amount": this.model.GrandTotal,
+                    //"Donate": this.model.Donate,
+                    //"TaxID": this.model.TaxID,
+                    //"Suffix": this.model.Suffix
                 };
                 data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
                 var self = this;
@@ -472,32 +572,61 @@ var app = new Vue({
                 $.ajax({
                     async: false,
                     method: 'post',
-                    url: '/FormSiriraj/Siriraj/SaveData',
+                    url: '/FormSiriraj/Siriraj/SaveRegister',
                     data: data,
                     success: function (response) {
-                        self.result.Ref1 = response[0].Barcode.substring(14, 25);
-                        if (response.Success === 'true') {
+                        
+                        //Sucess
+                        if (response[0].Result == 1) {
+                            self.result.Ref1 = response[0].Barcode.substring(14, 25);
+
                             var strHTML = '';
-                            if (response.Success === 'true') {
-                                strHTML += ReserveHeader + "<br><br>";
-                                strHTML += ActivityName + "<br>";
-                                strHTML += ActivityDetail + "<br><br>";
-                                strHTML += ReserveFooter;
-                                $("#MainResult").html(strHTML);
-                                this.resetForm();
-                                $("#MainForm").slideUp(300);
-                                $("#ConfirmForm").slideDown(300);
-                            } else {
-                                strHTML += AttendeeFullHeader + "<br><br>";
-                                strHTML += ActivityName + "<br>";
-                                strHTML += ActivityDetail + "<br><br>";
-                                strHTML += AttendeeFullFooter;
-                                $("#MainResult").html(strHTML);
-                                this.resetForm();
-                                $("#MainForm").slideUp(300);
-                                $("#ConfirmForm").slideDown(300);
-                            }
+                            //strHTML += ReserveHeader + "<br><br>";
+                            //strHTML += ActivityName + "<br>";
+                            //strHTML += ActivityDetail + "<br><br>";
+                            //strHTML += ReserveFooter;
+                            $("#MainResult").html(strHTML);
+                            // this.resetForm();
+                            $("#ConfirmForm").slideUp(300);
+                            $("#FinalForm").slideDown(300);
+                            //if (response.Success === 'true') {
+                            //    strHTML += ReserveHeader + "<br><br>";
+                            //    strHTML += ActivityName + "<br>";
+                            //    strHTML += ActivityDetail + "<br><br>";
+                            //    strHTML += ReserveFooter;
+                            //    $("#MainResult").html(strHTML);
+                            //    this.resetForm();
+                            //    $("#MainForm").slideUp(300);
+                            //    $("#ConfirmForm").slideDown(300);
+                            //} else {
+                            //    strHTML += AttendeeFullHeader + "<br><br>";
+                            //    strHTML += ActivityName + "<br>";
+                            //    strHTML += ActivityDetail + "<br><br>";
+                            //    strHTML += AttendeeFullFooter;
+                            //    $("#MainResult").html(strHTML);
+                            //    this.resetForm();
+                            //    $("#MainForm").slideUp(300);
+                            //    $("#FinalForm").slideDown(300);
+
+                            //    //FinalForm
+                            //}
                         }
+                        else if (response[0].Result == 0) {
+
+                            //Case Error slideUp AlertForm
+                            //ของหมด
+                            $("#ConfirmForm").slideUp(300);
+                            $("#errorDupplicateID").slideDown();
+                           
+
+                            $("#AlertForm").slideDown(300);
+                        } else {
+                            $("#ConfirmForm").slideUp(300);
+                            $("#errorOutOfStock").slideDown();
+                            $("#AlertForm").slideDown(300);
+
+                        }
+
                     }
                 });
             }
@@ -507,7 +636,7 @@ var app = new Vue({
         // a computed getter
         AmountSummary: function () {
             // `this` points to the vm instance
-            return String.format(this.model.Summary,this.twoDigit(this.model.GrandTotal));
+            return String.format(this.model.Summary, this.twoDigit(this.model.GrandTotal));
         },
         ButtonText: function () {
             // `this` points to the vm instance
@@ -526,10 +655,7 @@ var app = new Vue({
                 }
                 return String.format(str, prc);
             };
-
-        },      
+        },
     },
-  
+   
 });
-
-
