@@ -167,10 +167,11 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
             parms.Add(new SqlParameter("@TaxID", model.TaxID));
             parms.Add(new SqlParameter("@Suffix", model.Suffix));
 
-
             ds = Db.GetDataSet(storeName, parms, CommandType.StoredProcedure);
-            DataTable dt = ds.Tables[0];
 
+            ds.WriteXml(@"C:\temp\tem.xml"); //Remove
+            DataTable dt = ds.Tables[0];
+          
             var query = (from temp in dt.AsEnumerable() 
                         select new
                         {
@@ -195,17 +196,39 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
                             CreateDate = temp.Field<DateTime>("CreateDate").ToString("yyyy/MM/dd HH:mm:ss")
                          });
 
+
+            //Save Personal
+
+            string name = model.personal.Name;
+
+
             return query.ToArray();
         }
 
 
 
+        public bool haveCitizenID(string CitizenID)
+        {
+            string myID = Hash.HashCitizenID(CitizenID);
+
+            List<IDataParameter> parms = new List<IDataParameter>();
+            var sql = "SELECT * FROM Register WHERE CitizenID = @ID";
+            parms.Add(new SqlParameter("@ID", myID));
+            object itemcount = Db.FbExecuteScalar ("sp_ExistsCitizenID", parms);
+
+            int  citiCount= Convert.ToInt32(itemcount);
+            if (citiCount > 0)
+                return true;
+            else
+                return false;
+        }
+
 
         public object AvailableItems()
         {
             DataSet ds = new DataSet();
-            List<IDataParameter> parms = new List<IDataParameter>();
-            ds = Db.GetDataSet("sp_RemainItems");
+          
+            ds = Db.GetDataSet("sp_AvailableItems");
             DataTable dt = ds.Tables[0];
 
             var query = (from temp in dt.AsEnumerable()

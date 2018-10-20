@@ -192,7 +192,8 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> getRegister(string ID)
+      public async Task<ActionResult> getRegister(  FormSiriraj.Models.SirirajModel model)
+      
         {
             try
             {
@@ -200,7 +201,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 
                 SirirajDb db = new SirirajDb();
 
-                Object data = db.getRegister(ID);
+                Object data = db.getRegister(model.CitizenID);
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -225,6 +226,29 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
         //{
         //    return BOTBarcode.genBarcode(TaxID, Suffix, Ref1, Ref2, Amount);
         //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> haveCitizenID(FormSiriraj.Models.SirirajModel model)
+        {
+            try
+            {
+                Init();
+               
+                SirirajDb db = new SirirajDb();
+                Object data = db.haveCitizenID(model.CitizenID);
+
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                var resultFail = new { Success = "false", e.Message };
+
+                return Json(resultFail, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -305,6 +329,11 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+
+       
+
+
+        
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
