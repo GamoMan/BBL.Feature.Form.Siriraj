@@ -289,44 +289,6 @@ var app = new Vue({
                 }
             });
         },
-
-
-        //getBarcode: function () {
-        //    var data = {
-        //        "TaxID": $('#TaxID').val(),
-        //        "Suffix": $('#Suffix').val(),
-        //        "Ref1": '0870538432',
-        //        "Ref2": '000000121',
-        //        "Amount": 1340.00
-        //    };
-        //    data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
-        //    var self = this;
-        //    $.ajax({
-        //        async: false,
-        //        method: 'post',
-        //        url: '/FormSiriraj/Siriraj/getBarcode',
-        //        data: data,
-        //        success: function (response) {
-        //            self.result.Barcode = response;
-        //        }
-        //    });
-        //},
-        //genQRCode: function (pixel) {
-        //    var data = {
-        //        "Data": this.model.PersonalID,
-        //        "Pixel": pixel
-        //    };
-        //    data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
-        //    $.ajax({
-        //        async: false,
-        //        method: 'post',
-        //        url: '/FormSiriraj/Siriraj/GenQRCode',
-        //        data: data,
-        //        success: function (response) {
-        //            app.image = 'data:image/jpg;base64,'.concat(response);
-        //        }
-        //    });
-        //},
         maskID: function (id) {
             if (id !== '')
                 return id.replace(id.substring(7, 10), "xxxx")
@@ -567,14 +529,7 @@ var app = new Vue({
 
         },      
     },
-    //watch: {
-    //    Branches: function (val, oldVal) {
-    //        // change of userinput, do something
-    //        //if(val !== oldVal)
-    //        $('#selBranch').selectmenu();
-    //        $('#selBranch').selectmenu('refresh');
-    //    }
-    //}
+  
 });
 
 
