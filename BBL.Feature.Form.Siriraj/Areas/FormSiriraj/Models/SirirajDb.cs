@@ -169,7 +169,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
 
             ds = Db.GetDataSet(storeName, parms, CommandType.StoredProcedure);
 
-            ds.WriteXml(@"C:\temp\tem.xml"); //Remove
+            //ds.WriteXml(@"C:\temp\tem.xml"); //Remove
             DataTable dt = ds.Tables[0];
           
             var query = (from temp in dt.AsEnumerable() 
@@ -193,8 +193,9 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
                             QRcode = temp.Field<String>("QRcode"),
                             Amount = temp.Field<Double>("Amount"),
                             Donate = temp.Field<Double>("Donate"),
-                            CreateDate = temp.Field<DateTime>("CreateDate").ToString("yyyy/MM/dd HH:mm:ss")
-                         });
+                         
+                            //CreateDate = temp.Field<DateTime>("CreateDate").ToString("yyyy/MM/dd HH:mm:ss")
+                        });
 
 
             //Save Personal

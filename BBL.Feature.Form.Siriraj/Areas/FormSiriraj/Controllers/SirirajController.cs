@@ -382,8 +382,10 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             {
 
                 webappKey = "Landlord#1";
-                //AppSettings.FormConnectionString = "Data Source = (local); Initial Catalog = Siriraj; Integrated Security = False; User ID = sa; Password = P@ssw0rd";
-                AppSettings.FormConnectionString = "Server=tcp:bblpwsdb.database.windows.net,1433;Initial Catalog=Siriraj;Persist Security Info=False;User ID=pwsadmin@bblpwsdb.database.windows.net;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+                AppSettings.FormConnectionString = "Data Source = (local); Initial Catalog = Siriraj; Integrated Security = False; User ID = sa; Password = P@ssw0rd";
+                //AppSettings.FormConnectionString = "Server=tcp:bblpwsdb.database.windows.net,1433;Initial Catalog=Siriraj;Persist Security Info=False;User ID=pwsadmin@bblpwsdb.database.windows.net;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+                //AppSettings.FormConnectionString = "Server=tcp:bblpwsdb.database.windows.net,1433;Initial Catalog=Siriraj;Persist Security Info=False;User ID=pwsadmin@bblpwsdb.database.windows.net;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
                 AppSettings.FormKey = "x8r9ho0GGR";
 
