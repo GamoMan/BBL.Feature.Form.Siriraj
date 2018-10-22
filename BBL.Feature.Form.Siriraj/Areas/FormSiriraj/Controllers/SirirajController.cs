@@ -100,7 +100,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
                     RenderingContext.Current.Rendering.DataSource))
                     contentItem = database.GetItem(new ID(
                         RenderingContext.Current.Rendering.DataSource));
-
+            AppSettings.SecretCode = contentItem.Fields["SecretCode"].ToString();
             return View(contentItem);
         }
 
