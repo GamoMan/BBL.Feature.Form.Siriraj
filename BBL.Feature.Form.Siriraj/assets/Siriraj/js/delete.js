@@ -24,7 +24,6 @@ var app = new Vue({
             SecretCode: ''
         },
         result: {
-            InvoiceID: '',
             PersonalID: '',
             CreateDate: '',
             Piggy: [],
@@ -113,14 +112,42 @@ var app = new Vue({
             }
             return ret;
         },
-        InvoiceNo: function (number, length) {
-            var str = '' + number;
-            while (str.length < length) {
-                str = '0' + str;
-            }
-
-            return str;
-        },
+        //getBarcode: function () {
+        //    var data = {
+        //        "TaxID": $('#TaxID').val(),
+        //        "Suffix": $('#Suffix').val(),
+        //        "Ref1": '0870538432',
+        //        "Ref2": '000000121',
+        //        "Amount": 1340.00
+        //    };
+        //    data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
+        //    var self = this;
+        //    $.ajax({
+        //        async: false,
+        //        method: 'post',
+        //        url: '/FormSiriraj/Siriraj/getBarcode',
+        //        data: data,
+        //        success: function (response) {
+        //            self.result.Barcode = response;
+        //        }
+        //    });
+        //},
+        //genQRCode: function (pixel) {
+        //    var data = {
+        //        "Data": this.model.PersonalID,
+        //        "Pixel": pixel
+        //    };
+        //    data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
+        //    $.ajax({
+        //        async: false,
+        //        method: 'post',
+        //        url: '/FormSiriraj/Siriraj/GenQRCode',
+        //        data: data,
+        //        success: function (response) {
+        //            app.image = 'data:image/jpg;base64,'.concat(response);
+        //        }
+        //    });
+        //},
         maskID: function (id) {
             if (id !== '')
                 return id.replace(id.substring(7, 10), "xxxx")
@@ -210,7 +237,7 @@ var app = new Vue({
                             self.result.Type[0] = response[0].Car === 1? true: false;
                             self.result.Type[1] = response[0].Radio === 1 ? true : false;
                             self.result.Type[2] = response[0].Camera === 1 ? true : false;
-                            self.result.InvoiceID = response[0].InvoiceID;
+                            //self.result.PersonalID = response[0].CitizenID;
                             self.result.CreateDate = response[0].CreateDate;
                             self.result.Receipt = response[0].Receipt.toString();
                             self.result.Delivery = response[0].DeliveryType.toString();

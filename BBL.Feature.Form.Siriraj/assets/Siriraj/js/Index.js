@@ -401,10 +401,18 @@ var app = new Vue({
                     url: '/FormSiriraj/Siriraj/SaveRegister',
                     data: data,
                     success: function (response) {
-                        //self.result.Ref1 = response[0].Barcode.substring(14, 25);
-                        $('#ConfirmForm').slideDown(100);
-                        $('#MainForm').slideUp(100);
-                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                        self.result.Ref1 = response[0].Barcode.substring(14, 25);
+                        if (response.Success === 'true') {
+                            var strHTML = '';
+                            if (response.Success === 'true') {
+                                strHTML += "<br><br>";
+                                $('#ConfirmForm').slideDown(100);
+                                $('#MainForm').slideUp(100);
+                                $("html, body").animate({ scrollTop: 0 }, "slow");
+                            } else {
+                                strHTML += "<br><br>";
+                            }
+                        }
                     }
                 });
             }

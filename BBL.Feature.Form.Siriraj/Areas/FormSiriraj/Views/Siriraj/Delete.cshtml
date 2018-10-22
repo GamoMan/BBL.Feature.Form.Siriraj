@@ -81,7 +81,7 @@
                         </div>
                         <div class="col-md-6 col-md-offset-3">
                             <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.SecretCode)">
-                                <input type="password" name="SecretCode" class="form-control" placeholder="@Model.Fields["SecretCodeLabel"] *" required size="8" maxlength="8" v-model="model.Secretcode" autocomplete="off">
+                                <input type="password" name="SecretCode" class="form-control" placeholder="@Model.Fields["SecretCode"] *" required size="8" maxlength="8" v-model="model.Secretcode" autocomplete="off">
 
                                 <field-messages auto-label name="SecretCode" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                     <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
@@ -121,8 +121,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row pad-bot">
-                <div class="col-md-6 text-right"><p class="result-label">@Model.Fields["InvoiceIDLabel"] </p> <p class="result-label">{{InvoiceNo(result.InvoiceID,7)}}</p></div>
+
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{model.PersonalID}}</p></div>
                 @{
                     var language = Sitecore.Context.Culture.Name.ToLower();
                     if (language == "th-th")
@@ -133,88 +134,87 @@
                     {
                         <div class="col-md-6 text-right"><p class="result-label">@Model.Fields["CreateDate"] </p> <p class="result-label">{{formatDate(result.CreateDate)}}</p></div>
                     }
+                }                
+            </div>
+            <div class="row">
+                @*<div id="divstg" class="col-md-12">
+                <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
+            </div>*@
+                @{
+                    string Receipt = Model.Fields["ReceiptOption"].Value;
+                    NameValueCollection ReceiptValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(Receipt);
+                    foreach (string key in ReceiptValueCollection.Keys)
+                    {
+                        string[] values = ReceiptValueCollection.GetValues(key);
+                        foreach (string value in values)
+                        {
+                            <div class="col-md-12 col-sm-12" v-if="result.Receipt == @key">
+                                <p class="result-label" v-if="result.Receipt == '1'">@value</p>
+                                <p class="result-label" v-if="result.Receipt == '0'">@value</p>
+                            </div>
+                        }
+                    }
                 }
             </div>
-                <div class="row">
-                    <div class="col-md-12"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{model.PersonalID}}</p></div>
-                    @*<div id="divstg" class="col-md-12">
-                    <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
-                </div>*@
-                    @{
-                        string Receipt = Model.Fields["ReceiptOption"].Value;
-                        NameValueCollection ReceiptValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(Receipt);
-                        foreach (string key in ReceiptValueCollection.Keys)
-                        {
-                            string[] values = ReceiptValueCollection.GetValues(key);
-                            foreach (string value in values)
-                            {
-                                <div class="col-md-12 col-sm-12" v-if="result.Receipt == @key">
-                                    <p class="result-label" v-if="result.Receipt == '1'">@value</p>
-                                    <p class="result-label" v-if="result.Receipt == '0'">@value</p>
-                                </div>
-                            }
-                        }
-                    }
-                </div>
-                <div class="row pad-top pad-bot">
-                    <div class="col-md-12">
-                        <div class="table-overflow">
-                            <table class="result-table">
-                                <tbody>
-                                    <tr>
-                                        <th class="left">@Model.Fields["ResultType"]</th>
-                                        <th class="right">@Model.Fields["ResultSelect"]</th>
-                                        <th class="right">@Model.Fields["ResultTotal"]</th>
-                                    </tr>
-                                    <tr v-for="Pig in result.Piggy">
-                                        <td class="left">{{Pig.Text}}</td>
-                                        <td class="right">{{Pig.Count}}</td>
-                                        <td class="right">{{Pig.Amount}}</td>
-                                    </tr>
-                                    <tr v-if="result.Delivery === '1'">
-                                        <td colspan="2">@Model.Fields["ResultDelivery"]</td>
-                                        <td class="right">{{this.twoDigit(result.DeliveryAmount)}}</td>
-                                    </tr>
-                                    <tr class="totalamount">
-                                        <td colspan="2" class="result-bold">@Model.Fields["ResultGrandTotal"]</td>
-                                        <td class="right result-bold">{{this.twoDigit(result.GrandTotal)}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="divstg">
-                            <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
-                        </div>
-                    </div>
-                    @{
-                        string ResDeliver = Model.Fields["Deliver"].Value;
-                        NameValueCollection ResnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(ResDeliver);
-                        foreach (string key in ResnameValueCollection.Keys)
-                        {
-                            string[] values = ResnameValueCollection.GetValues(key);
-                            foreach (string value in values)
-                            {
-                                <div class="col-md-12 col-sm-12" v-if="result.Delivery == @key">
-                                    <p class="result-label" v-if="result.Delivery == '1'">@value</p>
-                                    <p class="result-label" v-if="result.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.Branch}}</p>
-                                </div>
-                            }
-                        }
-                    }
-                </div>
-
-                <div class="text-label pad-top">
-                    <div class="row text-center">
-                        <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onDelete" type="submit">@Model.Fields["DeleteConfirmButton"]</button></div>
-                        <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onCancelConfirm" type="reset">@Model.Fields["DeleteCancelButton"]</button></div>
+            <div class="row pad-top pad-bot">
+                <div class="col-md-12">
+                    <div class="table-overflow">
+                        <table class="result-table">
+                            <tbody>
+                                <tr>
+                                    <th class="left">@Model.Fields["ResultType"]</th>
+                                    <th class="right">@Model.Fields["ResultSelect"]</th>
+                                    <th class="right">@Model.Fields["ResultTotal"]</th>
+                                </tr>
+                                <tr v-for="Pig in result.Piggy">
+                                    <td class="left">{{Pig.Text}}</td>
+                                    <td class="right">{{Pig.Count}}</td>
+                                    <td class="right">{{Pig.Amount}}</td>
+                                </tr>
+                                <tr v-if="result.Delivery === '1'">
+                                    <td colspan="2">@Model.Fields["ResultDelivery"]</td>
+                                    <td class="right">{{this.twoDigit(result.DeliveryAmount)}}</td>
+                                </tr>
+                                <tr class="totalamount">
+                                    <td colspan="2" class="result-bold">@Model.Fields["ResultGrandTotal"]</td>
+                                    <td class="right result-bold">{{this.twoDigit(result.GrandTotal)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="divstg">
+                        <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
+                    </div>
+                </div>
+                @{
+                    string ResDeliver = Model.Fields["Deliver"].Value;
+                    NameValueCollection ResnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(ResDeliver);
+                    foreach (string key in ResnameValueCollection.Keys)
+                    {
+                        string[] values = ResnameValueCollection.GetValues(key);
+                        foreach (string value in values)
+                        {
+                            <div class="col-md-12 col-sm-12" v-if="result.Delivery == @key">
+                                <p class="result-label" v-if="result.Delivery == '1'">@value</p>
+                                <p class="result-label" v-if="result.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.Branch}}</p>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+
+            <div class="text-label pad-top">
+                <div class="row text-center">
+                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onDelete" type="submit">@Model.Fields["DeleteConfirmButton"]</button></div>
+                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onCancelConfirm" type="reset">@Model.Fields["DeleteCancelButton"]</button></div>
+                </div>
+            </div>
+        </div>
 
         <div id="MainResult" class="form-group control-label text-default pad-top mainresult" v-show:false>
             <div id="ResultMessage" class="text-center"></div>
