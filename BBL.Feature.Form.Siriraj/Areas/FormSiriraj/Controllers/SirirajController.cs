@@ -1,26 +1,18 @@
-﻿using Sitecore;
+﻿using BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models;
+
+//using QRCoder;
+using BBL.Feature.Form.Siriraj.Config;
+using BBL.Feature.Form.Siriraj.Cryptography;
+using BBL.Feature.Form.Siriraj.Helpers;
+using BBL.Feature.Form.Siriraj.Json;
+using Sitecore;
 using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.Mvc.Controllers;
 using Sitecore.Mvc.Presentation;
-using Sitecore.Web.UI.WebControls;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Text;
-using System.Linq;
 using System.Threading.Tasks;
-//using QRCoder;
-using bbl.AzureUtility.Helpers;
-using bbl.BBLSecurity.Cryptography;
-using BBL.Feature.Form.Siriraj.Config;
-using BBL.Feature.Form.Siriraj.Cryptography;
-using BBL.Feature.Form.Siriraj.Json;
-using BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models;
-using System.Drawing;
 using System.Web.Mvc;
-using BBL.Feature.Form.Siriraj.Helpers;
 
 namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 {
@@ -73,7 +65,6 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
     //        return (ushort)(crc & 0xffff);
     //    }
     //}
-
 
     public class SirirajController : SitecoreController
     {
@@ -140,16 +131,14 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> getDeleteRegister(string ID,string SecretCode)
+        public async Task<ActionResult> getDeleteRegister(string ID, string SecretCode)
         {
-
-            Object data="";
+            Object data = "";
             try
             {
                 Init();
                 if (SecretCode == AppSettings.SecretCode)
                 {
-
                     SirirajDb db = new SirirajDb();
 
                     data = db.getDeleteRegister(ID, SecretCode);
@@ -168,14 +157,12 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteData(string ID, string SecretCode)
         {
-
             Object data = "";
             try
             {
                 Init();
                 if (SecretCode == AppSettings.SecretCode)
                 {
-
                     SirirajDb db = new SirirajDb();
 
                     data = db.DeleteRegister(ID, SecretCode);
@@ -192,8 +179,8 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-      public async Task<ActionResult> getRegister(  FormSiriraj.Models.SirirajModel model)
-      
+        public async Task<ActionResult> getRegister(FormSiriraj.Models.SirirajModel model)
+
         {
             try
             {
@@ -216,7 +203,6 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
         //[ValidateAntiForgeryToken]
         //public string getHash(string ID)
         //{
-
         //    return Hash.HashCitizenID(ID);
         //}
 
@@ -233,7 +219,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             try
             {
                 Init();
-               
+
                 SirirajDb db = new SirirajDb();
                 Object data = db.haveCitizenID(model.CitizenID);
 
@@ -247,9 +233,6 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             }
         }
 
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SaveRegister(FormSiriraj.Models.SirirajModel model)
@@ -257,6 +240,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             try
             {
                 Init();
+
                 model.CitizenID = Hash.HashCitizenID(model.CitizenID);
                 //var modeljson = FromString.JsonToString(model);
 
@@ -273,7 +257,6 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
                 return Json(resultFail, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -299,7 +282,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 
                 //var theURL = Sitecore.Resources.Media.MediaManager.GetMediaUrl(mediaItem);
 
-                var success = new { Success = "true"};
+                var success = new { Success = "true" };
 
                 return Json(success, JsonRequestBehavior.AllowGet);
             }
@@ -311,29 +294,62 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             }
         }
 
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AvailableItems()
         {
-            Object data = "";
-            Init();
+            try
+            {
+                Object data = "";
+                Init();
 
-            SirirajDb db = new SirirajDb();
+                SirirajDb db = new SirirajDb();
 
-            data = db.AvailableItems();
+                data = db.AvailableItems();
 
-            //Item it = new Item(data);
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                var resultFail = new { Success = "false", e.Message };
 
+                return Json(resultFail, JsonRequestBehavior.AllowGet);
+            }
 
-            return Json(data, JsonRequestBehavior.AllowGet);
+            //Object data = "";
+            //Init();
+
+            //SirirajDb db = new SirirajDb();
+
+            //data = db.AvailableItems();
+
+            //return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-       
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ResetAvailableItems()
+        {
+            try
+            {
+                Object data = "";
+                Init();
 
+                SirirajDb db = new SirirajDb();
 
-        
+                db.InitAvailableItems();
+
+                var success = new { Success = "true" };
+
+                return Json(success, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                var resultFail = new { Success = "false", e.Message };
+
+                return Json(resultFail, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
@@ -380,7 +396,6 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             var webappKey = "";
             if (AppSettings.HasKey == false)
             {
-
                 webappKey = "Landlord#1";
                 AppSettings.FormConnectionString = "Data Source = (local); Initial Catalog = Siriraj; Integrated Security = False; User ID = sa; Password = P@ssw0rd";
                 //AppSettings.FormConnectionString = "Server=tcp:bblpwsdb.database.windows.net,1433;Initial Catalog=Siriraj;Persist Security Info=False;User ID=pwsadmin@bblpwsdb.database.windows.net;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";

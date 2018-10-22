@@ -187,6 +187,7 @@
   <ItemGroup>
     <Compile Include="Areas\FormSiriraj\Controllers\SirirajController.cs" />
     <Compile Include="Areas\FormSiriraj\FormSirirajAreaRegistration.cs" />
+    <Compile Include="Areas\FormSiriraj\Models\StockItem.cs" />
     <Compile Include="Cryptography\Encryption.cs" />
     <Compile Include="Db\DataAccess.cs" />
     <Compile Include="Helpers\AppSettings.cs" />

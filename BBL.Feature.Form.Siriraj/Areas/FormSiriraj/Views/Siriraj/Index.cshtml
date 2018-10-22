@@ -20,7 +20,6 @@
 <link href="~/assets/Siriraj/css/Style.css" rel="stylesheet" />
 <link href="~/assets/Siriraj/css/vue-thai-address-input.css" rel="stylesheet" />
 
-
 @functions{
     public static string GetImageURL(Sitecore.Data.Fields.ImageField imageField)
     {
@@ -38,16 +37,14 @@
         <div class="row">
             <div id="divstg" class="col-md-8 col-md-offset-2 text-center">
                 <img class="img-responsive" src="@GetImageURL(Model.Fields["ImageHeader"])">
-                @*<h1 class="title-2 small pad-bot">@Model.Fields["Head"]</h1>*@
-                @*<h4 class="pad-bot">@Model.Fields["Title"]</h4>*@
             </div>
         </div>
 
-@*
-    //
-    // Main form section
-    //
-*@
+        @*
+            //
+            // Main form section
+            //
+        *@
 
         <div id="MainForm">
             <input type="hidden" id="Type1" name="Type1" value="@Model.Fields["ButtonType1"]">
@@ -61,7 +58,7 @@
             <vue-form :state="formstate" v-model="formstate" @@submit.prevent="dummy" class="general-form" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 <div class="item-shadow">
-                    <div id="divstg" class="title-label" v-show="false">
+                    <div id="divstg" class="title-label main-header" v-show="false">
                         @Html.Raw(Model.Fields["Title"])
                     </div>
                     <div id="divstg">
@@ -134,51 +131,55 @@
                         </div>
                     </div>
                     @*<div id="divstg">
-                <h4 class="text-label">@Model.Fields["SelectLabel"]</h4>
-            </div>*@
+                            <h4 class="text-label">@Model.Fields["SelectLabel"]</h4>
+                        </div>*@
 
-                    <div class="row scroll-x">
+                    <div class="row scroll-x" style="overflow-y: hidden;margin-bottom:14px;">
                         <validate auto-label class="required-field" :class="fieldClassName(formstate.Type)">
                             <div class="col-md-4 col-sm-4 text-center">
                                 <div class="frame form-group">
                                     <label for="squaredTwo">
-                                        <input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" :required="required.Type" :disabled="!app.data.haveCar">
+                                        @*<input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" :required="required.Type"  :disabled="!this.haveCar"   >*@
+                                        <input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" v-show="this.haveCar" :required="this.haveCar" :disabled="!this.haveCar">
                                         <span class="checkmark">
                                             <img class="img-responsive pointer" v-on:click="ClickBtn(1)" src="@GetImageURL(Model.Fields["Type1"])">
                                         </span>
                                     </label>
                                 </div>
+                                <span id="txtTipCar">  รถจิ๊บ 1กระปุก ยอดออม 450 บาท</span>
                             </div>
                             <div class="col-md-4 col-sm-4 text-center">
                                 <div class="frame form-group">
                                     <label for="squaredTwo">
-                                        <input name="Type" type="checkbox" class="checkbox" value="radio" v-on:change="Calculate" v-model="model.Type[1]" :required="required.Type" :disabled="!app.data.haveCame">
+                                        <input name="Type" type="checkbox" class="checkbox" value="radio" v-on:change="Calculate" v-model="model.Type[1]" v-show="this.haveRadio" :required="this.haveRadio" :disabled="!this.haveRadio">
                                         <span class="checkmark">
                                             <img class="img-responsive pointer" v-on:click="ClickBtn(2)" src="@GetImageURL(Model.Fields["Type2"])">
                                         </span>
                                     </label>
                                 </div>
+                                <span id="txtTipRadio"> วิทยุ 1กระปุก ยอดออม 450 บาท</span>
                             </div>
-                            <div class="col-md-4 col-sm-4 text-center">
+                            <div class="col-md-4 col-sm-4 text-center" style="overflow:visible">
                                 <div class="frame form-group">
                                     <label for="squaredTwo">
-                                        <input name="Type" type="checkbox" class="checkbox" value="camera" v-on:change="Calculate" v-model="model.Type[2]" :required="required.Type" :disabled="!app.data.haveRadio">
+                                        <input name="Type" type="checkbox" class="checkbox" value="camera" v-on:change="Calculate" v-model="model.Type[2]" v-show="this.haveCamera" :required="this.haveCamera" :disabled="!this.haveCamera">
                                         <span class="checkmark">
                                             <img class="img-responsive pointer" v-on:click="ClickBtn(3)" src="@GetImageURL(Model.Fields["Type3"])">
                                         </span>
                                     </label>
                                 </div>
+                                <span id="txtTipCamera" style=" white-space: nowrap;"> กล้อง 1กระปุก ยอดออม 450 บาท</span>
                             </div>
                             <field-messages auto-label name="Type" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                 @*<div class="text-center small-pad" slot="validateType">@Model.Fields["ReqType"]</div>*@
-                                <div class="text-center small-pad pad-bot" slot="required" v-if="validateType">@Model.Fields["ReqType"]</div>                               
+                                <div class="text-center small-pad pad-bot" slot="required" v-if="validateType">@Model.Fields["ReqType"]</div>
                             </field-messages>
                         </validate>
                     </div>
                     <div class="row">
                         @*<div id="divstg" class="col-md-12">
-                <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
-            </div>*@
+                                <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
+                            </div>*@
                         @{
                             string Receipt = Model.Fields["ReceiptOption"].Value;
                             NameValueCollection ReceiptValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(Receipt);
@@ -253,7 +254,7 @@
                                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Subdisticnt)">
                                     @*<input type="text" name="Subdisticnt" class="form-control" placeholder="@Model.Fields["Subdistrict"] *" v-on:keyup="AddressOptionClick" required size="20" maxlength="20" v-model="model.Subdisticnt">*@
                                     <thai-address-input name="Subdisticnt" placeholder="@Model.Fields["Subdistinct"] *" type="subdistrict" v-model="model.Subdistrict" input-class="form-control" @@selected="onSelected" v-on:keyup="copyAddressBack" :required="required.Receipt"></thai-address-input>
-                                    
+
                                     <field-messages auto-label name="Subdisticnt" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                         <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
                                     </field-messages>
@@ -298,14 +299,14 @@
                     </div>
                     <div class="row">
                         @*<div class="col-md-12">
-                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Donate)">
-                                <input type="number" name="Donate" class="form-control" placeholder="@Model.Fields["Donate"]" v-on:keyup="Calculate" v-model="model.Donate" size="50" maxlength="50" v-model="model.Donate">
+                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Donate)">
+                                    <input type="number" name="Donate" class="form-control" placeholder="@Model.Fields["Donate"]" v-on:keyup="Calculate" v-model="model.Donate" size="50" maxlength="50" v-model="model.Donate">
 
-                                <field-messages auto-label name="Donate" show="$dirty || $touched || $submitted" class="form-control-feedback">
-                            <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
-                        </field-messages>
-                            </validate>
-                        </div>*@
+                                    <field-messages auto-label name="Donate" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                            </field-messages>
+                                </validate>
+                            </div>*@
                         <div id="divstg" class="col-md-12">
                             <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
                         </div>
@@ -332,8 +333,8 @@
                     </div>
                     <div class="row" id="AddressOption" v-show="false">
                         @*<div id="divstg" class="col-md-12">
-                <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
-            </div>*@
+                                <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
+                            </div>*@
                         @{
                             string addressoption = Model.Fields["AddressOption"].Value;
                             NameValueCollection addressoptionCollection = Sitecore.Web.WebUtil.ParseUrlParameters(addressoption);
@@ -357,11 +358,11 @@
                     </div>
                     <div class="row" id="ShowBranch" v-show="true">
                         @*<div id="divstg" class="col-md-12">
-                    <h4 class="text-label">@Model.Fields["BranchLabel"]</h4>
-                </div>*@
+                                <h4 class="text-label">@Model.Fields["BranchLabel"]</h4>
+                            </div>*@
                         <div class="col-md-6">
                             <validate auto-label class="form-group cust-select required-field" :class="fieldClassName(formstate.SelectProvince)">
-                                <select name="SelectProvince" class="form-control none-bgd" id="selProvince" v-model="model.BranchProvince"> 
+                                <select name="SelectProvince" :required="true" class="form-control none-bgd" id="selProvince" v-model="model.BranchProvince">
                                     <option value="" selected disabled>@Model.Fields["BranchProvince"]</option>
                                     <option v-for="(p, index) in Provinces" v-bind:value="p.Province" v-bind:key="index">{{p.Province}}</option>
                                 </select>
@@ -372,10 +373,11 @@
                         </div>
                         <div class="col-md-6">
                             <validate auto-label class="form-group cust-select required-field" :class="fieldClassName(formstate.SelectBranch)">
-                                <select name="SelectBranch" class="form-control none-bgd" id="selBranch" v-model="model.Branch">
+                                <select name="SelectBranch" :required="true" class="form-control none-bgd" id="selBranch" v-model="model.BranchName">
                                     <option value="" selected disabled>@Model.Fields["Branch"]</option>
                                     <option v-for="(c, index) in Branches" v-bind:value="c.BranchCode" v-bind:key="index">{{c.BranchName}}</option>
                                 </select>
+
                                 <field-messages auto-label name="SelectBranch" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                     <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
                                 </field-messages>
@@ -498,47 +500,17 @@
                 </div>
             </vue-form>
         </div>
-@*
-    //
-    // Confirm section
-    //        
-*@
+        @*
+            //
+            // Confirm section
+            //
+        *@
         <div id="ConfirmForm" class="general-form" v-show="false">
             <div class="row">
                 <div class="col-md-12">
                     <div id="divstg">
-                        <h4 class="text-label">@Model.Fields["PersonalLabel"]</h4>
+                        <h4 class="text-label SubHead">@Model.Fields["PersonalLabel"]</h4>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Name"] </p> <p class="result-label">{{result.Name}}</p></div>
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Surname"] </p> <p class="result-label">{{result.Surname}}</p></div>
-            </div>
-            <div class="row">
-                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{result.PersonalID}}</p></div>
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{result.Mobile}}</p></div>
-            </div>
-            <div class="row">
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{result.Mobile2}}</p></div>
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Email"] </p> <p class="result-label">{{result.Email}}</p></div>
-            </div>
-            <div id="ConfirmAddress" class="pad-bot" v-if="model.Receipt == '1'">
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.Address}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.Soi}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.Road}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.Subdistrict}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.District}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.Province}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.Zip}}</p></div>
-                    <div class="col-md-6"></div>
                 </div>
             </div>
             <div class="row pad-top pad-bot">
@@ -572,24 +544,64 @@
             <div class="row">
                 <div class="col-md-12">
                     <div id="divstg">
-                        <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
+                        <h4 class="text-label SubHead">@Model.Fields["DeliverLabel"]</h4>
                     </div>
                 </div>
-                    @{
-                        string ResDeliver = Model.Fields["Deliver"].Value;
-                        NameValueCollection ResnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(ResDeliver);
-                        foreach (string key in ResnameValueCollection.Keys)
+                @{
+                    string ResDeliver = Model.Fields["Deliver"].Value;
+                    NameValueCollection ResnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(ResDeliver);
+                    foreach (string key in ResnameValueCollection.Keys)
+                    {
+                        string[] values = ResnameValueCollection.GetValues(key);
+                        foreach (string value in values)
                         {
-                            string[] values = ResnameValueCollection.GetValues(key);
-                            foreach (string value in values)
-                            {
-                                <div class="col-md-12 col-sm-12" v-if="model.Delivery == @key">
-                                    <p class="result-label" v-if="model.Delivery == '1'">@value</p>
-                                    <p class="result-label" v-if="model.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.Branch}}</p>
-                                </div>
-                            }
+                            <div class="col-md-12 col-sm-12" v-if="model.Delivery == @key">
+                                <p class="result-label" v-if="model.Delivery == '1'">@value</p>
+                                <p class="result-label" v-if="model.Delivery == '0'">@Model.Fields["BranchProvince"] {{model.BranchProvince}} @Model.Fields["Branch"] {{model.BranchName}}</p>
+                            </div>
                         }
                     }
+                }
+            </div>
+
+            <div class="row lineSection"><hr></div>
+            @*Section*@
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="divstg">
+                        <h4 class="text-label SubHead"> รายละเอียดผู้สมัคร</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Name"] </p> <p class="result-label">{{model.Name}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Surname"] </p> <p class="result-label">{{model.Surname}}</p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{model.PersonalID}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{model.Mobile}}</p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{model.Mobile2}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Email"] </p> <p class="result-label">{{model.Email}}</p></div>
+            </div>
+            <div id="ConfirmAddress" class="pad-bot" v-if="model.Receipt == '1'">
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{model.Address}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{model.Soi}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{model.Road}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{model.Subdistrict}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{model.District}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.Province}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{model.Zip}}</p></div>
+                    <div class="col-md-6"></div>
+                </div>
             </div>
 
             <div id="ConfirmPostAddress" class="pad-bot" v-if="model.Delivery == '1'">
@@ -610,7 +622,10 @@
                     <div class="col-md-6"></div>
                 </div>
             </div>
-            <div class="text-label pad-top">
+
+            <div class="row lineSection"><hr></div>
+
+            <div class="text-label ">
                 <div class="row text-center">
                     <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onSubmit" type="submit">@Model.Fields["ConfirmButton"]</button></div>
                     <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onCancelConfirm" type="reset">@Model.Fields["BackButton"]</button></div>
@@ -618,20 +633,92 @@
             </div>
         </div>
 
-@*
-    //
-    // Receipt section
-    //
-*@
-        <div id="FinalForm" class="general-form" v-show="true">
+        @*
+            //
+            // Receipt section
+            //
+        *@
+        <div id="FinalForm" class="general-form" v-show="false">
+
             <div class="row">
                 <div class="col-md-12">
-                    <div id="divstg">
-                        <h4 class="text-label">@Model.Fields["PersonalLabel"]</h4>
+                    <div class="TitleHead">
+
+                        <h4 class="text-label  ">  ใบสมัครเลขที่ {{result.InvoiceID}}</h4>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="SubHead">
+
+                        <h4 class="text-label  "> รายละเอียดการสมัคร</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row   pad-bot">
+                <div class="col-md-12">
+                    <div class="table-overflow">
+                        <table class="result-table">
+                            <tbody>
+                                <tr>
+                                    <th class="left">@Model.Fields["ResultType"]</th>
+                                    <th class="right">@Model.Fields["ResultSelect"]</th>
+                                    <th class="right">@Model.Fields["ResultTotal"]</th>
+                                </tr>
+                                <tr v-for="Pig in model.Piggy">
+                                    <td class="left">{{Pig.Text}}</td>
+                                    <td class="right">{{Pig.Count}}</td>
+                                    <td class="right">{{Pig.Amount}}</td>
+                                </tr>
+                                <tr v-if="model.Delivery === '1'">
+                                    <td colspan="2">@Model.Fields["ResultDelivery"]</td>
+                                    <td class="right">{{this.twoDigit(model.DeliveryAmount)}}</td>
+                                </tr>
+                                <tr class="totalamount">
+                                    <td colspan="2" class="result-bold">@Model.Fields["ResultGrandTotal"]</td>
+                                    <td class="right result-bold">{{this.twoDigit(model.GrandTotal)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12 SubHead">
+                    <div id="divstg ">
+                        <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
+                    </div>
+                </div>
+                @{
+            string FinDeliver = Model.Fields["Deliver"].Value;
+            NameValueCollection FinnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(FinDeliver);
+            foreach (string key in FinnameValueCollection.Keys)
+            {
+                string[] values = FinnameValueCollection.GetValues(key);
+                foreach (string value in values)
+                {
+                    <div class="col-md-12 col-sm-12" v-if="model.Delivery == @key">
+                        <p class="result-label" v-if="model.Delivery == '1'">@value</p>
+                        <p class="result-label" v-if="model.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.Branch}}</p>
+                    </div>
+        }
+    }
+                }
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 SubHead">
+                    <div id="divstg ">
+                        <h4 class="text-label">รายละเอียดผู้สมัคร</h4>
+                    </div>
+                </div>
+            </div>
+                <div class="row">
                 <div class="col-md-6"><p class="result-label">@Model.Fields["Name"] </p> <p class="result-label">{{result.Name}}</p></div>
                 <div class="col-md-6"><p class="result-label">@Model.Fields["Surname"] </p> <p class="result-label">{{result.Surname}}</p></div>
             </div>
@@ -660,60 +747,22 @@
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.Zip}}</p></div>
                     <div class="col-md-6"></div>
                 </div>
+                
             </div>
-           
-            
-            
-            <div class="row pad-top pad-bot">
-                <div class="col-md-12">
-                    <div class="table-overflow">
-                        <table class="result-table">
-                            <tbody>
-                                <tr>
-                                    <th class="left">@Model.Fields["ResultType"]</th>
-                                    <th class="right">@Model.Fields["ResultSelect"]</th>
-                                    <th class="right">@Model.Fields["ResultTotal"]</th>
-                                </tr>
-                                <tr v-for="Pig in model.Piggy">
-                                    <td class="left">{{Pig.Text}}</td>
-                                    <td class="right">{{Pig.Count}}</td>
-                                    <td class="right">{{Pig.Amount}}</td>
-                                </tr>
-                                <tr v-if="model.Delivery === '1'">
-                                    <td colspan="2">@Model.Fields["ResultDelivery"]</td>
-                                    <td class="right">{{this.twoDigit(model.DeliveryAmount)}}</td>
-                                </tr>
-                                <tr class="totalamount">
-                                    <td colspan="2" class="result-bold">@Model.Fields["ResultGrandTotal"]</td>
-                                    <td class="right result-bold">{{this.twoDigit(model.GrandTotal)}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            <div class="row lineSection"><hr></div>
+
+
+
             <div class="row">
-                <div class="col-md-12">
-                    <div id="divstg">
-                        <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
+                <div class="col-md-12 SubHead">
+                    <div id="divstg ">
+                        <h4 class="text-label">ช่องทางการโอนเงินออม</h4>
                     </div>
                 </div>
-                @{
-                    string FinDeliver = Model.Fields["Deliver"].Value;
-                    NameValueCollection FinnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(FinDeliver);
-                    foreach (string key in FinnameValueCollection.Keys)
-                    {
-                        string[] values = FinnameValueCollection.GetValues(key);
-                        foreach (string value in values)
-                        {
-                            <div class="col-md-12 col-sm-12" v-if="model.Delivery == @key">
-                                <p class="result-label" v-if="model.Delivery == '1'">@value</p>
-                                <p class="result-label" v-if="model.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.Branch}}</p>
-                            </div>
-                        }
-                    }
-                }
             </div>
+
+
+
             <div id="ReceiptPostAddress" class="pad-bot" v-if="model.Delivery == '1'">
                 <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.PostAddress}}</p></div>
@@ -732,31 +781,37 @@
                     <div class="col-md-6"></div>
                 </div>
             </div>
+            
+            
             <div class="row pad-top">
                 <div class="col-md-6 col-sm-6 pad-bot">
                     <div class="row">
-                        <div class="col-md-6 result-label">@Model.Fields["ServiceCodeLabel"]</div><div class="col-md-6 result-label">{{model.ServiceCode}}</div>
+                        <div class="col-md-6 result-label">@*@Model.Fields["ServiceCodeLabel"]*@ Service Code: </div><div class="col-md-6 result-label">{{model.ServiceCode}}</div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 result-label">@Model.Fields["RefNoLabel"]</div><div class="col-md-6 result-label">{{result.Ref1}}</div>
+                        <div class="col-md-6 result-label">@*@Model.Fields["RefNoLabel"]*@ Ref No:</div><div class="col-md-6 result-label">{{result.Ref1}}</div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 result-label">@Model.Fields["BillerNameLabel"]</div><div class="col-md-6 result-label">{{model.BillerName}}</div>
+                        <div class="col-md-6 result-label">@*@Model.Fields["BillerNameLabel"]*@ Biller name:</div><div class="col-md-6 result-label">{{model.BillerName}}</div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 result-label">@Model.Fields["AmountLabel"]</div><div class="col-md-6 result-label">{{this.twoDigit(result.GrandTotal)}}</div>
+                        <div class="col-md-6 result-label">@*@Model.Fields["AmountLabel"]*@ จำนวนเงิน</div><div class="col-md-6 result-label">{{this.twoDigit(result.GrandTotal)}}</div>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-6 text-center pad-bot">
                     <qrcode v-bind:value="result.QRCode" :options="{ size: 150 }"></qrcode>
                 </div>
+                <div class="text-center"><span>  *Qr Code สามารถชำระเงินที่ Mobile Banking ของทุกธนาคาร  </span></div>
+                <div class="row lineSection"><hr></div>
             </div>
             <div class="row">
-                <div class="col-md-12 text-center pad-top pad-bot">
-                </div>
-                <div class="col-md-12 text-center fit-width pad-top pad-bot">
+               
+                <div class="col-md-12 text-center fit-width   pad-bot">
                     <barcode v-bind:value="result.Barcode" tag="img"></barcode>
                 </div>
+
+                <div class="text-center"><span>*Bar Code สามารถชำระเงินที่ ATM ของธนาคาร และเคาเตอร์ของธนาคารกรุงเทพทั่วประเทศ  </span></div>
+                <div class="row lineSection"><hr></div>
             </div>
             <div class="text-label pad-top">
                 <div class="row text-center">
@@ -765,9 +820,35 @@
             </div>
         </div>
 
-    </div>
+            @*
+        //
+        // Alert section
+        //
+            *@
+            <div id="AlertForm" class="general-form" v-show="false">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="divstg">
+                            <h4 class="text-label"> </h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pad-bot">
+                    <div id="errorDupplicateID" class="row" v-show="false">
+                        <div class="col-md-12 text-center"><h4 class="result-label ">เลขบัตรประชาชนของท่านมีอยู่ในระบบเรียบร้อยแล้ว ระบบไม่สามารถดำเนินการสมัครต่อได้</h4></div>
+                    </div>
+                    <div id="errorOutOfStock" class="row" v-show="false">
+                        <div class="col-md-12 text-center"><h4 class="result-label "> ขออภัย กระปุกออมสินได้ถูกสั่งจองหมดแล้ว</h4></div>
+                    </div>
+                    <div id="errorDefualt" class="row" v-show="false">
+                        <div class="col-md-12 text-center"><h4 class="result-label "> ขออภัย เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง</h4></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 </div>
 <div class="pad-bot"></div>
 
 <script src="~/assets/Siriraj/js/index.js"></script>
-
