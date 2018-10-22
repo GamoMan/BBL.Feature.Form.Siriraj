@@ -815,7 +815,8 @@
             </div>
             <div class="text-label pad-top">
                 <div class="row text-center">
-                    <div class="col-md-12 col-sm-12 col-xs-12"><button class="btn btn-primary" v-on:click="onPrint" type="submit">@Model.Fields["PrintButton"]</button></div>
+                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onPrint" type="submit">@Model.Fields["PrintButton"]</button></div>
+                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onCancelOrder" type="submit">ยกเลิกรายการ</button></div>
                 </div>
             </div>
         </div>
@@ -843,6 +844,10 @@
                     </div>
                     <div id="errorDefualt" class="row" v-show="false">
                         <div class="col-md-12 text-center"><h4 class="result-label "> ขออภัย เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง</h4></div>
+                    </div>
+
+                    <div id="AlertCancel" class="row" v-show="false">
+                        <div class="col-md-12 text-center"><h4 class="result-label ">ยกเลิกคำสั่งซื้อเรียบร้อยแล้ว</h4></div>
                     </div>
 
                 </div>

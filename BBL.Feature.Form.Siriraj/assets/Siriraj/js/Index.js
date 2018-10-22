@@ -91,7 +91,7 @@ var app = new Vue({
             Summary: '',
             car: 0,
             Radio: 0,
-            Camera:0
+            Camera: 0
         },
         required: {
             Type: true,
@@ -153,22 +153,17 @@ var app = new Vue({
 
             for (var i = 0; i < this.model.Type.length; i++) {
                 if (this.model.Type[i] === true) {
-
-
                     //Re Cal from Result
                     if (this.result.InvoiceID != '') {
-                        
                         var OutOfStockMessage = 'หมด';
-                   
+
                         if ((i == 0) && (this.result.Car == 0)) {
                             Amount = 0;
                             Count = OutOfStockMessage;
-                          
                         }
                         else if ((i == 1) && (this.result.Radio == 0)) {
                             Amount = 0;
                             Count = OutOfStockMessage;
-                             
                         }
                         else if ((i == 2) && (this.result.Camera == 0)) {
                             Amount = 0;
@@ -180,8 +175,6 @@ var app = new Vue({
                         }
 
                         self.model.Piggy.push({ "Text": self.model.TypeText[i], "Count": Count, "Amount": Amount });
-
-                       
                     }
                     else {
                         //Cal From User Detail
@@ -189,16 +182,12 @@ var app = new Vue({
                         cnt++;
                     }
 
-                 
                     this.required.Type = false;
                 }
             }
-          
 
-             
-        
             this.model.GrandTotal = (cnt > 0 ? this.Price * cnt : 0) + (this.model.Delivery === "1" ? 70 : 0);
-         
+
             this.model.Total = cnt;
             if (this.model.Donate === "0")
                 this.model.Donate = '';
@@ -209,6 +198,8 @@ var app = new Vue({
             if (this.haveRadio == false && val == 2) { return; }
             if (this.haveCamera == false && val == 3) { return; }
 
+
+            debugger
             this.model.Type[val - 1] = !this.model.Type[val - 1];
             this.Calculate();
             event.preventDefault();
@@ -233,6 +224,14 @@ var app = new Vue({
         validateType: function () {
             var ret = false;
             for (var i = 0; i < this.model.Type.length; i++) {
+
+
+                if (this.haveCar == false && val == 0) { continue; }
+                if (this.haveRadio == false && val == 1) { continue; }
+                if (this.haveCamera == false && val == 2) { continue; }
+
+
+
                 if (this.model.Type[i] === true) {
                     ret = true;
                 }
@@ -299,27 +298,21 @@ var app = new Vue({
                 url: '/FormSiriraj/Siriraj/AvailableItems',
                 data: data,
                 success: function (response) {
-
-                     
                     self.AvailableItems = response;
 
                     self.haveRadio = response.Radio;
                     self.haveCar = response.Car;
                     self.haveCamera = response.Camera;
 
-                     
-
-                    //OutofStock 
+                    //OutofStock
                     if (self.haveRadio == false && self.haveCar == false && self.haveCamera == false) {
-                       $('#AlertForm').slideDown(100);
+                        $('#AlertForm').slideDown(100);
                         $("#errorOutOfStock").slideDown();
                         $('#MainForm').slideUp(100);
 
                         return;
                     }
 
-
-                     
                     if (self.haveRadio == false) {
                         $('#txtTipRadio').html('หมด');
                         $('#spnradio').addClass('Disableitem');
@@ -332,8 +325,7 @@ var app = new Vue({
                         $('#txtTipCamera').html('หมด');
                         $('#spncamera').addClass('Disableitem');
                     }
-
-                    }
+                }
             });
         },
 
@@ -498,8 +490,6 @@ var app = new Vue({
                         //}
                     }
                 });
-
-              
             }
         },
         onCancelConfirm: function (e) {
@@ -510,6 +500,44 @@ var app = new Vue({
         onPrint: function () {
             window.print();
         },
+
+        onCancelOrder: function () {
+            var data = {
+                "CitizenID": this.model.PersonalID
+            };
+
+            data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
+            $.ajax({
+                async: false,
+                method: 'post',
+                url: '/FormSiriraj/Siriraj/CancelOrder',
+                data: data,
+                success: function (response) {
+                    debugger
+
+                    if (response) {
+                        $('#AlertForm').slideDown(100);
+                        $("#AlertCancel").slideDown();
+                    } else {
+                        $('#AlertForm').slideDown(100);
+                        $('#errorDefualt').slideDown(100);
+                        //$("#AlertCancel").slideDown();
+                    }
+
+                    $('#ConfirmForm').slideUp(100);
+                    $('#MainForm').slideUp(100);
+
+                    $('#FinalForm').slideUp(100);
+
+                    var strHTML = '';
+
+                    strHTML += "<br><br>";
+           
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                }
+            });
+        },
+
         onSubmit: function (e) {
             if (!app.formstate.$invalid) {
                 var data = {
@@ -573,22 +601,6 @@ var app = new Vue({
                     "Donate": this.model.Donate,
                     "TaxID": this.model.TaxID,
                     "Suffix": this.model.Suffix
-
-                    //"CitizenID": this.model.PersonalID,//.replace(SpacialCharacter, ''),
-                    //"Car": this.model.Type[0] === true ? 1 : 0,
-                    //"Camera": this.model.Type[2] === true ? 1 : 0,
-                    //"Radio": this.model.Type[1] === true ? 1 : 0,
-                    //"Receipt": this.model.Receipt,
-                    //"DeliveryType": this.model.Delivery,
-                    //"BranchCode": this.model.BranchCode,
-                    //"BranchName": this.model.BranchName,//.replace(SpacialCharacter, ''),
-                    //"BranchProvince": this.model.BranchProvince,//.replace(SpacialCharacter, ''),
-                    //"Barcode": this.model.Barcode,//.replace(SpacialCharacter, ''),
-                    //"QRcode": this.model.QRcode,//.replace(SpacialCharacter, ''),
-                    //"Amount": this.model.GrandTotal,
-                    //"Donate": this.model.Donate,
-                    //"TaxID": this.model.TaxID,
-                    //"Suffix": this.model.Suffix
                 };
                 data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
                 var self = this;
@@ -623,7 +635,6 @@ var app = new Vue({
 
                             self.result.InvoiceID = response[0].InvoiceID;
 
-                           
                             self.result.BranchProvince = self.model.BranchProvince;
                             self.result.Branch = self.model.Branch;
 
@@ -633,7 +644,7 @@ var app = new Vue({
                             self.result.Mobile = self.model.Mobile;
                             self.result.Mobile2 = self.model.Mobile2;
                             self.result.Email = self.model.Email;
-                        
+
                             self.result.Address = self.model.Address;
                             self.result.Soi = self.model.Soi;
                             self.result.Road = self.model.Road;
@@ -642,18 +653,15 @@ var app = new Vue({
                             self.result.Province = self.model.Province;
                             self.result.Zip = self.model.Zip;
 
-
-                           
-                         
                             self.result.QRcode = response[0].QRcode;
                             self.result.Barcode = response[0].Barcode;
 
                             self.model.ServiceCode = "*ยังไม่ได้ทำ";
                             self.result.Ref1 = "*ยังไม่ได้ทำ";
-                            self.model.BillerName ="*ยังไม่ได้ทำ"
-
+                            self.model.BillerName = "*ยังไม่ได้ทำ"
+                            debugger
                             //Set ค่าที่จองได้
-                            
+
                             //self.model.Type[0] = (response[0].Car == 1);
                             //self.model.Type[1] = (response[0].Radio == 1);
                             //self.model.Type[2] = (response[0].Camera == 1);
@@ -662,11 +670,9 @@ var app = new Vue({
                             self.result.Radio = response[0].Radio;
                             self.result.Camera = response[0].Camera;
 
-
                             //self.result.GrandTotal = response[0].Amount;
 
                             self.Calculate();
-                            
                         }
                         else if (response[0].Result == 0) {
                             //Case Error slideUp AlertForm
@@ -675,8 +681,6 @@ var app = new Vue({
 
                             $("#AlertForm").slideDown(300);
                             $("#errorOutOfStock").slideDown();
-
-                         
                         } else if (response[0].Result == -100) {
                             $("#ConfirmForm").slideUp(300);
                             $("#errorDupplicateID").slideDown();
