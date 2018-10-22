@@ -81,7 +81,7 @@
                         </div>
                         <div class="col-md-6 col-md-offset-3">
                             <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.SecretCode)">
-                                <input type="password" name="SecretCode" class="form-control" placeholder="@Model.Fields["SecretCode"] *" required size="8" maxlength="8" v-model="model.Secretcode" autocomplete="off">
+                                <input type="password" name="SecretCode" class="form-control" placeholder="@Model.Fields["SecretCodeLabel"] *" required size="8" maxlength="8" v-model="model.Secretcode" autocomplete="off">
 
                                 <field-messages auto-label name="SecretCode" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                     <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
