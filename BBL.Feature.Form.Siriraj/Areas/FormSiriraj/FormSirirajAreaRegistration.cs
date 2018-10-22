@@ -1,18 +1,20 @@
-﻿using System.Web.Mvc;
+﻿
+
+using System.Web.Mvc;
 
 namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj
 {
-    public class FormSirirajAreaRegistration : AreaRegistration 
+    public class FormSirirajAreaRegistration : AreaRegistration
     {
-        public override string AreaName 
+        public override string AreaName
         {
-            get 
+            get
             {
                 return "FormSiriraj";
             }
         }
 
-        public override void RegisterArea(AreaRegistrationContext context) 
+        public override void RegisterArea(AreaRegistrationContext context)
         {
             context.MapRoute(
                 "FormSiriraj_default",
