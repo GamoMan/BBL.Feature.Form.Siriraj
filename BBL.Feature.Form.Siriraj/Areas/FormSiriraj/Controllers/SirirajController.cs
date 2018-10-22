@@ -211,26 +211,26 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
         //{
         //    return BOTBarcode.genBarcode(TaxID, Suffix, Ref1, Ref2, Amount);
         //}
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> haveCitizenID(FormSiriraj.Models.SirirajModel model)
-        {
-            try
-            {
-                Init();
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> haveCitizenID(FormSiriraj.Models.SirirajModel model)
+        //{
+        //    try
+        //    {
+        //        Init();
 
-                SirirajDb db = new SirirajDb();
-                Object data = db.haveCitizenID(model.CitizenID);
+        //        SirirajDb db = new SirirajDb();
+        //        Object data = db.haveCitizenID(model.CitizenID);
 
-                return Json(data, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                var resultFail = new { Success = "false", e.Message };
+        //        return Json(data, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        var resultFail = new { Success = "false", e.Message };
 
-                return Json(resultFail, JsonRequestBehavior.AllowGet);
-            }
-        }
+        //        return Json(resultFail, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -350,45 +350,46 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             }
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public String GenQRCode(string Data,int Pixel)
-        //{
-        //    string Version = "000201";
-        //    string Type = "010212";
-        //    string Merchant = "2913";
-        //    string AppID = "0010BBLPWS0001";
-        //    string Account = "0113";
-        //    string Country = "5802TH";
-        //    string Currency = "5303764";
-        //    string CheckSum = "6304";
 
-        //    string QRCode = Version + Type + Merchant + AppID + Data + Account + Country + Currency + CheckSum;
-        //    //QRCode = "00020101021129370016A000000677010111011300660000000005802TH53037646304";
-        //    byte[] bytes = Encoding.Default.GetBytes(QRCode);
-        //    string hex = Crc16.ComputeCrc(bytes).ToString("x2").ToUpper();
-        //    QRCode = QRCode + hex;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CancelOrder(string CitizenID)
+        {
+            try
+            {
+                Object data = "";
+                Init();
 
-        //    byte[] outbyte = null;
-        //    try
-        //    {
-        //        QRCodeGenerator qrGenerator = new QRCodeGenerator();
-        //        QRCodeData qrCodeData = qrGenerator.CreateQrCode(QRCode, QRCodeGenerator.ECCLevel.Q);
-        //        QRCode qrCode = new QRCode(qrCodeData);
-        //        Bitmap qrCodeImage = qrCode.GetGraphic(Pixel);
-        //        ImageConverter converter = new ImageConverter();
+                SirirajDb db = new SirirajDb();
 
-        //        outbyte = (byte[])converter.ConvertTo(qrCodeImage, typeof(byte[]));
-        //        // return File(ImageManipulate.ImageToByteArray(ImageManipulate.ResizeCropExcess(ImageManipulate.ByteArrayToImage(outbyte), Pixel, Pixel)), "image/jpeg");
-        //        return System.Convert.ToBase64String(ImageManipulate.ImageToByteArray(ImageManipulate.ResizeCropExcess(ImageManipulate.ByteArrayToImage(outbyte), Pixel, Pixel)));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        //var resultFail = new { Success = "false", e.Message };
+               bool cancelResult= db.CancelOrder(CitizenID);
 
-        //        return null;
-        //    }
-        //}
+                if  (cancelResult==false)
+                {
+                    throw new Exception("Unable to cancel order");
+                }
+                else
+                {
+                    //Sys Stock To Mem
+                   
+
+                    db.InitAvailableItems();
+
+                }
+
+               var success = new { Success = "true" };
+
+               return Json(success, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                var resultFail = new { Success = "false", e.Message };
+
+                return Json(resultFail, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        
 
         private void Init()
         {
