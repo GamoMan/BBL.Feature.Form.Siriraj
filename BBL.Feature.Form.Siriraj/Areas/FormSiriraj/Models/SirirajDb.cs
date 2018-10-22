@@ -253,21 +253,21 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
             }
         }
 
-        public bool haveCitizenID(string CitizenID)
-        {
-            string myID = Hash.HashCitizenID(CitizenID);
+        //public bool haveCitizenID(string CitizenID)
+        //{
+        //    string myID = Hash.HashCitizenID(CitizenID);
 
-            List<IDataParameter> parms = new List<IDataParameter>();
-            var sql = "SELECT * FROM Register WHERE CitizenID = @ID";
-            parms.Add(new SqlParameter("@ID", myID));
-            object itemcount = Db.FbExecuteScalar("sp_ExistsCitizenID", parms);
+        //    List<IDataParameter> parms = new List<IDataParameter>();
+        //    var sql = "SELECT * FROM Register WHERE CitizenID = @ID";
+        //    parms.Add(new SqlParameter("@ID", myID));
+        //    object itemcount = Db.FbExecuteScalar("sp_ExistsCitizenID", parms);
 
-            int citiCount = Convert.ToInt32(itemcount);
-            if (citiCount > 0)
-                return true;
-            else
-                return false;
-        }
+        //    int citiCount = Convert.ToInt32(itemcount);
+        //    if (citiCount > 0)
+        //        return true;
+        //    else
+        //        return false;
+        //}
 
         public object AvailableItems()
         {
@@ -280,6 +280,27 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
             var curruntItem = new { Car = StockItem.HaveCar, Camera = StockItem.HaveCamera, Radio = StockItem.HaveRadio };
             return curruntItem;
         }
+
+
+        public bool CancelOrder(string CitizenID)
+        {
+                string myID = Hash.HashCitizenID(CitizenID);
+
+                List<IDataParameter> parms = new List<IDataParameter>();
+                var sql = "DELETE FROM  [Register] WHERE CitizenID = @ID";
+                parms.Add(new SqlParameter("@ID", myID));
+                object itemcount = Db.FbExecuteNonQuery(sql, parms);
+
+                int citiCount = Convert.ToInt32(itemcount);
+                if (citiCount ==1)
+                    return true;
+                else
+                    return false;
+           
+
+        }
+
+
 
 
         public void InitAvailableItems()
