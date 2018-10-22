@@ -801,6 +801,26 @@ input[disabled].form-control {
 .small-pad-bot {
     margin-bottom: 15px !important;
 }
+.showdate{
+    text-align:right;
+}
+
+@media screen and (max-width: 767px) {
+    .panel-body {
+        margin-top: 45px;
+    }
+    [class*='btn-primary'] {
+        background: #039;
+        color: #fff;
+        min-width: 100% !important;
+    }
+    .showdate{
+        text-align:left;
+    }
+    #MainForm .text-right{
+        text-align:left !important;
+    }
+}
 /*
     //
     //  Print

@@ -78,7 +78,6 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
                     RenderingContext.Current.Rendering.DataSource))
                     contentItem = database.GetItem(new ID(
                         RenderingContext.Current.Rendering.DataSource));
-
             return View(contentItem);
         }
 
@@ -91,7 +90,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
                     RenderingContext.Current.Rendering.DataSource))
                     contentItem = database.GetItem(new ID(
                         RenderingContext.Current.Rendering.DataSource));
-
+            AppSettings.SecretCode = contentItem.Fields["SecretCode"].ToString();
             return View(contentItem);
         }
 
@@ -406,7 +405,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
                 AppSettings.FormKey = "x8r9ho0GGR";
 
                 AppSettings.HasKey = true;
-                AppSettings.SecretCode = "P@ssw0rd";
+                //AppSettings.SecretCode = "P@ssw0rd";
                 //webappKey = "Landlord#1";
                 //AppSettings.FormConnectionString = "Data Source = (local); Initial Catalog = Siriraj; Integrated Security = False; User ID = sa; Password = P@ssw0rd";
                 //AppSettings.FormKey = "x8r9ho0GGR";
