@@ -198,8 +198,6 @@ var app = new Vue({
             if (this.haveRadio == false && val == 2) { return; }
             if (this.haveCamera == false && val == 3) { return; }
 
-
-            debugger
             this.model.Type[val - 1] = !this.model.Type[val - 1];
             this.Calculate();
             event.preventDefault();
@@ -513,8 +511,6 @@ var app = new Vue({
                 url: '/FormSiriraj/Siriraj/CancelOrder',
                 data: data,
                 success: function (response) {
-                    debugger
-
                     if (response) {
                         $('#AlertForm').slideDown(100);
                         $("#AlertCancel").slideDown();
@@ -610,8 +606,7 @@ var app = new Vue({
                     method: 'post',
                     url: '/FormSiriraj/Siriraj/SaveRegister',
                     data: data,
-                    success: function (response) {
-                        debugger
+                    success: function (response) {                        
                         //Error กลาง
                         if (response[0] == undefined) {
                             $("#ConfirmForm").slideUp(300);
@@ -621,7 +616,6 @@ var app = new Vue({
                         }
                         //Sucess
                         if (response[0].Result == 1) {
-                            self.result.Ref1 = response[0].Barcode.substring(14, 25);
 
                             var strHTML = '';
                             //strHTML += ReserveHeader + "<br><br>";
@@ -636,7 +630,8 @@ var app = new Vue({
                             self.result.InvoiceID = response[0].InvoiceID;
 
                             self.result.BranchProvince = self.model.BranchProvince;
-                            self.result.Branch = self.model.Branch;
+                            self.result.BranchName = self.model.BranchName;
+                            self.result.BranchCode = self.model.BranchCode;
 
                             self.result.Name = self.model.Name;
                             self.result.Surname = self.model.Surname;
@@ -656,10 +651,11 @@ var app = new Vue({
                             self.result.QRcode = response[0].QRcode;
                             self.result.Barcode = response[0].Barcode;
 
-                            self.model.ServiceCode = "*ยังไม่ได้ทำ";
-                            self.result.Ref1 = "*ยังไม่ได้ทำ";
-                            self.model.BillerName = "*ยังไม่ได้ทำ"
-                            debugger
+                            //self.model.ServiceCode = "*ยังไม่ได้ทำ";
+                            //self.result.Ref1 = "*ยังไม่ได้ทำ";
+                            //self.model.BillerName = "*ยังไม่ได้ทำ"
+                            self.result.Ref1 = response[0].Barcode.substring(14, 25);
+
                             //Set ค่าที่จองได้
 
                             //self.model.Type[0] = (response[0].Car == 1);

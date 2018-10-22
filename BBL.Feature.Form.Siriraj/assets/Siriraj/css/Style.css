@@ -829,7 +829,7 @@ input[disabled].form-control {
 
 @media print {
 
-.general-form {max-width: 800px !important;margin: 0 auto}
+.general-form {width: 800px !important;margin: 0 auto}
 .result-table{
     width:100%;
     margin: 0 auto;
@@ -860,7 +860,7 @@ input[disabled].form-control {
     .result-table td.right {
         text-align: right;
     }
-#FinalForm{margin-top:2in;page-break-before:always}
+#app{margin-top:1in}
 #FinalForm table, #FinalForm table th,#FinalForm table tr,#FinalForm table td{border:0 !important;padding-top:5px;padding-bottom:5px;}
 #FinalForm table th{border-top:2px solid #666 !important;border-bottom:2px solid #666 !important}
 #FinalForm table tr{border-top:1px solid #ddd !important;border-bottom:1px solid #ddd !important}
