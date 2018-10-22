@@ -514,48 +514,48 @@ var app = new Vue({
             if (!app.formstate.$invalid) {
                 var data = {
                     Personal: {
-                        "Name": this.model.Name,
-                        "Surname": this.model.Surname,
-                        "PersonalID": this.model.PersonalID,
-                        "Mobile": this.model.Mobile,
-                        "Mobile2": this.model.Mobile2,
-                        "Email": this.model.Email,
-                        "LineID": this.model.LineID,
-                        "Address": this.model.Address,
-                        "Building": this.model.Building,
-                        "Soi": this.model.Soi,
-                        "Road": this.model.Road,
-                        "Subdistrict": this.model.Subdistrict,
-                        "District": this.model.District,
-                        "Province": this.model.Province,
-                        "Zip": this.model.Zip,
-                        "PostAddress": this.model.PostAddress,
-                        "PostBuilding": this.model.PostBuilding,
-                        "PostSoi": this.model.PostSoi,
-                        "PostRoad": this.model.PostRoad,
-                        "PostSubdistrict": this.model.PostSubdistrict,
-                        "PostDistrict": this.model.PostDistrict,
-                        "PostProvince": this.model.PostProvince,
-                        "PostZip": this.model.PostZip,
-                        "Piggy": this.model.Piggy,
-                        "Type": this.model.Type,
-                        "TypeText": this.model.TypeText,
-                        "Receipt": this.model.Receipt,
-                        "BranchProvince": this.model.BranchProvince,
-                        "BranchCode": this.model.BranchCode,
-                        "BranchName": this.model.BranchName,
-                        "Delivery": this.model.Delivery,
-                        "AddressOption": this.model.AddressOption,
-                        "Donate": this.model.Donate,
-                        "DeliveryAmount": this.model.DeliveryAmount,
-                        "GrandTotal": this.model.GrandTotal,
-                        "QRcode": this.model.QRcode,
-                        "Barcode": this.model.Barcode,
-                        "SummaryText": this.model.SummaryText,
-                        "Summary": this.model.Summary,
-                        "ServiceCode": this.model.ServiceCode,
-                        "Ref1": this.model.Ref1,
-                        "BillerName": this.model.BillerName,
+                        "Name": this.model.Name,                            // Name
+                        "Surname": this.model.Surname,                      // Surname
+                        "PersonalID": this.model.PersonalID,                // CitizenID
+                        "Mobile": this.model.Mobile,                        // Mobile1
+                        "Mobile2": this.model.Mobile2,                      // Mobile2
+                        "Email": this.model.Email,                          // Email
+                        "LineID": this.model.LineID,                        // --Notuse
+                        "Address": this.model.Address,                      // Address_CZ
+                        "Building": this.model.Building,                    // --Notuse
+                        "Soi": this.model.Soi,                              // --Notuse
+                        "Road": this.model.Road,                            // -- Notuse                         
+                        "Subdistrict": this.model.Subdistrict,              // Subdistrict_CZ
+                        "District": this.model.District,                    // District_CZ
+                        "Province": this.model.Province,                    // Province_CZ
+                        "Zip": this.model.Zip,                              // Postcode_CZ
+                        "PostAddress": this.model.PostAddress,              // Address_Post
+                        "PostBuilding": this.model.PostBuilding,            // --Notuse
+                        "PostSoi": this.model.PostSoi,                      // --Notuse
+                        "PostRoad": this.model.PostRoad,                    // --Notuse
+                        "PostSubdistrict": this.model.PostSubdistrict,      // Subdistrict_Post
+                        "PostDistrict": this.model.PostDistrict,            // District_Post
+                        "PostProvince": this.model.PostProvince,            // Province_Post
+                        "PostZip": this.model.PostZip,                      // Postcode_Post
+                        "Piggy": this.model.Piggy,                          // --Notuse
+                        "Type": this.model.Type,                            // Car=Type[0],Camera=Type[1],Radio=Type[2]
+                        "TypeText": this.model.TypeText,                    // --Notuse
+                        "Receipt": this.model.Receipt,                      // Receipt
+                        "BranchProvince": this.model.BranchProvince,        // BranchProvince
+                        "BranchCode": this.model.BranchCode,                // BranchCode                            
+                        "BranchName": this.model.BranchName,                // BranchName
+                        "Delivery": this.model.Delivery,                    // DeliveryType 0=สาขา , 1=ไปรษณีย์
+                        "AddressOption": this.model.AddressOption,          // DeliveryAddress 0=ตามบัตรประชาชน, 1 = ใช้ที่อยู่อื่น
+                        "Donate": this.model.Donate,                        // --Notuse
+                        "DeliveryAmount": this.model.DeliveryAmount,        // --Notuse
+                        "GrandTotal": this.model.GrandTotal,                // Amount
+                        "QRcode": this.model.QRcode,                        // --Notuse
+                        "Barcode": this.model.Barcode,                      // --Notuse
+                        "SummaryText": this.model.SummaryText,              // --Notuse
+                        "Summary": this.model.Summary,                      // --Notuse
+                        "ServiceCode": this.model.ServiceCode,              // ServiceCode
+                        "Ref1": this.model.Ref1,                            // Ref
+                        "BillerName": this.model.BillerName,                // BillerName
                     },
 
                     "CitizenID": this.model.PersonalID,//.replace(SpacialCharacter, ''),
