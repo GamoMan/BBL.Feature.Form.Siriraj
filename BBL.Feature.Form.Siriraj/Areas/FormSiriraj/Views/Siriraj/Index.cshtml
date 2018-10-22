@@ -141,7 +141,7 @@
                                     <label for="squaredTwo">
                                         @*<input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" :required="required.Type"  :disabled="!this.haveCar"   >*@
                                         <input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" v-show="this.haveCar" :required="this.haveCar" :disabled="!this.haveCar">
-                                        <span class="checkmark">
+                                        <span id="spncar" class="checkmark">
                                             <img class="img-responsive pointer" v-on:click="ClickBtn(1)" src="@GetImageURL(Model.Fields["Type1"])">
                                         </span>
                                     </label>
@@ -152,7 +152,7 @@
                                 <div class="frame form-group">
                                     <label for="squaredTwo">
                                         <input name="Type" type="checkbox" class="checkbox" value="radio" v-on:change="Calculate" v-model="model.Type[1]" v-show="this.haveRadio" :required="this.haveRadio" :disabled="!this.haveRadio">
-                                        <span class="checkmark">
+                                        <span id="spnradio" class="checkmark">
                                             <img class="img-responsive pointer" v-on:click="ClickBtn(2)" src="@GetImageURL(Model.Fields["Type2"])">
                                         </span>
                                     </label>
@@ -163,7 +163,7 @@
                                 <div class="frame form-group">
                                     <label for="squaredTwo">
                                         <input name="Type" type="checkbox" class="checkbox" value="camera" v-on:change="Calculate" v-model="model.Type[2]" v-show="this.haveCamera" :required="this.haveCamera" :disabled="!this.haveCamera">
-                                        <span class="checkmark">
+                                        <span id="spncamera" class="checkmark">
                                             <img class="img-responsive pointer" v-on:click="ClickBtn(3)" src="@GetImageURL(Model.Fields["Type3"])">
                                         </span>
                                     </label>

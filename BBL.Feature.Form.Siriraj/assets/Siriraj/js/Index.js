@@ -89,6 +89,9 @@ var app = new Vue({
             Barcode: ' ',
             SummaryText: '',
             Summary: '',
+            car: 0,
+            Radio: 0,
+            Camera:0
         },
         required: {
             Type: true,
@@ -150,23 +153,22 @@ var app = new Vue({
 
             for (var i = 0; i < this.model.Type.length; i++) {
                 if (this.model.Type[i] === true) {
+
+
                     //Re Cal from Result
                     if (this.result.InvoiceID != '') {
                         
-                        
                         var OutOfStockMessage = 'หมด';
-                        //this.Reuslt.Car;
-                        //this.Reuslt.Radio
-                        //this.Reuslt.Camera
-
-                        //Car i
+                   
                         if ((i == 0) && (this.result.Car == 0)) {
                             Amount = 0;
                             Count = OutOfStockMessage;
+                          
                         }
                         else if ((i == 1) && (this.result.Radio == 0)) {
                             Amount = 0;
                             Count = OutOfStockMessage;
+                             
                         }
                         else if ((i == 2) && (this.result.Camera == 0)) {
                             Amount = 0;
@@ -174,20 +176,29 @@ var app = new Vue({
                         } else {
                             Amount = self.twoDigit(self.Price);
                             Count = 1;
+                            cnt++;
                         }
 
                         self.model.Piggy.push({ "Text": self.model.TypeText[i], "Count": Count, "Amount": Amount });
+
+                       
                     }
                     else {
                         //Cal From User Detail
                         self.model.Piggy.push({ "Text": self.model.TypeText[i], "Count": 1, "Amount": self.twoDigit(self.Price) });
+                        cnt++;
                     }
 
-                    cnt++;
+                 
                     this.required.Type = false;
                 }
             }
+          
+
+             
+        
             this.model.GrandTotal = (cnt > 0 ? this.Price * cnt : 0) + (this.model.Delivery === "1" ? 70 : 0);
+         
             this.model.Total = cnt;
             if (this.model.Donate === "0")
                 this.model.Donate = '';
@@ -289,7 +300,7 @@ var app = new Vue({
                 data: data,
                 success: function (response) {
 
-                    debugger
+                     
                     self.AvailableItems = response;
 
                     self.haveRadio = response.Radio;
@@ -308,14 +319,21 @@ var app = new Vue({
                     }
 
 
-                    debugger
-                    if (self.haveRadio == false)
+                     
+                    if (self.haveRadio == false) {
                         $('#txtTipRadio').html('หมด');
-                    if (self.haveCar == false)
+                        $('#spnradio').addClass('Disableitem');
+                    }
+                    if (self.haveCar == false) {
                         $('#txtTipCar').html('หมด');
-                    if (self.haveCamera == false)
+                        $('#spncar').addClass('Disableitem');
+                    }
+                    if (self.haveCamera == false) {
                         $('#txtTipCamera').html('หมด');
-                }
+                        $('#spncamera').addClass('Disableitem');
+                    }
+
+                    }
             });
         },
 
@@ -481,33 +499,7 @@ var app = new Vue({
                     }
                 });
 
-                //$.ajax({
-                //    async: false,
-                //    method: 'post',
-                //    url: '/FormSiriraj/Siriraj/SaveRegister',
-                //    data: data,
-                //    success: function (response) {
-                //        if (response[0].Result ==-100) {
-                //            $('#AlertForm').slideDown(100);
-                //            $('#MainForm').slideUp(100);
-                //            return;
-                //        }
-
-                //            self.result.Ref1 = response[0].Barcode.substring(14, 25);
-                //            if (response.Success === 'true') {
-                //                var strHTML = '';
-                //                if (response.Success === 'true') {
-                //                    strHTML += "<br><br>";
-                //                    $('#ConfirmForm').slideDown(100);
-                //                    $('#MainForm').slideUp(100);
-                //                    $("html, body").animate({ scrollTop: 0 }, "slow");
-                //                } else {
-                //                    strHTML += "<br><br>";
-                //                }
-                //            }
-
-                //    }
-                //});
+              
             }
         },
         onCancelConfirm: function (e) {
@@ -607,7 +599,7 @@ var app = new Vue({
                     url: '/FormSiriraj/Siriraj/SaveRegister',
                     data: data,
                     success: function (response) {
-
+                        debugger
                         //Error กลาง
                         if (response[0] == undefined) {
                             $("#ConfirmForm").slideUp(300);
@@ -651,16 +643,27 @@ var app = new Vue({
                             self.result.Zip = self.model.Zip;
 
 
-                            //self.model.ServiceCode = response[0].BranchCode; 
-                            //self.result.Ref1 = response[0].Barcode;
-                            self.result.GrandTotal = response[0].Amount;
+                           
+                         
                             self.result.QRcode = response[0].QRcode;
                             self.result.Barcode = response[0].Barcode;
 
-                            self.model.ServiceCode = "*";
-                            self.result.Ref1 = "*";
-                            self.model.BillerName  ="*"
+                            self.model.ServiceCode = "*ยังไม่ได้ทำ";
+                            self.result.Ref1 = "*ยังไม่ได้ทำ";
+                            self.model.BillerName ="*ยังไม่ได้ทำ"
 
+                            //Set ค่าที่จองได้
+                            
+                            //self.model.Type[0] = (response[0].Car == 1);
+                            //self.model.Type[1] = (response[0].Radio == 1);
+                            //self.model.Type[2] = (response[0].Camera == 1);
+
+                            self.result.Car = response[0].Car;
+                            self.result.Radio = response[0].Radio;
+                            self.result.Camera = response[0].Camera;
+
+
+                            //self.result.GrandTotal = response[0].Amount;
 
                             self.Calculate();
                             
@@ -674,9 +677,9 @@ var app = new Vue({
                             $("#errorOutOfStock").slideDown();
 
                          
-                        } else {
+                        } else if (response[0].Result == -100) {
                             $("#ConfirmForm").slideUp(300);
-                            $("#errorOutOfStock").slideDown();
+                            $("#errorDupplicateID").slideDown();
                             $("#AlertForm").slideDown(300);
                         }
                     }

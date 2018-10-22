@@ -29,6 +29,11 @@
     text-align: center
 }
 
+.Disableitem {
+opacity:.3;
+}
+
+
 .lineSection {
     padding-left: 10px;
     padding-right: 10px;
