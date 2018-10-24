@@ -8,6 +8,18 @@ Vue.use(VueForm, {
     }
 });
 
+Vue.component('modal',
+    {
+        template: '#modal-template',
+        methods: {
+            AcceptCanCelOrder: function (e) {
+                app.onCancelOrder();
+
+                app.showModal = false
+            }
+        }
+    });
+
 var app = new Vue({
     el: '#app',
     data: {
@@ -25,6 +37,7 @@ var app = new Vue({
         haveCar: false,
         haveCamera: false,
         haveRadio: false,
+        showModal: false,
         model: {
             Name: '',
             Surname: '',
@@ -112,7 +125,7 @@ var app = new Vue({
         this.model.Suffix = $('#Suffix').val();
         this.model.ServiceCode = $('#ServiceCode').val();
         this.model.BillerName = $('#BillerName').val();
-        
+
         $(document).ready(function () {
             $('#selProvince').selectmenu({
                 change: function (event, ui) {
@@ -198,7 +211,7 @@ var app = new Vue({
             if (this.haveCar == false && val == 1) { return; }
             if (this.haveRadio == false && val == 2) { return; }
             if (this.haveCamera == false && val == 3) { return; }
-             
+
             this.model.Type[val - 1] = !this.model.Type[val - 1];
 
             this.Calculate();
@@ -225,13 +238,9 @@ var app = new Vue({
         validateType: function () {
             var ret = false;
             for (var i = 0; i < this.model.Type.length; i++) {
-
-
                 if (this.haveCar == false && val == 0) { continue; }
                 if (this.haveRadio == false && val == 1) { continue; }
                 if (this.haveCamera == false && val == 2) { continue; }
-
-
 
                 if (this.model.Type[i] === true) {
                     ret = true;
@@ -514,8 +523,6 @@ var app = new Vue({
                 url: '/FormSiriraj/Siriraj/CancelOrder',
                 data: data,
                 success: function (response) {
-                  
-
                     if (response) {
                         $('#AlertForm').slideDown(100);
                         $("#AlertCancel").slideDown();
@@ -533,7 +540,7 @@ var app = new Vue({
                     var strHTML = '';
 
                     strHTML += "<br><br>";
-           
+
                     $("html, body").animate({ scrollTop: 0 }, "slow");
                 }
             });
@@ -612,7 +619,6 @@ var app = new Vue({
                     url: '/FormSiriraj/Siriraj/SaveRegister',
                     data: data,
                     success: function (response) {
-                         
                         //Error กลาง
                         if (response[0] == undefined) {
                             $("#ConfirmForm").slideUp(300);
@@ -657,14 +663,10 @@ var app = new Vue({
                             self.result.QRcode = response[0].QRcode;
                             self.result.Barcode = response[0].Barcode;
 
-                          
-
-
-
                             self.model.ServiceCode = self.model.ServiceCode;
                             //self.result.Ref1 = self.model.Ref1;
                             self.model.BillerName = self.model.BillerName;
-                             
+
                             //Set ค่าที่จองได้
 
                             //self.model.Type[0] = (response[0].Car == 1);
@@ -694,7 +696,19 @@ var app = new Vue({
                     }
                 });
             }
-        }
+        },
+
+        ShowModal: function () {
+            debugger
+            //app.model.head = term[termID].Head;
+
+            //app.model.ModalMessage = app.htmlDecode(term[termID].Message);
+            //app.model.Submit = term[termID].Submit;
+            //app.model.AcceptTerms = term[termID].AcceptTerms
+
+            app.showModal = true;
+            return;
+        }//ShowModal
     },
     computed: {
         // a computed getter

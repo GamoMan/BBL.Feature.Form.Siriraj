@@ -32,11 +32,19 @@
         return imageURL;
     }
 }
+
+
 <div id="app" class="inner-container">
+
+
+
     <div class="panel panel-default panel-body general-form">
+
         <div class="row">
             <div id="divstg" class="col-md-8 col-md-offset-2 text-center">
                 <img class="img-responsive" src="@GetImageURL(Model.Fields["ImageHeader"])">
+
+              
             </div>
         </div>
 
@@ -142,7 +150,7 @@
                                         @*<input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" :required="required.Type"  :disabled="!this.haveCar"   >*@
                                         <input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" v-show="this.haveCar" :required="this.haveCar" :disabled="!this.haveCar">
                                         <span id="spncar" class="checkmark">
-                                            <img  class="img-responsive pointer" v-on:click="ClickBtn(1)" src="@GetImageURL(Model.Fields["Type1"])">
+                                            <img class="img-responsive pointer" v-on:click="ClickBtn(1)" src="@GetImageURL(Model.Fields["Type1"])">
                                         </span>
                                     </label>
                                 </div>
@@ -496,6 +504,9 @@
                     </div>
                     <div id="divstg" class="title-label pad-top">
                         @Html.Raw(Model.Fields["Remark"])
+
+
+
                     </div>
                 </div>
             </vue-form>
@@ -694,19 +705,19 @@
                     </div>
                 </div>
                 @{
-            string FinDeliver = Model.Fields["Deliver"].Value;
-            NameValueCollection FinnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(FinDeliver);
-            foreach (string key in FinnameValueCollection.Keys)
-            {
-                string[] values = FinnameValueCollection.GetValues(key);
-                foreach (string value in values)
-                {
-                    <div class="col-md-12 col-sm-12" v-if="model.Delivery == @key">
-                        <p class="result-label" v-if="model.Delivery == '1'">@value</p>
-                        <p class="result-label" v-if="model.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.Branch}}</p>
-                    </div>
-        }
-    }
+                    string FinDeliver = Model.Fields["Deliver"].Value;
+                    NameValueCollection FinnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(FinDeliver);
+                    foreach (string key in FinnameValueCollection.Keys)
+                    {
+                        string[] values = FinnameValueCollection.GetValues(key);
+                        foreach (string value in values)
+                        {
+                            <div class="col-md-12 col-sm-12" v-if="model.Delivery == @key">
+                                <p class="result-label" v-if="model.Delivery == '1'">@value</p>
+                                <p class="result-label" v-if="model.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.Branch}}</p>
+                            </div>
+                        }
+                    }
                 }
             </div>
 
@@ -718,7 +729,7 @@
                     </div>
                 </div>
             </div>
-                <div class="row">
+            <div class="row">
                 <div class="col-md-6"><p class="result-label">@Model.Fields["Name"] </p> <p class="result-label">{{result.Name}}</p></div>
                 <div class="col-md-6"><p class="result-label">@Model.Fields["Surname"] </p> <p class="result-label">{{result.Surname}}</p></div>
             </div>
@@ -747,7 +758,7 @@
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.Zip}}</p></div>
                     <div class="col-md-6"></div>
                 </div>
-                
+
             </div>
             <div class="row lineSection"><hr></div>
 
@@ -781,8 +792,8 @@
                     <div class="col-md-6"></div>
                 </div>
             </div>
-            
-            
+
+
             <div class="row pad-top">
                 <div class="col-md-6 col-sm-6 pad-bot">
                     <div class="row">
@@ -805,7 +816,7 @@
                 <div class="row lineSection"><hr></div>
             </div>
             <div class="row">
-               
+
                 <div class="col-md-12 text-center fit-width   pad-bot">
                     <barcode v-bind:value="result.Barcode" tag="img"></barcode>
                 </div>
@@ -816,44 +827,121 @@
             <div class="text-label pad-top">
                 <div class="row text-center">
                     <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onPrint" type="submit">@Model.Fields["PrintButton"]</button></div>
-                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onCancelOrder" type="submit">ยกเลิกรายการ</button></div>
+                    @* <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onCancelOrder" type="submit">ยกเลิกรายการ</button></div>*@
+
+                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="showModal = true">ยกเลิกรายการ</button></div>
+
+                   
                 </div>
             </div>
         </div>
 
-            @*
-        //
-        // Alert section
-        //
-            *@
-            <div id="AlertForm" class="general-form" v-show="false">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="divstg">
-                            <h4 class="text-label"> </h4>
+        @*
+            //
+            // Alert section
+            //
+        *@
+        <div id="AlertForm" class="general-form" v-show="false">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="divstg">
+                        <h4 class="text-label"> </h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pad-bot">
+                <div id="errorDupplicateID" class="row" v-show="false">
+                    <div class="col-md-12 text-center"><h4 class="result-label ">เลขบัตรประชาชนของท่านมีอยู่ในระบบเรียบร้อยแล้ว ระบบไม่สามารถดำเนินการสมัครต่อได้</h4></div>
+                </div>
+                <div id="errorOutOfStock" class="row" v-show="false">
+                    <div class="col-md-12 text-center"><h4 class="result-label "> ขออภัย กระปุกออมสินได้ถูกสั่งจองหมดแล้ว</h4></div>
+                </div>
+                <div id="errorDefualt" class="row" v-show="false">
+                    <div class="col-md-12 text-center"><h4 class="result-label "> ขออภัย เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง</h4></div>
+                </div>
+
+                <div id="AlertCancel" class="row" v-show="false">
+                    <div class="col-md-12 text-center"><h4 class="result-label ">ยกเลิกใบสมัครเรียบร้อยแล้ว</h4></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <modal v-if="showModal" v-on:close="showModal = false">
+        <!--
+        you can use custom content here to overwrite
+        default content
+        -->
+        <h3 slot="header">custom header</h3>
+    </modal>
+
+    <!-- template for the modal component -->
+    <script type="text/x-template" id="modal-template">
+        <transition name="modal">
+            <div class="modal-mask ">
+
+                <div class="modal-wrapper inner-container">
+
+                    <div class="modal-container center-content" style="position:relative">
+                        <img src="/assets/FormDownload/img/close-button.png" style="height:30px;width:30px;position:absolute; top:-10px;right:-15px;z-index:500;z-index:100;" v-on:click="$emit('close')" />
+                        <div class="modal-header text-center">
+                            <div class="modal-header ">
+                                <h3 id="modal-head"  > แจ้งเตือน </h3>
+                            </div>
+
+                            <div class="modal-body text-left " style="color:#333;background-color:#EEEEF2;padding:5%;border-radius:5px;">
+
+                                <div @*v-html="app.model.ModalMessage"*@ class="innerDiv">
+
+                                    โปรดยืนยันการยกเลิกการสมัคร
+
+                                </div>
+                            </div>
+
+                            @*<div class="modal-body text-center " style="overflow: visible;">
+                                <span>
+                                    <input type="checkbox" id="checkbox" style="margin-bottom: 6px; display: inline-block;">
+                                    <label id="Terms" for="checkbox" v-html="app.model.AcceptTerms" style=" display: inline-block;padding-left:0px;"> </label>
+                                </span>
+                            </div>*@
+
+                            <div class="modal-footer  ">
+                                @**@
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-">
+                                        <button class="btn btn-primary btn-sm   btn-block   text-center"   v-on:click="AcceptCanCelOrder"  >ยืนยัน</button>
+                                    </div>
+
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-">
+                                        <button class="btn btn-primary btn-sm   btn-block   text-center" style="background-color: #d3d3d3;"  v-on:click="$emit('close')" >ยกเลิก</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="pad-bot">
-                    <div id="errorDupplicateID" class="row" v-show="false">
-                        <div class="col-md-12 text-center"><h4 class="result-label ">เลขบัตรประชาชนของท่านมีอยู่ในระบบเรียบร้อยแล้ว ระบบไม่สามารถดำเนินการสมัครต่อได้</h4></div>
-                    </div>
-                    <div id="errorOutOfStock" class="row" v-show="false">
-                        <div class="col-md-12 text-center"><h4 class="result-label "> ขออภัย กระปุกออมสินได้ถูกสั่งจองหมดแล้ว</h4></div>
-                    </div>
-                    <div id="errorDefualt" class="row" v-show="false">
-                        <div class="col-md-12 text-center"><h4 class="result-label "> ขออภัย เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง</h4></div>
-                    </div>
-
-                    <div id="AlertCancel" class="row" v-show="false">
-                        <div class="col-md-12 text-center"><h4 class="result-label ">ยกเลิกใบสมัครเรียบร้อยแล้ว</h4></div>
-                    </div>
-
-                </div>
             </div>
-        </div>
+        </transition>
+    </script>
+
+
 </div>
 <div class="pad-bot"></div>
+
+
+
+
+
+
+
+
+
+
 
 <script src="~/assets/Siriraj/js/index.js"></script>
