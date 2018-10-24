@@ -165,6 +165,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
                     SirirajDb db = new SirirajDb();
 
                     data = db.DeleteRegister(ID, SecretCode);
+                    db.InitAvailableItems();
                 }
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
