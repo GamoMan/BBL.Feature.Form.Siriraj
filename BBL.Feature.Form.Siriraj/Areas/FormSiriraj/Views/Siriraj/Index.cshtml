@@ -54,6 +54,7 @@
             <input type="hidden" id="TaxID" name="TaxID" value="@Model.Fields["TaxID"]">
             <input type="hidden" id="Suffix" name="Suffix" value="@Model.Fields["Suffix"]">
             <input type="hidden" id="ServiceCode" name="ServiceCode" value="@Model.Fields["ServiceCode"]">
+            <input type="hidden" id="BillerName" name="BillerName" value="@Model.Fields["BillerName"]">
 
             <vue-form :state="formstate" v-model="formstate" @@submit.prevent="dummy" class="general-form" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
@@ -488,13 +489,13 @@
                             <p class="total text-center">{{AmountSummary}}</p>
                         </div>
                     </div>
-                    <div id="SaveData" class="text-label pad-top">
+                    <div id="SaveData" class="text-label">
                         <div class="row text-center">
                             <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onConfirm" type="submit">@Model.Fields["Submit"]</button></div>
                             <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="resetForm" type="reset">@Model.Fields["Cancel"]</button></div>
                         </div>
                     </div>
-                    <div id="divstg" class="title-label">
+                    <div id="divstg" class="title-label pad-top">
                         @Html.Raw(Model.Fields["Remark"])
                     </div>
                 </div>
@@ -606,19 +607,19 @@
 
             <div id="ConfirmPostAddress" class="pad-bot" v-if="model.Delivery == '1'">
                 <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.PostAddress}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.PostSoi}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{model.PostAddress}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{model.PostSoi}}</p></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.PostRoad}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.PostSubdistrict}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{model.PostRoad}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{model.PostSubdistrict}}</p></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.PostDistrict}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.PostProvince}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{model.PostDistrict}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.PostProvince}}</p></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.PostZip}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{model.PostZip}}</p></div>
                     <div class="col-md-6"></div>
                 </div>
             </div>
@@ -649,17 +650,15 @@
                 </div>
             </div>
 
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="SubHead">
-
                         <h4 class="text-label  "> รายละเอียดการสมัคร</h4>
                     </div>
                 </div>
             </div>
 
-            <div class="row   pad-bot">
+            <div class="row">
                 <div class="col-md-12">
                     <div class="table-overflow">
                         <table class="result-table">
@@ -688,32 +687,49 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 SubHead">
-                    <div id="divstg ">
+                <div class="col-md-12">
+                    <div id="divstg" class="SubHead">
                         <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
                     </div>
                 </div>
-                @{
-            string FinDeliver = Model.Fields["Deliver"].Value;
-            NameValueCollection FinnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(FinDeliver);
-            foreach (string key in FinnameValueCollection.Keys)
-            {
-                string[] values = FinnameValueCollection.GetValues(key);
-                foreach (string value in values)
+            @{
+                string FinDeliver = Model.Fields["Deliver"].Value;
+                NameValueCollection FinnameValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(FinDeliver);
+                foreach (string key in FinnameValueCollection.Keys)
                 {
-                    <div class="col-md-12 col-sm-12" v-if="model.Delivery == @key">
-                        <p class="result-label" v-if="model.Delivery == '1'">@value</p>
-                        <p class="result-label" v-if="model.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.Branch}}</p>
-                    </div>
-        }
-    }
+                    string[] values = FinnameValueCollection.GetValues(key);
+                    foreach (string value in values)
+                    {
+                        <div class="col-md-12 col-sm-12" v-if="model.Delivery == @key">
+                            <p class="result-label" v-if="model.Delivery == '1'">@value</p>
+                            <p class="result-label" v-if="model.Delivery == '0'">@Model.Fields["BranchProvince"] {{result.BranchProvince}} @Model.Fields["Branch"] {{result.BranchName}}</p>
+                        </div>
+                    }
                 }
+            }
+            </div>
+            <div id="ReceiptPostAddress" v-if="model.Delivery == '1'">
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.PostAddress}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.PostSoi}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.PostRoad}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.PostSubdistrict}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.PostDistrict}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.PostProvince}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.PostZip}}</p></div>
+                    <div class="col-md-6"></div>
+                </div>
             </div>
 
-
             <div class="row">
-                <div class="col-md-12 SubHead">
-                    <div id="divstg ">
+                <div class="col-md-12">
+                    <div id="divstg" class="SubHead">
                         <h4 class="text-label">รายละเอียดผู้สมัคร</h4>
                     </div>
                 </div>
@@ -730,7 +746,7 @@
                 <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{result.Mobile2}}</p></div>
                 <div class="col-md-6"><p class="result-label">@Model.Fields["Email"] </p> <p class="result-label">{{result.Email}}</p></div>
             </div>
-            <div id="ReceiptAddress" class="pad-bot" v-if="model.Receipt == '1'">
+            <div id="ReceiptAddress" v-if="model.Receipt == '1'">
                 <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.Address}}</p></div>
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.Soi}}</p></div>
@@ -751,39 +767,15 @@
             </div>
             <div class="row lineSection"><hr></div>
 
-
-
             <div class="row">
-                <div class="col-md-12 SubHead">
-                    <div id="divstg ">
+                <div class="col-md-12">
+                    <div id="divstg" class="SubHead">
                         <h4 class="text-label">ช่องทางการโอนเงินออม</h4>
                     </div>
                 </div>
-            </div>
-
-
-
-            <div id="ReceiptPostAddress" class="pad-bot" v-if="model.Delivery == '1'">
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.PostAddress}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.PostSoi}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.PostRoad}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.PostSubdistrict}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.PostDistrict}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.PostProvince}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.PostZip}}</p></div>
-                    <div class="col-md-6"></div>
-                </div>
-            </div>
+            </div>           
             
-            
-            <div class="row pad-top">
+            <div class="row">
                 <div class="col-md-6 col-sm-6 pad-bot">
                     <div class="row">
                         <div class="col-md-6 result-label">@*@Model.Fields["ServiceCodeLabel"]*@ Service Code: </div><div class="col-md-6 result-label">{{model.ServiceCode}}</div>
@@ -795,7 +787,7 @@
                         <div class="col-md-6 result-label">@*@Model.Fields["BillerNameLabel"]*@ Biller name:</div><div class="col-md-6 result-label">{{model.BillerName}}</div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 result-label">@*@Model.Fields["AmountLabel"]*@ จำนวนเงิน</div><div class="col-md-6 result-label">{{this.twoDigit(result.GrandTotal)}}</div>
+                        <div class="col-md-6 result-label">@*@Model.Fields["AmountLabel"]*@ จำนวนเงิน</div><div class="col-md-6 result-label">{{this.twoDigit(model.GrandTotal)}}</div>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-6 text-center pad-bot">
@@ -806,14 +798,14 @@
             </div>
             <div class="row">
                
-                <div class="col-md-12 text-center fit-width   pad-bot">
+                <div class="col-md-12 text-center fit-width  pad-bot">
                     <barcode v-bind:value="result.Barcode" tag="img"></barcode>
                 </div>
 
                 <div class="text-center"><span>*Bar Code สามารถชำระเงินที่ ATM ของธนาคาร และเคาเตอร์ของธนาคารกรุงเทพทั่วประเทศ  </span></div>
                 <div class="row lineSection"><hr></div>
             </div>
-            <div class="text-label pad-top">
+            <div class="text-label">
                 <div class="row text-center">
                     <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onPrint" type="submit">@Model.Fields["PrintButton"]</button></div>
                     <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onCancelOrder" type="submit">ยกเลิกรายการ</button></div>
@@ -847,7 +839,7 @@
                     </div>
 
                     <div id="AlertCancel" class="row" v-show="false">
-                        <div class="col-md-12 text-center"><h4 class="result-label ">ยกเลิกคำสั่งซื้อเรียบร้อยแล้ว</h4></div>
+                        <div class="col-md-12 text-center"><h4 class="result-label ">ยกเลิกใบสมัครเรียบร้อยแล้ว</h4></div>
                     </div>
 
                 </div>

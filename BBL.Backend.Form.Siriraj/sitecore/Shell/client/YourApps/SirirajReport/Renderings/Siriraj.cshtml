@@ -4,8 +4,8 @@
 @model RenderingModel
 @{
     var rendering = Html.Sitecore().Controls().GetUserControl(Model.Rendering);
-    rendering.Class = "sc-BualuangExclusive";
-    rendering.Requires.Script("client", "BualuangExclusive.js");
+    rendering.Class = "sc-Siriraj";
+    rendering.Requires.Script("client", "Siriraj.js");
     rendering.Requires.Script("client", "jquery-ui.min.js");
 
     rendering.Requires.Css("client", "jquery-ui.min.css");
@@ -18,12 +18,6 @@
 <div @htmlAttributes>
     <div class="general-form">
         @Html.AntiForgeryToken()
-        <div class="col-md-12">
-            <label>Activity</label>
-            <select class="form-control" id="ActivitiesList" data-bind="foreach: myActivities, event:{change: OnChange}">
-                <option data-bind="value:ActivityCode,text:ActivityName +'  -  '+ActivityDetail"></option>
-            </select>
-        </div>
         <div class="col-md-6" style="margin-top:20px;">
             <label>From Date</label>
             <input class="form-control" id="fdate" name="fdate" type="text" data-bind="event:{change: OnChange}" />
@@ -46,22 +40,46 @@
             <table class="sc-table sc-table-header table">
                 <thead>
                     <tr>
-                        <th class="sc-table-head">Activity Code</th>
+                        <th class="sc-table-head">Customer ID</th>
+                        <th class="sc-table-head">Invoice ID</th>
                         <th class="sc-table-head">Name</th>
                         <th class="sc-table-head">Surname</th>
-                        <th class="sc-table-head">Mobile</th>
+                        <th class="sc-table-head">Citizen ID</th>
+                        <th class="sc-table-head">Mobile 1</th>
+                        <th class="sc-table-head">Mobile 2</th>
                         <th class="sc-table-head">Email</th>
-                        <th class="sc-table-head">Attendee Name</th>
-                        <th class="sc-table-head">Attendee Surname</th>
-                        <th class="sc-table-head">Attendee Mobile</th>
-                        <th class="sc-table-head">Attendee Email</th>
+                        <th class="sc-table-head">Address CZ</th>
+                        <th class="sc-table-head">Soi CZ</th>
+                        <th class="sc-table-head">Subdistrict CZ</th>
+                        <th class="sc-table-head">District CZ</th>
+                        <th class="sc-table-head">Province CZ</th>
+                        <th class="sc-table-head">Postcode CZ</th>
+                        <th class="sc-table-head">Car</th>
+                        <th class="sc-table-head">Camera</th>
+                        <th class="sc-table-head">Radio</th>
+                        <th class="sc-table-head">Receipt</th>
+                        <th class="sc-table-head">Delivery Type</th>
+                        <th class="sc-table-head">Branch Code</th>
+                        <th class="sc-table-head">Branch Name</th>
+                        <th class="sc-table-head">Branch Province</th>
+                        <th class="sc-table-head">Address Post</th>
+                        <th class="sc-table-head">Soi Post</th>
+                        <th class="sc-table-head">Subdistrict Post</th>
+                        <th class="sc-table-head">District Post</th>
+                        <th class="sc-table-head">Province Post</th>
+                        <th class="sc-table-head">Postcode Post</th>
+                        <th class="sc-table-head">Amount</th>
+                        <th class="sc-table-head">Create Date</th>
                     </tr>
                 </thead>
 
                 <tbody data-bind="foreach: jsondata">
                     <tr>
                         <td class="ventilate">
-                            <span data-bind="text:ActivityCode"></span>
+                            <span data-bind="text:CustID"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:InvoiceID"></span>
                         </td>
                         <td class="ventilate">
                             <span data-bind="text:Name"></span>
@@ -70,22 +88,82 @@
                             <span data-bind="text:Surname"></span>
                         </td>
                         <td class="ventilate">
-                            <span data-bind="text:Mobile"></span>
+                            <span data-bind="text:CitizenID"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Mobile1"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Mobile2"></span>
                         </td>
                         <td class="ventilate">
                             <span data-bind="text:Email"></span>
                         </td>
                         <td class="ventilate">
-                            <span data-bind="text:AttendeeName"></span>
+                            <span data-bind="text:Address_CZ"></span>
                         </td>
                         <td class="ventilate">
-                            <span data-bind="text:AttendeeSurname"></span>
+                            <span data-bind="text:Soi_CZ"></span>
                         </td>
                         <td class="ventilate">
-                            <span data-bind="text:AttendeeMobile"></span>
+                            <span data-bind="text:Subdistrict_CZ"></span>
                         </td>
                         <td class="ventilate">
-                            <span data-bind="text:AttendeeEmail"></span>
+                            <span data-bind="text:District_CZ"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Province_CZ"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Postcode_CZ"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Car"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Camera"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Radio"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Receipt"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:DeliverType"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:BranchCode"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:BranchName"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:BranchProvince"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Address_Post"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Soi_Post"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Subdistrict_Post"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:District_Post"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Province_Post"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Postcode_Post"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Amount"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:CreateDate"></span>
                         </td>
                     </tr>
                 </tbody>

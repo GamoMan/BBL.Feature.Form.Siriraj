@@ -165,6 +165,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
                     SirirajDb db = new SirirajDb();
 
                     data = db.DeleteRegister(ID, SecretCode);
+                    db.InitAvailableItems();
                 }
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
@@ -362,24 +363,24 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 
                 SirirajDb db = new SirirajDb();
 
-               bool cancelResult= db.CancelOrder(CitizenID);
+                bool cancelResult = db.CancelOrder(CitizenID);
 
-                if  (cancelResult==false)
+                if (cancelResult == false)
                 {
                     throw new Exception("Unable to cancel order");
                 }
                 else
                 {
                     //Sys Stock To Mem
-                   
+
 
                     db.InitAvailableItems();
 
                 }
 
-               var success = new { Success = "true" };
+                var success = new { Success = "true" };
 
-               return Json(success, JsonRequestBehavior.AllowGet);
+                return Json(success, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
@@ -389,7 +390,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             }
         }
 
-        
+
 
         private void Init()
         {

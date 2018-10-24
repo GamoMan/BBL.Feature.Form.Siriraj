@@ -111,6 +111,7 @@ var app = new Vue({
         this.model.TaxID = $('#TaxID').val();
         this.model.Suffix = $('#Suffix').val();
         this.model.ServiceCode = $('#ServiceCode').val();
+        this.model.BillerName = $('#BillerName').val();
 
         $(document).ready(function () {
             $('#selProvince').selectmenu({
@@ -244,12 +245,15 @@ var app = new Vue({
                 $('#Receipt').slideUp(300);
                 this.model.AddressOption = '1';
                 this.required.Receipt = false;
+                this.resetAddress();
+                this.formstate._reset();
             }
             this.Calculate();
         },
         AddressOptionClick: function () {
             if (this.model.AddressOption === "1") {
                 this.resetPostAddress();
+                this.formstate._reset();
             } else {
                 this.copyAddress();
             }
@@ -261,12 +265,22 @@ var app = new Vue({
                 $('#ShowBranch').slideDown(300);
                 this.model.DeliveryAmount = 0;
                 this.required.Post = false;
+                if (this.model.Receipt === "0")
+                    this.required.Receipt = false;
+                else
+                    this.required.Receipt = true;
             } else {
                 $('#AddressOption').slideDown(300);
                 $('#ShowBranch').slideUp(300);
                 $('#PostNote').slideDown(300);
                 this.model.DeliveryAmount = 70;
                 this.required.Post = true;
+                if (this.model.Receipt === "0") {
+                    this.required.Receipt = false;
+                } else {
+                    this.required.Receipt = true;
+                }
+                this.formstate._reset();
             }
             this.AddressOptionClick();
             this.Calculate();
@@ -433,6 +447,7 @@ var app = new Vue({
             this.model.PostDistrict = address.district;
             this.model.PostProvince = address.province;
             this.model.PostZip = address.postalCode;
+            this.copyAddressBack();
         },
         onConfirm: function (e) {
             if (!app.formstate.$invalid) {

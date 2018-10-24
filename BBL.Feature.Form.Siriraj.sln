@@ -38,4 +38,19 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://it-tfsapp1101:8080/tfs/bblcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = BBL.Feature.Form.Siriraj\\BBL.Feature.Form.Siriraj.csproj
+		SccProjectName1 = BBL.Feature.Form.Siriraj
+		SccLocalPath1 = BBL.Feature.Form.Siriraj
+		SccProjectUniqueName2 = BBL.Backend.Form.Siriraj\\BBL.Backend.Form.Siriraj.csproj
+		SccProjectName2 = BBL.Backend.Form.Siriraj
+		SccLocalPath2 = BBL.Backend.Form.Siriraj
+		SccProjectUniqueName3 = BBL.Backend.SSIS.Siriraj\\BBL.Backend.SSIS.Siriraj.dtproj
+		SccProjectName3 = BBL.Backend.SSIS.Siriraj
+		SccLocalPath3 = BBL.Backend.SSIS.Siriraj
+	EndGlobalSection
 EndGlobal

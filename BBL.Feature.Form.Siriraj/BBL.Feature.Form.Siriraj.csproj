@@ -28,7 +28,6 @@
     <SccProvider>SAK</SccProvider>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -120,7 +119,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Mvc">
-      <HintPath>E:\Sitecore\Alep Code\BBL Public Website Source Code\backend\src\Foundation\Common\code\BBL.Foundation.Common\bin\System.Web.Mvc.dll</HintPath>
+      <HintPath>..\..\BBL.Feature.Form.BualuangExclusive\BBL.Feature.Form.BualuangExclusive\bin\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
@@ -213,7 +212,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>18177</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

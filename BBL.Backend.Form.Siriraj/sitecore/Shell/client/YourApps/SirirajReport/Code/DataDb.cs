@@ -16,7 +16,7 @@ namespace BBL.Backend.Form.Siriraj.sitecore.Shell.client.YourApps.SirirajReport.
         public Object[] GetRegisterUsers(string FromDate, string ToDate)
         {
             DataSet ds = new DataSet();
-            string store = "Select * From SirirajRegister where CreateDate between @FromDate and @ToDate Order By CreateDate";
+            string store = "Select * From Personal where CreateDate between @FromDate and @ToDate Order By CreateDate";
             List<IDataParameter> parms = new List<IDataParameter>();
             parms.Add(new SqlParameter("@FromDate", FromDate + " 00:00:00"));
             parms.Add(new SqlParameter("@ToDate", ToDate + " 23:59:59"));

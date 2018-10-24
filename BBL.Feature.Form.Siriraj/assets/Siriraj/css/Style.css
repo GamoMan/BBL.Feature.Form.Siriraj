@@ -21,6 +21,7 @@
 
 .SubHead {
     background-color: #b1c0df;
+    margin-top: 15px;
     margin-bottom: 15px;
     color:#003399;
     font-size: 1.2rem;
@@ -860,7 +861,26 @@ input[disabled].form-control {
     .result-table td.right {
         text-align: right;
     }
-#app{margin-top:1in}
+.TitleHead {
+    background-color: #039;
+    margin-bottom: 0px !important;
+    color: #fff;
+    font-size: 1.2rem;
+    padding: 0px;
+    border-radius: 35px;
+    text-align: center;
+}
+.SubHead {
+    background-color: #b1c0df;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    color:#003399;
+    font-size: 1.2rem;
+    padding: 0px;
+    border-radius: 35px;
+    text-align: center
+}
+#app{margin-top:0in}
 #FinalForm table, #FinalForm table th,#FinalForm table tr,#FinalForm table td{border:0 !important;padding-top:5px;padding-bottom:5px;}
 #FinalForm table th{border-top:2px solid #666 !important;border-bottom:2px solid #666 !important}
 #FinalForm table tr{border-top:1px solid #ddd !important;border-bottom:1px solid #ddd !important}
