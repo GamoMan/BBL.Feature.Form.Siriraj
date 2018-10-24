@@ -26,7 +26,8 @@
     font-size: 1.2rem;
     padding: 15px;
     border-radius: 35px;
-    text-align: center
+    text-align: center;
+    margin-top:15px;
 }
 
 .Disableitem {

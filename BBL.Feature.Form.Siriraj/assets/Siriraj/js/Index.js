@@ -111,7 +111,8 @@ var app = new Vue({
         this.model.TaxID = $('#TaxID').val();
         this.model.Suffix = $('#Suffix').val();
         this.model.ServiceCode = $('#ServiceCode').val();
-
+        this.model.BillerName = $('#BillerName').val();
+        
         $(document).ready(function () {
             $('#selProvince').selectmenu({
                 change: function (event, ui) {
@@ -656,10 +657,14 @@ var app = new Vue({
                             self.result.QRcode = response[0].QRcode;
                             self.result.Barcode = response[0].Barcode;
 
-                            self.model.ServiceCode = "*ยังไม่ได้ทำ";
-                            self.result.Ref1 = "*ยังไม่ได้ทำ";
-                            self.model.BillerName = "*ยังไม่ได้ทำ"
-                            debugger
+                          
+
+
+
+                            self.model.ServiceCode = self.model.ServiceCode;
+                            //self.result.Ref1 = self.model.Ref1;
+                            self.model.BillerName = self.model.BillerName;
+                             
                             //Set ค่าที่จองได้
 
                             //self.model.Type[0] = (response[0].Car == 1);
