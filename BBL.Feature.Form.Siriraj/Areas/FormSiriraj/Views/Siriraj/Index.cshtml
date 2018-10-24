@@ -363,7 +363,7 @@
                             </div>*@
                         <div class="col-md-6">
                             <validate auto-label class="form-group cust-select required-field" :class="fieldClassName(formstate.SelectProvince)">
-                                <select name="SelectProvince" :required="true" class="form-control none-bgd" id="selProvince" v-model="model.BranchProvince">
+                                <select name="SelectProvince" :required="required.Branch" class="form-control none-bgd" id="selProvince" v-model="model.BranchProvince">
                                     <option value="" selected disabled>@Model.Fields["BranchProvince"]</option>
                                     <option v-for="(p, index) in Provinces" v-bind:value="p.Province" v-bind:key="index">{{p.Province}}</option>
                                 </select>
@@ -374,7 +374,7 @@
                         </div>
                         <div class="col-md-6">
                             <validate auto-label class="form-group cust-select required-field" :class="fieldClassName(formstate.SelectBranch)">
-                                <select name="SelectBranch" :required="true" class="form-control none-bgd" id="selBranch" v-model="model.BranchName">
+                                <select name="SelectBranch" :required="required.Branch" class="form-control none-bgd" id="selBranch" v-model="model.BranchName">
                                     <option value="" selected disabled>@Model.Fields["Branch"]</option>
                                     <option v-for="(c, index) in Branches" v-bind:value="c.BranchCode" v-bind:key="index">{{c.BranchName}}</option>
                                 </select>
@@ -495,7 +495,7 @@
                             <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="resetForm" type="reset">@Model.Fields["Cancel"]</button></div>
                         </div>
                     </div>
-                    <div id="divstg" class="title-label">
+                    <div id="divstg" class="title-label pad-top">
                         @Html.Raw(Model.Fields["Remark"])
                     </div>
                 </div>
@@ -564,6 +564,24 @@
                     }
                 }
             </div>
+            <div id="ConfirmPostAddress" class="pad-bot" v-if="model.Delivery == '1'">
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{model.PostAddress}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{model.PostSoi}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{model.PostRoad}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{model.PostSubdistrict}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{model.PostDistrict}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.PostProvince}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{model.PostZip}}</p></div>
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
 
             <div class="row lineSection"><hr></div>
             @*Section*@
@@ -601,25 +619,6 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{model.Zip}}</p></div>
-                    <div class="col-md-6"></div>
-                </div>
-            </div>
-
-            <div id="ConfirmPostAddress" class="pad-bot" v-if="model.Delivery == '1'">
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{model.PostAddress}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{model.PostSoi}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{model.PostRoad}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{model.PostSubdistrict}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{model.PostDistrict}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.PostProvince}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{model.PostZip}}</p></div>
                     <div class="col-md-6"></div>
                 </div>
             </div>

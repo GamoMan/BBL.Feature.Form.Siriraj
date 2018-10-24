@@ -109,7 +109,8 @@ var app = new Vue({
         required: {
             Type: true,
             Post: false,
-            Receipt: false
+            Receipt: false,
+            Branch: false
         },
     },
     mounted: function () {
@@ -275,6 +276,7 @@ var app = new Vue({
                 $('#PostNote').slideUp(300);
                 $('#ShowBranch').slideDown(300);
                 this.model.DeliveryAmount = 0;
+                this.required.Branch = true;
                 this.required.Post = false;
                 if (this.model.Receipt === "0")
                     this.required.Receipt = false;
@@ -286,6 +288,7 @@ var app = new Vue({
                 $('#PostNote').slideDown(300);
                 this.model.DeliveryAmount = 70;
                 this.required.Post = true;
+                this.required.Branch = false;
                 if (this.model.Receipt === "0") {
                     this.required.Receipt = false;
                 } else {
