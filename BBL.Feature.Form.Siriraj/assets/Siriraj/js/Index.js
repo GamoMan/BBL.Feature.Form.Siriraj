@@ -198,11 +198,11 @@ var app = new Vue({
             if (this.haveCar == false && val == 1) { return; }
             if (this.haveRadio == false && val == 2) { return; }
             if (this.haveCamera == false && val == 3) { return; }
-
-
-            debugger
+             
             this.model.Type[val - 1] = !this.model.Type[val - 1];
+
             this.Calculate();
+
             event.preventDefault();
         },
         validateThaiCitizenID: function (id) {
@@ -514,7 +514,7 @@ var app = new Vue({
                 url: '/FormSiriraj/Siriraj/CancelOrder',
                 data: data,
                 success: function (response) {
-                    debugger
+                  
 
                     if (response) {
                         $('#AlertForm').slideDown(100);
@@ -612,7 +612,7 @@ var app = new Vue({
                     url: '/FormSiriraj/Siriraj/SaveRegister',
                     data: data,
                     success: function (response) {
-                        debugger
+                         
                         //Error กลาง
                         if (response[0] == undefined) {
                             $("#ConfirmForm").slideUp(300);
