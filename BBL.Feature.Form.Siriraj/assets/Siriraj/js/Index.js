@@ -168,18 +168,18 @@ var app = new Vue({
             for (var i = 0; i < this.model.Type.length; i++) {
                 if (this.model.Type[i] === true) {
                     //Re Cal from Result
-                    if (this.result.InvoiceID != '') {
+                    if (this.result.InvoiceID !== '') {
                         var OutOfStockMessage = 'หมด';
 
-                        if ((i == 0) && (this.result.Car == 0)) {
+                        if ((i === 0) && (this.result.Car === 0)) {
                             Amount = 0;
                             Count = OutOfStockMessage;
                         }
-                        else if ((i == 1) && (this.result.Radio == 0)) {
+                        else if ((i === 1) && (this.result.Radio === 0)) {
                             Amount = 0;
                             Count = OutOfStockMessage;
                         }
-                        else if ((i == 2) && (this.result.Camera == 0)) {
+                        else if ((i === 2) && (this.result.Camera === 0)) {
                             Amount = 0;
                             Count = OutOfStockMessage;
                         } else {
@@ -208,9 +208,9 @@ var app = new Vue({
         },
         ClickBtn: function (val) {
             //Set Non Check
-            if (this.haveCar == false && val == 1) { return; }
-            if (this.haveRadio == false && val == 2) { return; }
-            if (this.haveCamera == false && val == 3) { return; }
+            if (this.haveCar === false && val === 1) { return; }
+            if (this.haveRadio === false && val === 2) { return; }
+            if (this.haveCamera === false && val === 3) { return; }
 
             this.model.Type[val - 1] = !this.model.Type[val - 1];
 
@@ -238,9 +238,9 @@ var app = new Vue({
         validateType: function () {
             var ret = false;
             for (var i = 0; i < this.model.Type.length; i++) {
-                if (this.haveCar == false && val == 0) { continue; }
-                if (this.haveRadio == false && val == 1) { continue; }
-                if (this.haveCamera == false && val == 2) { continue; }
+                if (this.haveCar === false && val === 0) { continue; }
+                if (this.haveRadio === false && val === 1) { continue; }
+                if (this.haveCamera === false && val === 2) { continue; }
 
                 if (this.model.Type[i] === true) {
                     ret = true;
@@ -328,7 +328,7 @@ var app = new Vue({
                     self.haveCamera = response.Camera;
 
                     //OutofStock
-                    if (self.haveRadio == false && self.haveCar == false && self.haveCamera == false) {
+                    if (self.haveRadio === false && self.haveCar === false && self.haveCamera === false) {
                         $('#AlertForm').slideDown(100);
                         $("#errorOutOfStock").slideDown();
                         $('#MainForm').slideUp(100);
@@ -336,15 +336,15 @@ var app = new Vue({
                         return;
                     }
 
-                    if (self.haveRadio == false) {
+                    if (self.haveRadio === false) {
                         $('#txtTipRadio').html('หมด');
                         $('#spnradio').addClass('Disableitem');
                     }
-                    if (self.haveCar == false) {
+                    if (self.haveCar === false) {
                         $('#txtTipCar').html('หมด');
                         $('#spncar').addClass('Disableitem');
                     }
-                    if (self.haveCamera == false) {
+                    if (self.haveCamera === false) {
                         $('#txtTipCamera').html('หมด');
                         $('#spncamera').addClass('Disableitem');
                     }
@@ -634,14 +634,14 @@ var app = new Vue({
                     data: data,
                     success: function (response) {
                         //Error กลาง
-                        if (response[0] == undefined) {
+                        if (response[0] === undefined) {
                             $("#ConfirmForm").slideUp(300);
                             $("#errorDefualt").slideDown();
                             $("#AlertForm").slideDown(300);
                             return;
                         }
                         //Sucess
-                        if (response[0].Result == 1) {
+                        if (response[0].Result === 1) {
                             self.result.Ref1 = response[0].Barcode.substring(14, 25);
 
                             var strHTML = '';
@@ -695,14 +695,14 @@ var app = new Vue({
 
                             self.Calculate();
                         }
-                        else if (response[0].Result == 0) {
+                        else if (response[0].Result === 0) {
                             //Case Error slideUp AlertForm
                             //ของหมด
                             $("#ConfirmForm").slideUp(300);
 
                             $("#AlertForm").slideDown(300);
                             $("#errorOutOfStock").slideDown();
-                        } else if (response[0].Result == -100) {
+                        } else if (response[0].Result === -100) {
                             $("#ConfirmForm").slideUp(300);
                             $("#errorDupplicateID").slideDown();
                             $("#AlertForm").slideDown(300);
