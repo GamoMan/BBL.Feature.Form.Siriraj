@@ -709,16 +709,16 @@
             </div>
             <div id="ReceiptPostAddress" v-if="model.Delivery == '1'">
                 <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.PostAddress}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.PostSoi}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{model.PostAddress}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{model.PostSoi}}</p></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.PostRoad}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.PostSubdistrict}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{model.PostRoad}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{model.PostSubdistrict}}</p></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.PostDistrict}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.PostProvince}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{model.PostDistrict}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.PostProvince}}</p></div>
                 </div>
                 <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.PostZip}}</p></div>
@@ -852,10 +852,6 @@
         </div>
     </div>
 
-
-
-
-
     <modal v-if="showModal" v-on:close="showModal = false">
         <!--
         you can use custom content here to overwrite
@@ -912,19 +908,7 @@
             </div>
         </transition>
     </script>
-
-
 </div>
 <div class="pad-bot"></div>
-
-
-
-
-
-
-
-
-
-
 
 <script src="~/assets/Siriraj/js/index.js"></script>
