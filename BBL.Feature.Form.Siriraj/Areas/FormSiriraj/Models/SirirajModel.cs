@@ -73,6 +73,9 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
         public string Address_CZ { get; set; }
 
         [StringLength(50)]
+        public string Building_CZ { get; set; }
+      
+        [StringLength(50)]
         public string Soi_CZ { get; set; }
 
         [StringLength(50)]
@@ -90,7 +93,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
         public int Car { get; set; }
         public int Camera { get; set; }
 
-        public int CaRadior { get; set; }
+        public int Radio { get; set; }
 
         public int Receipt { get; set; }
 

@@ -154,9 +154,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="sitecore\Shell\client\YourApps\SirirajReport\Code\SirirajDataController.cs" />
     <Compile Include="sitecore\Shell\client\YourApps\SirirajReport\Code\DataDb.cs" />
     <Compile Include="sitecore\Shell\client\YourApps\SirirajReport\Code\DataModel.cs" />
+    <Compile Include="sitecore\Shell\client\YourApps\SirirajReport\Code\SirirajBackendController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

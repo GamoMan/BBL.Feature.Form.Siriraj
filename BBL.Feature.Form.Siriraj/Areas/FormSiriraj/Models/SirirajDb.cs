@@ -217,6 +217,8 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
 
                 //Save PerSonale ============================================================================
 
+                //S
+                model.personal.InvoiceID = Convert.ToInt32(dt.Rows[0]["InvoiceID"]);
                 String JsonData = FromString.JsonToString(model.personal);
 
 
@@ -225,12 +227,9 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
                 var jsonEncrypt = Encryption.Encrypt(AppSettings.FormKey, JsonData);
 
                 //parmsData.Add(Db.CreateParameterDb("@Data", JsonData));
-                parmsData.Add(new SqlParameter("@Data", JsonData));
+                parmsData.Add(new SqlParameter("@Data", jsonEncrypt));
 
                  Db.FbExecuteNonQuery("INSERT INTO [Personal]([Data],[CreateDate],[Status])VALUES(@Data, GETDATE(), 0)", parmsData, CommandType.Text );
-
-
-
 
                 //=============================================================================================
             
@@ -253,21 +252,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
             }
         }
 
-        //public bool haveCitizenID(string CitizenID)
-        //{
-        //    string myID = Hash.HashCitizenID(CitizenID);
-
-        //    List<IDataParameter> parms = new List<IDataParameter>();
-        //    var sql = "SELECT * FROM Register WHERE CitizenID = @ID";
-        //    parms.Add(new SqlParameter("@ID", myID));
-        //    object itemcount = Db.FbExecuteScalar("sp_ExistsCitizenID", parms);
-
-        //    int citiCount = Convert.ToInt32(itemcount);
-        //    if (citiCount > 0)
-        //        return true;
-        //    else
-        //        return false;
-        //}
+       
 
         public object AvailableItems()
         {

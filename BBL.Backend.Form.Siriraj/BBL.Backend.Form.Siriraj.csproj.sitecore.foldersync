@@ -1,0 +1,5 @@
+﻿<Project>
+  <FolderSync SynchronizeProjectOutputFolderOnBuild="False">
+    <Folder SourceFolder="sitecore\Shell\client\YourApps\SirirajReport\Renderings\" DestinationFolder="sitecore\shell\client\YourApps\SirirajReport\Renderings\" Mode="Mirror" Pattern="*.*" />
+  </FolderSync>
+</Project>

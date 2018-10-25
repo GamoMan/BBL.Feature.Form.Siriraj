@@ -50,7 +50,7 @@
             data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
 
             $.ajax({
-                url: "/api/sitecore/SirirajData/GetUserData",
+                url: "/api/sitecore/SirirajBackend/GetUserData",
                 type: "POST",
                 data: data,
                 context: this,

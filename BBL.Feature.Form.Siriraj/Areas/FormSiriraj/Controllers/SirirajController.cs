@@ -1,4 +1,6 @@
-﻿using BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models;
+﻿using bbl.AzureUtility.Helpers;
+using bbl.BBLSecurity.Cryptography;
+using BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models;
 
 //using QRCoder;
 using BBL.Feature.Form.Siriraj.Config;
@@ -419,11 +421,11 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             //{
             //    var akvHelper = new AkvHelper();
             //    var webappKey = akvHelper.GetSecret("WEBAPPKey").Value;
-            //    var webappConnectionString = akvHelper.GetSecret("FormConnectionString").Value;
+            //    var SirirajConnectionString = akvHelper.GetSecret("SirirajConnectionString").Value;
             //    var aes = new AES(webappKey);
-            //    AppSettings.FormConnectionString = aes.Decrypt(webappConnectionString);
+            //    AppSettings.FormConnectionString = aes.Decrypt(SirirajConnectionString);
             //    AppSettings.FormKey = akvHelper.GetSecret("WEBFORMKey").Value;
-            //    AppSettings.SecretCode = akvHelper.GetSecret("SririrajSecret").Value;
+            //    //AppSettings.SecretCode = akvHelper.GetSecret("SririrajSecret").Value;
             //    AppSettings.HasKey = true;
             //}
         }

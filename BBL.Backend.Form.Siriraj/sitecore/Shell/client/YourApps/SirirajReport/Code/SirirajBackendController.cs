@@ -3,17 +3,16 @@ using bbl.BBLSecurity.Cryptography;
 using BBL.Backend.Form.Siriraj.Config;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Threading.Tasks;
+using System.Configuration;
 
 namespace BBL.Backend.Form.Siriraj.sitecore.Shell.client.YourApps.SirirajReport.Renderings
 {
-    public class SirirajDataController : Controller
+    public class SirirajBackendController : Controller
     {
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> GetUserData(string FromDate, string ToDate)
@@ -46,7 +45,7 @@ namespace BBL.Backend.Form.Siriraj.sitecore.Shell.client.YourApps.SirirajReport.
             //    // var webappConnectionString = akvHelper.GetSecret("ReportConnectionString").Value;
             //    //var aes = new AES(webappKey);
             //    // AppSettings.FormConnectionString = aes.Decrypt(webappConnectionString);
-            //    AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["ReportConnectionString"].ConnectionString;
+            //    AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["SirirajConnectionString"].ConnectionString;
             //    AppSettings.FormKey = akvHelper.GetSecret("WEBFORMKey").Value;
 
             //    AppSettings.HasKey = true;

@@ -40,7 +40,6 @@
             <table class="sc-table sc-table-header table">
                 <thead>
                     <tr>
-                        <th class="sc-table-head">Customer ID</th>
                         <th class="sc-table-head">Invoice ID</th>
                         <th class="sc-table-head">Name</th>
                         <th class="sc-table-head">Surname</th>
@@ -49,6 +48,7 @@
                         <th class="sc-table-head">Mobile 2</th>
                         <th class="sc-table-head">Email</th>
                         <th class="sc-table-head">Address CZ</th>
+                        <th class="sc-table-head">Building CZ</th>
                         <th class="sc-table-head">Soi CZ</th>
                         <th class="sc-table-head">Subdistrict CZ</th>
                         <th class="sc-table-head">District CZ</th>
@@ -63,6 +63,7 @@
                         <th class="sc-table-head">Branch Name</th>
                         <th class="sc-table-head">Branch Province</th>
                         <th class="sc-table-head">Address Post</th>
+                        <th class="sc-table-head">Building Post</th>
                         <th class="sc-table-head">Soi Post</th>
                         <th class="sc-table-head">Subdistrict Post</th>
                         <th class="sc-table-head">District Post</th>
@@ -75,9 +76,6 @@
 
                 <tbody data-bind="foreach: jsondata">
                     <tr>
-                        <td class="ventilate">
-                            <span data-bind="text:CustID"></span>
-                        </td>
                         <td class="ventilate">
                             <span data-bind="text:InvoiceID"></span>
                         </td>
@@ -101,6 +99,9 @@
                         </td>
                         <td class="ventilate">
                             <span data-bind="text:Address_CZ"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Building_CZ"></span>
                         </td>
                         <td class="ventilate">
                             <span data-bind="text:Soi_CZ"></span>
@@ -143,6 +144,9 @@
                         </td>
                         <td class="ventilate">
                             <span data-bind="text:Address_Post"></span>
+                        </td>
+                        <td class="ventilate">
+                            <span data-bind="text:Building_Post"></span>
                         </td>
                         <td class="ventilate">
                             <span data-bind="text:Soi_Post"></span>

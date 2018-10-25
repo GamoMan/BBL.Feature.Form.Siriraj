@@ -344,15 +344,29 @@
                                 string[] values = addressoptionCollection.GetValues(key);
                                 foreach (string value in values)
                                 {
-                                    <div class="col-md-6 col-sm-6">
-                                        <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.AddressOption)">
-                                            <input type="radio" name="AddressOption" class="form-control radio-align" v-model="model.AddressOption" value="@key" v-on:change="AddressOptionClick"><label class="radiovalue-align">@value</label>
-
-                                            <field-messages auto-label name="AddressOption" show="$dirty || $touched || $submitted" class="form-control-feedback">
-                                                <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
-                                            </field-messages>
-                                        </validate>
-                                    </div>
+                                    string AddName = "AddressOption" + key;
+                                    if (key == "0")
+                                    {
+                                        <div class="col-md-6 col-sm-6">
+                                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.AddressOption)">
+                                                    <input type="radio" id="@AddName" name="AddressOption" class="form-control radio-align" disabled="disabled" v-model="model.AddressOption" value="@key" v-on:change="AddressOptionClick"><label class="radiovalue-align">@value</label>
+                                                <field-messages auto-label name="AddressOption" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                                </field-messages>
+                                            </validate>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-6 col-sm-6">
+                                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.AddressOption)">
+                                                <input type="radio" id="@AddName" name="AddressOption" class="form-control radio-align"  v-model="model.AddressOption" value="@key" v-on:change="AddressOptionClick"><label class="radiovalue-align">@value</label>
+                                                <field-messages auto-label name="AddressOption" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                                </field-messages>
+                                            </validate>
+                                        </div>
+                                    }
                                 }
                             }
                         }
@@ -567,19 +581,19 @@
             <div id="ConfirmPostAddress" class="pad-bot" v-if="model.Delivery == '1'">
                 <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{model.PostAddress}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Building"] </p> <p class="result-label">{{model.PostBuilding}}</p></div>
+                </div>
+                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{model.PostSoi}}</p></div>
-                </div>
-                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{model.PostRoad}}</p></div>
+                </div>
+                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{model.PostSubdistrict}}</p></div>
-                </div>
-                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{model.PostDistrict}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.PostProvince}}</p></div>
                 </div>
                 <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.PostProvince}}</p></div>
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{model.PostZip}}</p></div>
-                    <div class="col-md-6"></div>
                 </div>
             </div>
 
@@ -607,19 +621,19 @@
             <div id="ConfirmAddress" class="pad-bot" v-if="model.Receipt == '1'">
                 <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{model.Address}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Building"] </p> <p class="result-label">{{model.Building}}</p></div>
+                </div>
+                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{model.Soi}}</p></div>
-                </div>
-                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{model.Road}}</p></div>
+                </div>
+                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{model.Subdistrict}}</p></div>
-                </div>
-                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{model.District}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.Province}}</p></div>
                 </div>
                 <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.Province}}</p></div>
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{model.Zip}}</p></div>
-                    <div class="col-md-6"></div>
                 </div>
             </div>
 
@@ -710,19 +724,19 @@
             <div id="ReceiptPostAddress" v-if="model.Delivery == '1'">
                 <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{model.PostAddress}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Building"] </p> <p class="result-label">{{model.PostBuilding}}</p></div>
+                </div>
+                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{model.PostSoi}}</p></div>
-                </div>
-                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{model.PostRoad}}</p></div>
+                </div>
+                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{model.PostSubdistrict}}</p></div>
-                </div>
-                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{model.PostDistrict}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.PostProvince}}</p></div>
                 </div>
                 <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.PostProvince}}</p></div>
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{model.PostZip}}</p></div>
-                    <div class="col-md-6"></div>
                 </div>
             </div>
 
@@ -749,26 +763,23 @@
             <div id="ReceiptAddress" v-if="model.Receipt == '1'">
                 <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.Address}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Building"] </p> <p class="result-label">{{result.Building}}</p></div>
+                </div>
+                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.Soi}}</p></div>
-                </div>
-                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.Road}}</p></div>
+                </div>
+                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.Subdistrict}}</p></div>
-                </div>
-                <div class="row">
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.District}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.Province}}</p></div>
                 </div>
                 <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.Province}}</p></div>
                     <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.Zip}}</p></div>
-                    <div class="col-md-6"></div>
                 </div>
                 
             </div>
             <div class="row lineSection"><hr></div>
-
-
-
             <div class="row">
                 <div class="col-md-12">
                     <div id="divstg" class="SubHead">

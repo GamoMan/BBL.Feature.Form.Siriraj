@@ -252,10 +252,12 @@ var app = new Vue({
         ReceiptClick: function () {
             if (this.model.Receipt === "1") {
                 $('#Receipt').slideDown(300);
+                $('#AddressOption0').attr('disabled', false);
                 this.required.Receipt = true;
             } else {
                 $('#Receipt').slideUp(300);
                 this.model.AddressOption = '1';
+                $('#AddressOption0').attr('disabled', true)
                 this.required.Receipt = false;
                 this.resetAddress();
                 this.formstate._reset();
@@ -390,7 +392,7 @@ var app = new Vue({
             this.model.PostZip = this.model.Zip;
         },
         copyAddressBack: function () {
-            if (this.model.AddressOption === "0") {
+            if (this.model.AddressOption === '0' && this.model.Receipt === '0') {
                 this.model.Address = this.model.PostAddress;
                 this.model.Building = this.model.PostBuilding;
                 this.model.Soi = this.model.PostSoi;
@@ -455,13 +457,16 @@ var app = new Vue({
             this.model.District = address.district;
             this.model.Province = address.province;
             this.model.Zip = address.postalCode;
+            if (this.model.Receipt === 0)
+                this.copyAddress();
         },
         onPostSelected: function (address) {
             this.model.PostSubdistrict = address.subdistrict;
             this.model.PostDistrict = address.district;
             this.model.PostProvince = address.province;
             this.model.PostZip = address.postalCode;
-            this.copyAddressBack();
+            if(this.model.Receipt === 0)
+                this.copyAddressBack();
         },
         onConfirm: function (e) {
             if (!app.formstate.$invalid) {
@@ -569,27 +574,30 @@ var app = new Vue({
                     Personal: {
                         "Name": this.model.Name,
                         "Surname": this.model.Surname,
-                        "PersonalID": this.model.PersonalID,
-                        "Mobile": this.model.Mobile,
+                        "CitizenID": this.model.PersonalID,
+                        "Mobile1": this.model.Mobile,
                         "Mobile2": this.model.Mobile2,
                         "Email": this.model.Email,
                         "LineID": this.model.LineID,
-                        "Address": this.model.Address,
-                        "Building": this.model.Building,
-                        "Soi": this.model.Soi,
-                        "Road": this.model.Road,
-                        "Subdistrict": this.model.Subdistrict,
-                        "District": this.model.District,
-                        "Province": this.model.Province,
-                        "Zip": this.model.Zip,
-                        "PostAddress": this.model.PostAddress,
-                        "PostBuilding": this.model.PostBuilding,
-                        "PostSoi": this.model.PostSoi,
-                        "PostRoad": this.model.PostRoad,
-                        "PostSubdistrict": this.model.PostSubdistrict,
-                        "PostDistrict": this.model.PostDistrict,
-                        "PostProvince": this.model.PostProvince,
-                        "PostZip": this.model.PostZip,
+                        "Address_CZ": this.model.Address,
+                        "Building_CZ": this.model.Building,
+                        "Soi_CZ": this.model.Soi,
+                        "Road_CZ": this.model.Road,
+                        "Subdistrict_CZ": this.model.Subdistrict,
+                        "District_CZ": this.model.District,
+                        "Province_CZ": this.model.Province,
+                        "Postcode_CZ": this.model.Zip,
+                        "Address_Post": this.model.PostAddress,
+                        "Building_Post": this.model.PostBuilding,
+                        "Soi_Post": this.model.PostSoi,
+                        "Road_Post": this.model.PostRoad,
+                        "Subdistrict_Post": this.model.PostSubdistrict,
+                        "District_Post": this.model.PostDistrict,
+                        "Province_Post": this.model.PostProvince,
+                        "Postcode_Post": this.model.PostZip,
+                        "Car": this.model.Type[0] === true ? 1 : 0,
+                        "Camera": this.model.Type[2] === true ? 1 : 0,
+                        "Radio": this.model.Type[1] === true ? 1 : 0,
                         "Piggy": this.model.Piggy,
                         "Type": this.model.Type,
                         "TypeText": this.model.TypeText,
@@ -597,11 +605,11 @@ var app = new Vue({
                         "BranchProvince": this.model.BranchProvince,
                         "BranchCode": this.model.BranchCode,
                         "BranchName": this.model.BranchName,
-                        "Delivery": this.model.Delivery,
+                        "DeliveryType": this.model.Delivery,
                         "AddressOption": this.model.AddressOption,
                         "Donate": this.model.Donate,
                         "DeliveryAmount": this.model.DeliveryAmount,
-                        "GrandTotal": this.model.GrandTotal,
+                        "Amount": this.model.GrandTotal,
                         "QRcode": this.model.QRcode,
                         "Barcode": this.model.Barcode,
                         "SummaryText": this.model.SummaryText,
