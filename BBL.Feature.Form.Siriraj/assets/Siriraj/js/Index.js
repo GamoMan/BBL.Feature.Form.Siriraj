@@ -674,7 +674,7 @@ var app = new Vue({
                             self.result.InvoiceID = response[0].InvoiceID;
 
                             self.result.BranchProvince = self.model.BranchProvince;
-                            self.result.Branch = self.model.Branch;
+                            self.result.BranchName = self.model.BranchName;
 
                             self.result.Name = self.model.Name;
                             self.result.Surname = self.model.Surname;
