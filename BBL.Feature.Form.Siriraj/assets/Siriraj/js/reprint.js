@@ -24,6 +24,7 @@ var app = new Vue({
             PersonalID: '',
         },
         result: {
+            InvoiceID: '',
             PersonalID: '',
             CreateDate: '',
             Piggy: [],
@@ -52,6 +53,7 @@ var app = new Vue({
         this.result.Summary = $('#Summary').val();
         this.ReprintFailed = $('#ReprintFailed').val();
         this.result.ServiceCode = $('#ServiceCode').val();
+        this.result.BillerName = $('#BillerName').val();
         this.result.TypeText[0] = $('#Type1').val();
         this.result.TypeText[1] = $('#Type2').val();
         this.result.TypeText[2] = $('#Type3').val();
@@ -217,7 +219,7 @@ var app = new Vue({
             if (!app.formstate.$invalid) {
                 var self = this;
                 var data = {
-                    "ID": app.model.PersonalID,
+                    "CitizenID": app.model.PersonalID,
                 };
                 data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
 
@@ -231,10 +233,10 @@ var app = new Vue({
                     success: function (response) {
                         if (response.length > 0 ) {
                             //self.hash = response;
+                            self.result.InvoiceID = response[0].InvoiceID;
                             self.result.Type[0] = response[0].Car === 1 ? true : false;
                             self.result.Type[1] = response[0].Radio === 1 ? true : false;
                             self.result.Type[2] = response[0].Camera === 1 ? true : false;
-                            //self.result.PersonalID = response[0].CitizenID;
                             self.result.CreateDate = response[0].CreateDate;
                             self.result.Receipt = response[0].Receipt.toString();
                             self.result.Delivery = response[0].DeliveryType.toString();
