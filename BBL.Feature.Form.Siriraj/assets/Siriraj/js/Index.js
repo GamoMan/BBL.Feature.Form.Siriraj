@@ -254,6 +254,7 @@ var app = new Vue({
                 $('#Receipt').slideDown(300);
                 $('#AddressOption0').attr('disabled', false);
                 this.required.Receipt = true;
+                this.model.AddressOption = 0;
             } else {
                 $('#Receipt').slideUp(300);
                 this.model.AddressOption = '1';
@@ -280,10 +281,13 @@ var app = new Vue({
                 this.model.DeliveryAmount = 0;
                 this.required.Branch = true;
                 this.required.Post = false;
-                if (this.model.Receipt === "0")
+                if (this.model.Receipt === "0") {
                     this.required.Receipt = false;
-                else
+                    this.model.AddressOption = 1;
+                } else {
                     this.required.Receipt = true;
+                    this.model.AddressOption = 0;
+                }
             } else {
                 $('#AddressOption').slideDown(300);
                 $('#ShowBranch').slideUp(300);
@@ -293,8 +297,10 @@ var app = new Vue({
                 this.required.Branch = false;
                 if (this.model.Receipt === "0") {
                     this.required.Receipt = false;
+                    this.model.AddressOption = 1;
                 } else {
                     this.required.Receipt = true;
+                    this.model.AddressOption = 0;
                 }
                 this.formstate._reset();
             }

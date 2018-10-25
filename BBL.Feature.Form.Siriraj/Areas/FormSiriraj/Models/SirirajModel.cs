@@ -112,6 +112,9 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
         public string Address_Post { get; set; }
 
         [StringLength(50)]
+        public string Building_Post { get; set; }
+
+        [StringLength(50)]
         public string Soi_Post { get; set; }
 
         [StringLength(50)]
