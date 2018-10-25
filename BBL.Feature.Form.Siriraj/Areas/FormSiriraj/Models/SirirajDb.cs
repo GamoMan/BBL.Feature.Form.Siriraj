@@ -216,9 +216,10 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
 
 
                 //Save PerSonale ============================================================================
-
-                //S
                 model.personal.InvoiceID = Convert.ToInt32(dt.Rows[0]["InvoiceID"]);
+
+                model.personal.CreateDate = Convert.ToDateTime(dt.Rows[0]["CreateDate"]);
+
                 String JsonData = FromString.JsonToString(model.personal);
 
 
