@@ -11,6 +11,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
         public Personal personal { get; set; }
 
         public string CitizenID { get; set; }
+        public string ClearCitizenID { get; set; }
         public int Car { get; set; }
         public int Camera { get; set; }
         public int Radio { get; set; }
@@ -127,11 +128,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
         public string Province_Post { get; set; }
 
         [StringLength(5)]
-        public string Postcode_Post { get; set; }
-
-        [StringLength(5)]
-        public string Building_Post { get; set; }
-       
+        public string Postcode_Post { get; set; }     
 
         public float Amount { get; set; }
 

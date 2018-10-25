@@ -160,6 +160,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
                 //var storeName = "INSERT INTO [SIP] ([ID],[Data]) VALUES (NEWID(),@Data) ;SELECT SCOPE_IDENTITY();";
                 var storeName = "sp_RegisterUser";
                 parms.Add(new SqlParameter("@CitizenID", model.CitizenID));
+                parms.Add(new SqlParameter("@ClearCitizenID", model.ClearCitizenID));
                 parms.Add(new SqlParameter("@Car", model.Car));
                 parms.Add(new SqlParameter("@Camera", model.Camera));
                 parms.Add(new SqlParameter("@Radio", model.Radio));

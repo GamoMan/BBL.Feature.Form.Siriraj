@@ -243,6 +243,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             {
                 Init();
 
+                model.ClearCitizenID = model.CitizenID;
                 model.CitizenID = Hash.HashCitizenID(model.CitizenID);
                 //var modeljson = FromString.JsonToString(model);
 
