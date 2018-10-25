@@ -27,29 +27,29 @@ namespace BBL.Backend.Form.Siriraj.sitecore.Shell.client.YourApps.SirirajReport.
 
         private void Init()
         {
-            var webappKey = "";
-            if (AppSettings.HasKey == false)
-            {
-                webappKey = "Landlord#1";
-                //AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["ReportConnectionString"].ConnectionString;
-                AppSettings.FormConnectionString = "Data Source = (local); Initial Catalog = Siriraj; Integrated Security = False; User ID = sa; Password = P@ssw0rd";
-                AppSettings.FormKey = "x8r9ho0GGR";// x8r9ho0GGR";
-
-                AppSettings.HasKey = true;
-            }
-
+            //var webappKey = "";
             //if (AppSettings.HasKey == false)
             //{
-            //    var akvHelper = new AkvHelper();
-            //    var webappKey = akvHelper.GetSecret("WEBAPPKey").Value;
-            //    // var webappConnectionString = akvHelper.GetSecret("ReportConnectionString").Value;
-            //    //var aes = new AES(webappKey);
-            //    // AppSettings.FormConnectionString = aes.Decrypt(webappConnectionString);
-            //    AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["SirirajConnectionString"].ConnectionString;
-            //    AppSettings.FormKey = akvHelper.GetSecret("WEBFORMKey").Value;
+            //    webappKey = "Landlord#1";
+            //    //AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["ReportConnectionString"].ConnectionString;
+            //    AppSettings.FormConnectionString = "Data Source = (local); Initial Catalog = Siriraj; Integrated Security = False; User ID = sa; Password = P@ssw0rd";
+            //    AppSettings.FormKey = "x8r9ho0GGR";// x8r9ho0GGR";
 
             //    AppSettings.HasKey = true;
             //}
+
+            if (AppSettings.HasKey == false)
+            {
+                var akvHelper = new AkvHelper();
+                var webappKey = akvHelper.GetSecret("WEBAPPKey").Value;
+                // var webappConnectionString = akvHelper.GetSecret("ReportConnectionString").Value;
+                //var aes = new AES(webappKey);
+                // AppSettings.FormConnectionString = aes.Decrypt(webappConnectionString);
+                AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["SirirajConnectionString"].ConnectionString;
+                AppSettings.FormKey = akvHelper.GetSecret("WEBFORMKey").Value;
+
+                AppSettings.HasKey = true;
+            }
         }
     }
 }
