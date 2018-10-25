@@ -126,6 +126,10 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
         [StringLength(5)]
         public string Postcode_Post { get; set; }
 
+        [StringLength(5)]
+        public string Building_Post { get; set; }
+       
+
         public float Amount { get; set; }
 
         //public float Donate { get; set; }
