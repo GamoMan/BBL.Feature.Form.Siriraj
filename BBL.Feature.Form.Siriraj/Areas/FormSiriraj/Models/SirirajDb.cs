@@ -147,7 +147,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
 
         public object SaveRegister(FormSiriraj.Models.SirirajModel model)
         {
-            bool output = false;
+            //bool output = false;
             try
             {
 

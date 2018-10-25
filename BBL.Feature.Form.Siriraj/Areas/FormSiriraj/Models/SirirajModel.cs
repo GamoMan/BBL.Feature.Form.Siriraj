@@ -128,7 +128,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
 
         public float Amount { get; set; }
 
-        public float Donate { get; set; }
+        //public float Donate { get; set; }
         public DateTime CreateDate { get; set; }
     }
 }

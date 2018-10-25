@@ -605,7 +605,7 @@ var app = new Vue({
                         "BranchProvince": this.model.BranchProvince,
                         "BranchCode": this.model.BranchCode,
                         "BranchName": this.model.BranchName,
-                        "DeliveryType": this.model.Delivery,
+                        "DeliveryType": this.padding(this.model.Delivery,4),
                         "AddressOption": this.model.AddressOption,
                         "Donate": this.model.Donate,
                         "DeliveryAmount": this.model.DeliveryAmount,
@@ -722,7 +722,9 @@ var app = new Vue({
                 });
             }
         },
-
+        padding :function (number, digits) {
+            return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
+        },
         ShowModal: function () {
             debugger
             //app.model.head = term[termID].Head;
