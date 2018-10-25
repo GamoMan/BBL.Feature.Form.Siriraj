@@ -60,6 +60,12 @@
                         rows.push(JSON.parse(data[i].Data));
                     }
 
+                    for (var i = 0; i < rows.length; i++) {
+                        if (rows[i].BranchCode !== null)
+                            rows[i].BranchCode = this.Padding(rows[i].BranchCode,4);
+                        rows[i].Amount = this.twoDigit(rows[i].Amount);
+                        rows[i].CreateDate = this.JsonDateToDate(rows[i].CreateDate);
+                    }
                     app.set("jsondata", rows);
 
                     if (rows.length > 0) {
@@ -71,6 +77,17 @@
                     }
                 }
             });
+        },
+        Padding: function (number, digits) {
+            return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
+        },
+        twoDigit: function (val) {
+            return val.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        },
+        JsonDateToDate: function (jsonDate) {
+            var milli = jsonDate.substr(6);
+            var date = new Date(parseInt(milli));
+            return date;
         },
         ExportCSV: function () {
             var fileName = "Siriraj Register User Report";
