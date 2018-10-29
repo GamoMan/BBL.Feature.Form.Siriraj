@@ -390,7 +390,7 @@ var app = new Vue({
             this.model.PostZip = this.model.Zip;
         },
         copyAddressBack: function () {
-            if (this.model.AddressOption === '0' && this.model.Receipt === '0') {
+            if (this.model.AddressOption === '0') {
                 this.model.Address = this.model.PostAddress;
                 this.model.Building = this.model.PostBuilding;
                 this.model.Soi = this.model.PostSoi;
@@ -455,16 +455,14 @@ var app = new Vue({
             this.model.District = address.district;
             this.model.Province = address.province;
             this.model.Zip = address.postalCode;
-            if (this.model.Receipt === 0)
-                this.copyAddress();
+            this.copyAddress();
         },
         onPostSelected: function (address) {
             this.model.PostSubdistrict = address.subdistrict;
             this.model.PostDistrict = address.district;
             this.model.PostProvince = address.province;
             this.model.PostZip = address.postalCode;
-            if(this.model.Receipt === 0)
-                this.copyAddressBack();
+            this.copyAddressBack();
         },
         onConfirm: function (e) {
             if (!app.formstate.$invalid) {
