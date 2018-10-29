@@ -32,7 +32,7 @@
         return imageURL;
     }
 }
-<div id="app" class="inner-container">
+<div id="app" class="inner-container" style="display:none">
     <div class="panel panel-default panel-body general-form">
         <div class="row">
             <div id="divstg" class="col-md-8 col-md-offset-2 text-center">
@@ -59,9 +59,7 @@
             <vue-form :state="formstate" v-model="formstate" @@submit.prevent="dummy" class="general-form" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 <div class="item-shadow">
-                    <div id="divstg" class="title-label main-header" v-show="false">
-                        @Html.Raw(Model.Fields["Title"])
-                    </div>
+
                     <div id="divstg">
                         <h4 class="text-label">@Model.Fields["PersonalLabel"]</h4>
                     </div>
@@ -131,79 +129,7 @@
                             </validate>
                         </div>
                     </div>
-                    @*<div id="divstg">
-                            <h4 class="text-label">@Model.Fields["SelectLabel"]</h4>
-                        </div>*@
-
-                    <div class="row scroll-x" style="overflow-y: hidden;margin-bottom:14px;">
-                        <validate auto-label class="required-field" :class="fieldClassName(formstate.Type)">
-                            <div class="col-md-4 col-sm-4 text-center">
-                                <div class="frame form-group">
-                                    <label for="squaredTwo">
-                                        @*<input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" :required="required.Type"  :disabled="!this.haveCar"   >*@
-                                        <input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" v-show="this.haveCar" :required="this.haveCar" :disabled="!this.haveCar">
-                                        <span id="spncar" class="checkmark">
-                                            <img class="img-responsive pointer" v-on:click="ClickBtn(1)" src="@GetImageURL(Model.Fields["Type1"])">
-                                        </span>
-                                    </label>
-                                </div>
-                                <span id="txtTipCar">  รถจิ๊บ 1กระปุก ยอดออม 450 บาท</span>
-                            </div>
-                            <div class="col-md-4 col-sm-4 text-center">
-                                <div class="frame form-group">
-                                    <label for="squaredTwo">
-                                        <input name="Type" type="checkbox" class="checkbox" value="radio" v-on:change="Calculate" v-model="model.Type[1]" v-show="this.haveRadio" :required="this.haveRadio" :disabled="!this.haveRadio">
-                                        <span id="spnradio" class="checkmark">
-                                            <img class="img-responsive pointer" v-on:click="ClickBtn(2)" src="@GetImageURL(Model.Fields["Type2"])">
-                                        </span>
-                                    </label>
-                                </div>
-                                <span id="txtTipRadio"> วิทยุ 1กระปุก ยอดออม 450 บาท</span>
-                            </div>
-                            <div class="col-md-4 col-sm-4 text-center" style="overflow:visible">
-                                <div class="frame form-group">
-                                    <label for="squaredTwo">
-                                        <input name="Type" type="checkbox" class="checkbox" value="camera" v-on:change="Calculate" v-model="model.Type[2]" v-show="this.haveCamera" :required="this.haveCamera" :disabled="!this.haveCamera">
-                                        <span id="spncamera" class="checkmark">
-                                            <img class="img-responsive pointer" v-on:click="ClickBtn(3)" src="@GetImageURL(Model.Fields["Type3"])">
-                                        </span>
-                                    </label>
-                                </div>
-                                <span id="txtTipCamera" style=" white-space: nowrap;"> กล้อง 1กระปุก ยอดออม 450 บาท</span>
-                            </div>
-                            <field-messages auto-label name="Type" show="$dirty || $touched || $submitted" class="form-control-feedback">
-                                @*<div class="text-center small-pad" slot="validateType">@Model.Fields["ReqType"]</div>*@
-                                <div class="text-center small-pad pad-bot" slot="required" v-if="validateType">@Model.Fields["ReqType"]</div>
-                            </field-messages>
-                        </validate>
-                    </div>
-                    <div class="row">
-                        @*<div id="divstg" class="col-md-12">
-                                <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
-                            </div>*@
-                        @{
-                            string Receipt = Model.Fields["ReceiptOption"].Value;
-                            NameValueCollection ReceiptValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(Receipt);
-                            foreach (string key in ReceiptValueCollection.Keys)
-                            {
-                                string[] values = ReceiptValueCollection.GetValues(key);
-                                foreach (string value in values)
-                                {
-                                    <div class="col-md-6 col-sm-6">
-                                        <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Receipt)">
-                                            <input type="radio" name="Receipt" class="form-control radio-align" v-model="model.Receipt" value="@key" v-on:change="ReceiptClick"><label class="radiovalue-align">@value</label>
-
-                                            <field-messages auto-label name="Receipt" show="$dirty || $touched || $submitted" class="form-control-feedback">
-                                                <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
-                                            </field-messages>
-                                        </validate>
-                                    </div>
-                                }
-                            }
-                        }
-                    </div>
-
-                    <div id="Receipt" v-show="false">
+                    <div id="Receipt">
                         <div id="divstg">
                             <h4 class="text-label">@Model.Fields["AddressLabel"]</h4>
                         </div>
@@ -298,6 +224,53 @@
                             </div>
                         </div>
                     </div>
+                    <div id="divstg" class="title-label main-header">
+                        @Html.Raw(Model.Fields["Title"])
+                    </div>
+
+                    <div class="row scroll-x" style="overflow-y: hidden;margin-bottom:14px;">
+                        <validate auto-label class="required-field" :class="fieldClassName(formstate.Type)">
+                            <div class="col-md-4 col-sm-4 text-center">
+                                <div class="frame form-group">
+                                    <label for="squaredTwo">
+                                        @*<input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" :required="required.Type"  :disabled="!this.haveCar"   >*@
+                                        <input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" v-show="this.haveCar" :required="this.haveCar" :disabled="!this.haveCar">
+                                        <span id="spncar" class="checkmark">
+                                            <img class="img-responsive pointer" v-on:click="ClickBtn(1)" src="@GetImageURL(Model.Fields["Type1"])">
+                                        </span>
+                                    </label>
+                                </div>
+                                <span id="txtTipCar">@Html.Raw(Model.Fields["CarLabel"])</span>
+                            </div>
+                            <div class="col-md-4 col-sm-4 text-center">
+                                <div class="frame form-group">
+                                    <label for="squaredTwo">
+                                        <input name="Type" type="checkbox" class="checkbox" value="radio" v-on:change="Calculate" v-model="model.Type[1]" v-show="this.haveRadio" :required="this.haveRadio" :disabled="!this.haveRadio">
+                                        <span id="spnradio" class="checkmark">
+                                            <img class="img-responsive pointer" v-on:click="ClickBtn(2)" src="@GetImageURL(Model.Fields["Type2"])">
+                                        </span>
+                                    </label>
+                                </div>
+                                <span id="txtTipRadio">@Html.Raw(Model.Fields["RadioLabel"])</span>
+                            </div>
+                            <div class="col-md-4 col-sm-4 text-center" style="overflow:visible">
+                                <div class="frame form-group">
+                                    <label for="squaredTwo">
+                                        <input name="Type" type="checkbox" class="checkbox" value="camera" v-on:change="Calculate" v-model="model.Type[2]" v-show="this.haveCamera" :required="this.haveCamera" :disabled="!this.haveCamera">
+                                        <span id="spncamera" class="checkmark">
+                                            <img class="img-responsive pointer" v-on:click="ClickBtn(3)" src="@GetImageURL(Model.Fields["Type3"])">
+                                        </span>
+                                    </label>
+                                </div>
+                                <span id="txtTipCamera" style=" white-space: nowrap;">@Html.Raw(Model.Fields["CameraLabel"])</span>
+                            </div>
+                            <field-messages auto-label name="Type" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                @*<div class="text-center small-pad" slot="validateType">@Model.Fields["ReqType"]</div>*@
+                                <div class="text-center small-pad pad-bot" slot="required" v-if="validateType">@Model.Fields["ReqType"]</div>
+                            </field-messages>
+                        </validate>
+                    </div>
+
                     <div class="row">
                         @*<div class="col-md-12">
                                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Donate)">
@@ -332,49 +305,10 @@
                             }
                         }
                     </div>
-                    <div class="row" id="AddressOption" v-show="false">
-                        @*<div id="divstg" class="col-md-12">
-                                <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
-                            </div>*@
-                        @{
-                            string addressoption = Model.Fields["AddressOption"].Value;
-                            NameValueCollection addressoptionCollection = Sitecore.Web.WebUtil.ParseUrlParameters(addressoption);
-                            foreach (string key in addressoptionCollection.Keys)
-                            {
-                                string[] values = addressoptionCollection.GetValues(key);
-                                foreach (string value in values)
-                                {
-                                    string AddName = "AddressOption" + key;
-                                    if (key == "0")
-                                    {
-                                        <div class="col-md-6 col-sm-6">
-                                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.AddressOption)">
-                                                    <input type="radio" id="@AddName" name="AddressOption" class="form-control radio-align" disabled="disabled" v-model="model.AddressOption" value="@key" v-on:change="AddressOptionClick"><label class="radiovalue-align">@value</label>
-                                                <field-messages auto-label name="AddressOption" show="$dirty || $touched || $submitted" class="form-control-feedback">
-                                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
-                                                </field-messages>
-                                            </validate>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="col-md-6 col-sm-6">
-                                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.AddressOption)">
-                                                <input type="radio" id="@AddName" name="AddressOption" class="form-control radio-align"  v-model="model.AddressOption" value="@key" v-on:change="AddressOptionClick"><label class="radiovalue-align">@value</label>
-                                                <field-messages auto-label name="AddressOption" show="$dirty || $touched || $submitted" class="form-control-feedback">
-                                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
-                                                </field-messages>
-                                            </validate>
-                                        </div>
-                                    }
-                                }
-                            }
-                        }
-                    </div>
                     <div class="row" id="ShowBranch" v-show="true">
                         @*<div id="divstg" class="col-md-12">
                                 <h4 class="text-label">@Model.Fields["BranchLabel"]</h4>
-                            </div>*@
+                        </div>*@
                         <div class="col-md-6">
                             <validate auto-label class="form-group cust-select required-field" :class="fieldClassName(formstate.SelectProvince)">
                                 <select name="SelectProvince" :required="required.Branch" class="form-control none-bgd" id="selProvince" v-model="model.BranchProvince">
@@ -398,11 +332,49 @@
                                 </field-messages>
                             </validate>
                         </div>
-                    </div>
-                    <div id="PostNote" v-show="false">
-                        <div id="divstg">
+                    </div>                   
+                    <div class="row" id="AddressOption" v-show="false">
+                        <div id="divstg" class="col-md-12">
                             <h4 class="text-label">@Model.Fields["DeliverAddressLabel"]</h4>
                         </div>
+                        @{
+                            string addressoption = Model.Fields["AddressOption"].Value;
+                            NameValueCollection addressoptionCollection = Sitecore.Web.WebUtil.ParseUrlParameters(addressoption);
+                            foreach (string key in addressoptionCollection.Keys)
+                            {
+                                string[] values = addressoptionCollection.GetValues(key);
+                                foreach (string value in values)
+                                {
+                                    string AddName = "AddressOption" + key;
+                                    if (key == "0")
+                                    {
+                                        <div class="col-md-6 col-sm-6">
+                                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.AddressOption)">
+                                                    <input type="radio" id="@AddName" name="AddressOption" class="form-control radio-align" v-model="model.AddressOption" value="@key" v-on:change="AddressOptionClick"><label class="radiovalue-align">@value</label>
+                                                <field-messages auto-label name="AddressOption" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                                </field-messages>
+                                            </validate>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-6 col-sm-6">
+                                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.AddressOption)">
+                                                <input type="radio" id="@AddName" name="AddressOption" class="form-control radio-align"  v-model="model.AddressOption" value="@key" v-on:change="AddressOptionClick"><label class="radiovalue-align">@value</label>
+                                                <field-messages auto-label name="AddressOption" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                                    <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                                </field-messages>
+                                            </validate>
+                                        </div>
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+
+                    <div id="PostNote" v-show="false">
+
                         <div class="row">
                             <div class="col-md-6">
                                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostAddress)">
@@ -499,6 +471,31 @@
                     </div>
                     <div class="row">
                         <div id="divstg" class="col-md-12">
+                            <h4 class="text-label">@Model.Fields["ReceiptText"]</h4>
+                        </div>
+                        @{
+                            string Receipt = Model.Fields["ReceiptOption"].Value;
+                            NameValueCollection ReceiptValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(Receipt);
+                            foreach (string key in ReceiptValueCollection.Keys)
+                            {
+                                string[] values = ReceiptValueCollection.GetValues(key);
+                                foreach (string value in values)
+                                {
+                                    <div class="col-md-6 col-sm-6">
+                                        <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Receipt)">
+                                            <input type="radio" name="Receipt" class="form-control radio-align" v-model="model.Receipt" value="@key" v-on:change="ReceiptClick"><label class="radiovalue-align">@value</label>
+
+                                            <field-messages auto-label name="Receipt" show="$dirty || $touched || $submitted" class="form-control-feedback">
+                                                <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
+                                            </field-messages>
+                                        </validate>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="row">
+                        <div id="divstg" class="col-md-12">
                             @*<h4 class="text-label">@Model.Fields["TotalLabel"]</h4>*@
                             <p class="total text-center">{{AmountSummary}}</p>
                         </div>
@@ -521,6 +518,7 @@
             //
         *@
         <div id="ConfirmForm" class="general-form" v-show="false">
+            @*Section*@
             <div class="row">
                 <div class="col-md-12">
                     <div id="divstg">
@@ -528,7 +526,43 @@
                     </div>
                 </div>
             </div>
-            <div class="row pad-top pad-bot">
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Name"] </p> <p class="result-label">{{model.Name}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Surname"] </p> <p class="result-label">{{model.Surname}}</p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{model.PersonalID}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{model.Mobile}}</p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{model.Mobile2}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Email"] </p> <p class="result-label">{{model.Email}}</p></div>
+            </div>
+            <div class="row pad-top">
+                <div class="col-md-12">
+                    <h4 class="text-label SubHead">@Model.Fields["AddressLabel"]</h4>
+                </div>
+            </div>
+            <div id="ConfirmAddress">
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{model.Address}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Building"] </p> <p class="result-label">{{model.Building}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{model.Soi}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{model.Road}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{model.Subdistrict}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{model.District}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.Province}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{model.Zip}}</p></div>
+                </div>
+            </div>
+
+            <div class="row pad-top">
                 <div class="col-md-12">
                     <div class="table-overflow">
                         <table class="result-table">
@@ -556,7 +590,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row pad-top">
                 <div class="col-md-12">
                     <div id="divstg">
                         <h4 class="text-label SubHead">@Model.Fields["DeliverLabel"]</h4>
@@ -597,47 +631,25 @@
                 </div>
             </div>
 
-            <div class="row lineSection"><hr></div>
-            @*Section*@
             <div class="row">
-                <div class="col-md-12">
-                    <div id="divstg">
-                        <h4 class="text-label SubHead"> รายละเอียดผู้สมัคร</h4>
-                    </div>
+                <div id="divstg" class="col-md-12">
+                    <h4 class="text-label SubHead">@Model.Fields["ReceiptText"]</h4>
                 </div>
+                @{
+                    string ConfReceipt = Model.Fields["ReceiptOption"].Value;
+                    NameValueCollection ConfReceiptValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(ConfReceipt);
+                    foreach (string key in ConfReceiptValueCollection.Keys)
+                    {
+                        string[] values = ConfReceiptValueCollection.GetValues(key);
+                        foreach (string value in values)
+                        {
+                            <div class="col-md-12 col-sm-12" v-if="model.Receipt == @key">
+                                <p class="result-label">@value</p>
+                            </div>
+                        }
+                    }
+                }
             </div>
-            <div class="row">
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Name"] </p> <p class="result-label">{{model.Name}}</p></div>
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Surname"] </p> <p class="result-label">{{model.Surname}}</p></div>
-            </div>
-            <div class="row">
-                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{model.PersonalID}}</p></div>
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{model.Mobile}}</p></div>
-            </div>
-            <div class="row">
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{model.Mobile2}}</p></div>
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Email"] </p> <p class="result-label">{{model.Email}}</p></div>
-            </div>
-            <div id="ConfirmAddress" class="pad-bot" v-if="model.Receipt == '1'">
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{model.Address}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Building"] </p> <p class="result-label">{{model.Building}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{model.Soi}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{model.Road}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{model.Subdistrict}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{model.District}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{model.Province}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{model.Zip}}</p></div>
-                </div>
-            </div>
-
-            <div class="row lineSection"><hr></div>
 
             <div class="text-label ">
                 <div class="row text-center">
@@ -656,22 +668,53 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <div class="TitleHead">
-
-                        <h4 class="text-label  ">  ใบสมัครเลขที่ {{result.InvoiceID}}</h4>
-                    </div>
+                        <h4 class="text-label TitleHead">@Model.Fields["InvoiceIDLabel"] {{InvoiceNo(result.InvoiceID,7)}}</h4>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <div class="SubHead">
-                        <h4 class="text-label  "> รายละเอียดการสมัคร</h4>
-                    </div>
+                        <h4 class="text-label SubHead">@Model.Fields["PersonalLabel"]</h4>
                 </div>
             </div>
-
             <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Name"] </p> <p class="result-label">{{result.Name}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Surname"] </p> <p class="result-label">{{result.Surname}}</p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{this.maskID(model.PersonalID)}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{result.Mobile}}</p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{result.Mobile2}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["Email"] </p> <p class="result-label">{{result.Email}}</p></div>
+            </div>
+            <div class="row pad-top">
+                <div class="col-md-12">
+                    <h4 class="text-label SubHead">@Model.Fields["AddressLabel"]</h4>
+                </div>
+            </div>
+            <div id="ReceiptAddress">
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.Address}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Building"] </p> <p class="result-label">{{result.Building}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.Soi}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.Road}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.Subdistrict}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.District}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.Province}}</p></div>
+                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.Zip}}</p></div>
+                </div>
+
+            </div>
+
+            <div class="row pad-top">
                 <div class="col-md-12">
                     <div class="table-overflow">
                         <table class="result-table">
@@ -699,11 +742,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row pad-top">
                 <div class="col-md-12">
-                    <div id="divstg" class="SubHead">
-                        <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
-                    </div>
+                        <h4 class="text-label SubHead">@Model.Fields["DeliverLabel"]</h4>
                 </div>
             @{
                 string FinDeliver = Model.Fields["Deliver"].Value;
@@ -740,73 +781,51 @@
                 </div>
             </div>
 
+            <div class="row pad-top">
+                <div class="col-md-12">
+                    <h4 class="text-label SubHead">@Model.Fields["ReceiptText"]</h4>
+                </div>
+                @{
+                    string ConfmReceipt = Model.Fields["ReceiptOption"].Value;
+                    NameValueCollection ConfmReceiptValueCollection = Sitecore.Web.WebUtil.ParseUrlParameters(ConfmReceipt);
+                    foreach (string key in ConfmReceiptValueCollection.Keys)
+                    {
+                        string[] values = ConfmReceiptValueCollection.GetValues(key);
+                        foreach (string value in values)
+                        {
+                            <div class="col-md-12 col-sm-12" v-if="model.Receipt == @key">
+                                <p class="result-label">@value</p>
+                            </div>
+                        }
+                    }
+                }
+            </div>
 
-            <div class="row">
+            <div class="row pad-top">
                 <div class="col-md-12">
-                    <div id="divstg" class="SubHead">
-                        <h4 class="text-label">รายละเอียดผู้สมัคร</h4>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Name"] </p> <p class="result-label">{{result.Name}}</p></div>
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Surname"] </p> <p class="result-label">{{result.Surname}}</p></div>
-            </div>
-            <div class="row">
-                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{this.maskID(model.PersonalID)}}</p></div>
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{result.Mobile}}</p></div>
-            </div>
-            <div class="row">
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{result.Mobile2}}</p></div>
-                <div class="col-md-6"><p class="result-label">@Model.Fields["Email"] </p> <p class="result-label">{{result.Email}}</p></div>
-            </div>
-            <div id="ReceiptAddress" v-if="model.Receipt == '1'">
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Address"] </p> <p class="result-label">{{result.Address}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Building"] </p> <p class="result-label">{{result.Building}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Soi"] </p> <p class="result-label">{{result.Soi}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Road"] </p> <p class="result-label">{{result.Road}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Subdistinct"] </p> <p class="result-label">{{result.Subdistrict}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Distinct"] </p> <p class="result-label">{{result.District}}</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Province"] </p> <p class="result-label">{{result.Province}}</p></div>
-                    <div class="col-md-6"><p class="result-label">@Model.Fields["Postcode"] </p> <p class="result-label">{{result.Zip}}</p></div>
-                </div>
-                
-            </div>
-            <div class="row lineSection"><hr></div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="divstg" class="SubHead">
-                        <h4 class="text-label">ช่องทางการโอนเงินออม</h4>
-                    </div>
+                    <h4 class="text-label SubHead">@Model.Fields["DeliveryLabel"]</h4>
                 </div>
             </div>           
             
             <div class="row">
                 <div class="col-md-6 col-sm-6 pad-bot">
                     <div class="row">
-                        <div class="col-md-6 result-label">@*@Model.Fields["ServiceCodeLabel"]*@ Service Code: </div><div class="col-md-6 result-label">{{model.ServiceCode}}</div>
+                        <div class="col-md-6 result-label">@Model.Fields["ServiceCodeLabel"] </div><div class="col-md-6 result-label">{{model.ServiceCode}}</div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 result-label">@*@Model.Fields["RefNoLabel"]*@ Ref No:</div><div class="col-md-6 result-label">{{result.Ref1}}</div>
+                        <div class="col-md-6 result-label">@Model.Fields["RefNoLabel"]</div><div class="col-md-6 result-label">{{result.Ref1}}</div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 result-label">@*@Model.Fields["BillerNameLabel"]*@ Biller name:</div><div class="col-md-6 result-label">{{model.BillerName}}</div>
+                        <div class="col-md-6 result-label">@Model.Fields["BillerNameLabel"]</div><div class="col-md-6 result-label">{{model.BillerName}}</div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 result-label">@*@Model.Fields["AmountLabel"]*@ จำนวนเงิน</div><div class="col-md-6 result-label">{{this.twoDigit(model.GrandTotal)}}</div>
+                        <div class="col-md-6 result-label">@Model.Fields["AmountLabel"]</div><div class="col-md-6 result-label">{{this.twoDigit(model.GrandTotal)}}</div>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-6 text-center pad-bot">
                     <qrcode v-bind:value="result.QRcode" :options="{ size: 150 }"></qrcode>
                 </div>
-                <div class="text-center"><span>  *QR Code สามารถชำระเงินที่ Mobile Banking ของทุกธนาคาร  </span></div>
+                <div class="text-center"><span>@Model.Fields["QRNoteLabel"]  </span></div>
                 <div class="row lineSection"><hr></div>
             </div>
             <div class="row">
@@ -815,7 +834,7 @@
                     <barcode v-bind:value="result.Barcode" tag="img"></barcode>
                 </div>
 
-                <div class="text-center"><span>*Bar Code สามารถชำระเงินที่ ATM ของธนาคาร และเคาเตอร์ของธนาคารกรุงเทพทั่วประเทศ  </span></div>
+                <div class="text-center"><span>@Model.Fields["BarcodeNoteLabel"]</span></div>
                 <div class="row lineSection"><hr></div>
             </div>
             <div class="text-label">
@@ -823,7 +842,7 @@
                     <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onPrint" type="submit">@Model.Fields["PrintButton"]</button></div>
                     @* <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onCancelOrder" type="submit">ยกเลิกรายการ</button></div>*@
 
-                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="showModal = true">ยกเลิกรายการ</button></div>
+                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="showModal = true">@Model.Fields["CancelLabel"]</button></div>
 
                    
                 </div>
@@ -846,17 +865,17 @@
 
             <div class="pad-bot">
                 <div id="errorDupplicateID" class="row" v-show="false">
-                    <div class="col-md-12 text-center"><h4 class="result-label ">เลขบัตรประชาชนของท่านมีอยู่ในระบบเรียบร้อยแล้ว ระบบไม่สามารถดำเนินการสมัครต่อได้</h4></div>
+                    <div class="col-md-12 text-center"><h4 class="result-label ">@Model.Fields["HasIDLabel"]</h4></div>
                 </div>
                 <div id="errorOutOfStock" class="row" v-show="false">
-                    <div class="col-md-12 text-center"><h4 class="result-label "> ขออภัย กระปุกออมสินได้ถูกสั่งจองหมดแล้ว</h4></div>
+                    <div class="col-md-12 text-center"><h4 class="result-label ">@Model.Fields["OutofStockLabel"]</h4></div>
                 </div>
                 <div id="errorDefualt" class="row" v-show="false">
-                    <div class="col-md-12 text-center"><h4 class="result-label "> ขออภัย เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง</h4></div>
+                    <div class="col-md-12 text-center"><h4 class="result-label ">@Model.Fields["ErrorLabel"]</h4></div>
                 </div>
 
                 <div id="AlertCancel" class="row" v-show="false">
-                    <div class="col-md-12 text-center"><h4 class="result-label ">ยกเลิกใบสมัครเรียบร้อยแล้ว</h4></div>
+                    <div class="col-md-12 text-center"><h4 class="result-label ">@Model.Fields["CancelApplyLabel"]</h4></div>
                 </div>
 
             </div>
@@ -889,7 +908,7 @@
 
                                 <div @*v-html="app.model.ModalMessage"*@ class="innerDiv">
 
-                                    โปรดยืนยันการยกเลิกการสมัคร
+                                    @Model.Fields["ConfirmApplyLabel"]
 
                                 </div>
                             </div>
@@ -905,11 +924,11 @@
                                 @**@
                                 <div class="row">
                                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-">
-                                        <button class="btn btn-primary btn-sm   btn-block   text-center"   v-on:click="AcceptCanCelOrder"  >ยืนยัน</button>
+                                        <button class="btn btn-primary btn-sm   btn-block   text-center"   v-on:click="AcceptCanCelOrder"  >@Model.Fields["ConfirmLabel"]</button>
                                     </div>
 
                                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-">
-                                        <button class="btn btn-primary btn-sm   btn-block   text-center" style="background-color: #d3d3d3;"  v-on:click="$emit('close')" >ยกเลิก</button>
+                                        <button class="btn btn-primary btn-sm   btn-block   text-center" style="background-color: #d3d3d3;"  v-on:click="$emit('close')" >@Model.Fields["UnconfirmLabel"]</button>
                                     </div>
                                 </div>
                             </div>

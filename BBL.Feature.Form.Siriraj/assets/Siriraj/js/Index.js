@@ -109,7 +109,7 @@ var app = new Vue({
         required: {
             Type: true,
             Post: false,
-            Receipt: false,
+            Receipt: true,
             Branch: false
         },
     },
@@ -155,6 +155,8 @@ var app = new Vue({
                 }
             });
         });
+
+        $("#app").css("display", "block");
     },
     methods: {
         dummy: function () {
@@ -250,19 +252,6 @@ var app = new Vue({
             return ret;
         },
         ReceiptClick: function () {
-            if (this.model.Receipt === "1") {
-                $('#Receipt').slideDown(300);
-                $('#AddressOption0').attr('disabled', false);
-                this.required.Receipt = true;
-                this.model.AddressOption = 0;
-            } else {
-                $('#Receipt').slideUp(300);
-                this.model.AddressOption = '1';
-                $('#AddressOption0').attr('disabled', true)
-                this.required.Receipt = false;
-                this.resetAddress();
-                this.formstate._reset();
-            }
             this.Calculate();
         },
         AddressOptionClick: function () {
@@ -281,13 +270,11 @@ var app = new Vue({
                 this.model.DeliveryAmount = 0;
                 this.required.Branch = true;
                 this.required.Post = false;
-                if (this.model.Receipt === "0") {
-                    this.required.Receipt = false;
-                    this.model.AddressOption = 1;
-                } else {
-                    this.required.Receipt = true;
-                    this.model.AddressOption = 0;
-                }
+                //if (this.model.Receipt === "0") {
+                //    this.model.AddressOption = 1;
+                //} else {
+                //    this.model.AddressOption = 0;
+                //}
             } else {
                 $('#AddressOption').slideDown(300);
                 $('#ShowBranch').slideUp(300);
@@ -295,13 +282,11 @@ var app = new Vue({
                 this.model.DeliveryAmount = 70;
                 this.required.Post = true;
                 this.required.Branch = false;
-                if (this.model.Receipt === "0") {
-                    this.required.Receipt = false;
-                    this.model.AddressOption = 1;
-                } else {
-                    this.required.Receipt = true;
-                    this.model.AddressOption = 0;
-                }
+                //if (this.model.Receipt === "0") {
+                //    this.model.AddressOption = 1;
+                //} else {
+                //    this.model.AddressOption = 0;
+                //}
                 this.formstate._reset();
             }
             this.AddressOptionClick();
@@ -362,7 +347,14 @@ var app = new Vue({
                 }
             });
         },
+        InvoiceNo: function (number, length) {
+            var str = '' + number;
+            while (str.length < length) {
+                str = '0' + str;
+            }
 
+            return str;
+        },
         maskID: function (id) {
             if (id !== '')
                 return id.replace(id.substring(7, 10), "xxxx")

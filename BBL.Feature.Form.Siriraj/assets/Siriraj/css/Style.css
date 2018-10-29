@@ -1,5 +1,5 @@
 ﻿.general-form {
-    max-width: 720px;
+    max-width: 840px;
     margin: 0 auto;
 }
 
@@ -28,7 +28,6 @@
     padding: 15px;
     border-radius: 35px;
     text-align: center;
-    margin-top:15px;
 }
 
 .Disableitem {
