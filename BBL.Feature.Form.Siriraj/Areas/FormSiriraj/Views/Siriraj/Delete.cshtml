@@ -71,7 +71,7 @@
                     <div class="row">
                         <div class="col-md-6 col-md-offset-3">
                             <validate auto-label class="form-group required-field" :custom="{validateThaiCitizenID: validateThaiCitizenID}" :class="fieldClassName(formstate.PersonalID)">
-                                <input type="number" name="PersonalID" class="form-control" placeholder="@Model.Fields["PersonalID"] *" required size="13" maxlength="13" minlength="13" v-model="model.PersonalID">
+                                <input type="number" name="PersonalID" onwheel="this.blur()" class="form-control" placeholder="@Model.Fields["PersonalID"] *" required size="13" maxlength="13" minlength="13" v-model="model.PersonalID">
 
                                 <field-messages auto-label name="PersonalID" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                     <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>

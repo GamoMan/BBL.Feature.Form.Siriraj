@@ -87,7 +87,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <validate auto-label class="form-group required-field" :custom="{validateThaiCitizenID: validateThaiCitizenID}" :class="fieldClassName(formstate.PersonalID)">
-                                <input type="number" name="PersonalID" class="form-control" placeholder="@Model.Fields["PersonalID"] *" required size="13" maxlength="13" minlength="13" v-model="model.PersonalID">
+                                <input type="number" name="PersonalID" onwheel="this.blur()" class="form-control" placeholder="@Model.Fields["PersonalID"] *" required size="13" maxlength="13" minlength="13" v-model="model.PersonalID">
 
                                 <field-messages auto-label name="PersonalID" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                     <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
@@ -98,7 +98,7 @@
                         </div>
                         <div class="col-md-6">
                             <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Mobile)">
-                                <input type="number" name="Mobile" class="form-control" placeholder="@Model.Fields["Mobile"] *" pattern="^0\d{9,11}$" required size="11" maxlength="11" v-model="model.Mobile">
+                                <input type="number" name="Mobile" onwheel="this.blur()" class="form-control" placeholder="@Model.Fields["Mobile"] *" pattern="^0\d{9,11}$" required size="11" maxlength="11" v-model="model.Mobile">
 
                                 <field-messages auto-label name="Mobile" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                     <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
@@ -111,7 +111,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Mobile2)">
-                                <input type="number" name="Mobile2" class="form-control" placeholder="@Model.Fields["Mobile2"]" pattern="^0\d{9,11}$" size="10" maxlength="10" v-model="model.Mobile2">
+                                <input type="number" name="Mobile2" onwheel="this.blur()" class="form-control" placeholder="@Model.Fields["Mobile2"]" pattern="^0\d{9,11}$" size="10" maxlength="10" v-model="model.Mobile2">
 
                                 <field-messages auto-label name="Mobile2" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                     <div class="small-pad" slot="pattern">@Model.Fields["ValMobileZero"]</div>
