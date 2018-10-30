@@ -70,7 +70,7 @@ var app = new Vue({
             BranchCode: '',
             BranchName: '',
             Delivery: '0',
-            AddressOption: '0',
+            AddressOption: '1',
             Donate: 0,
             DeliveryAmount: 0,
             GrandTotal: 0,
@@ -82,8 +82,10 @@ var app = new Vue({
             ServiceCode: '',
             Ref1: '',
             BillerName: '',
+            OutofStock: ''
         },
         result: {
+            CreateDate:'',
             InvoiceID: '',
             Piggy: [],
             Type: [],
@@ -126,6 +128,7 @@ var app = new Vue({
         this.model.Suffix = $('#Suffix').val();
         this.model.ServiceCode = $('#ServiceCode').val();
         this.model.BillerName = $('#BillerName').val();
+        this.model.OutofStock = $('#OutofStockLabel').val();
 
         $(document).ready(function () {
             $('#selProvince').selectmenu({
@@ -155,7 +158,6 @@ var app = new Vue({
                 }
             });
         });
-
         $("#app").css("display", "block");
     },
     methods: {
@@ -172,7 +174,7 @@ var app = new Vue({
                 if (this.model.Type[i] === true) {
                     //Re Cal from Result
                     if (this.result.InvoiceID !== '') {
-                        var OutOfStockMessage = 'หมด';
+                        var OutOfStockMessage = this.model.OutofStock;
 
                         if ((i === 0) && (this.result.Car === 0)) {
                             Amount = 0;
@@ -270,11 +272,6 @@ var app = new Vue({
                 this.model.DeliveryAmount = 0;
                 this.required.Branch = true;
                 this.required.Post = false;
-                //if (this.model.Receipt === "0") {
-                //    this.model.AddressOption = 1;
-                //} else {
-                //    this.model.AddressOption = 0;
-                //}
             } else {
                 $('#AddressOption').slideDown(300);
                 $('#ShowBranch').slideUp(300);
@@ -282,11 +279,6 @@ var app = new Vue({
                 this.model.DeliveryAmount = 70;
                 this.required.Post = true;
                 this.required.Branch = false;
-                //if (this.model.Receipt === "0") {
-                //    this.model.AddressOption = 1;
-                //} else {
-                //    this.model.AddressOption = 0;
-                //}
                 this.formstate._reset();
             }
             this.AddressOptionClick();
@@ -302,7 +294,8 @@ var app = new Vue({
                 url: '/FormSiriraj/Siriraj/getAllBranches',
                 data: data,
                 success: function (response) {
-                    self.Provinces = JSON.parse(response);
+                    if(response.Success='true')
+                        self.Provinces = JSON.parse(response);
                 }
             });
         },
@@ -333,15 +326,15 @@ var app = new Vue({
                     }
 
                     if (self.haveRadio === false) {
-                        $('#txtTipRadio').html('หมด');
+                        $('#txtTipRadio').html(self.model.OutofStock);
                         $('#spnradio').addClass('Disableitem');
                     }
                     if (self.haveCar === false) {
-                        $('#txtTipCar').html('หมด');
+                        $('#txtTipCar').html(self.model.OutofStock);
                         $('#spncar').addClass('Disableitem');
                     }
                     if (self.haveCamera === false) {
-                        $('#txtTipCamera').html('หมด');
+                        $('#txtTipCamera').html(self.model.OutofStock);
                         $('#spncamera').addClass('Disableitem');
                     }
                 }
@@ -367,6 +360,34 @@ var app = new Vue({
         },
         twoDigit: function (val) {
             return val.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        },
+        formatDate: function (date) {
+            var monthNames = [
+              "January", "February", "March",
+              "April", "May", "June", "July",
+              "August", "September", "October",
+              "November", "December"
+            ];
+            var d = new Date(date);
+            var day = d.getDate();
+            var monthIndex = d.getMonth();
+            var year = d.getFullYear();
+
+            return day + ' ' + monthNames[monthIndex] + ' ' + year;
+        },
+        formatThaiDate: function (date) {
+            var monthNames = [
+              "มกราคม", "กุมภาพันธ์", "มีนาคม",
+              "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฏาคม",
+              "สิงหาคม", "กันยายน", "ตุลาคม",
+              "พฤศจิกายน", "ธันวาคม"
+            ];
+            var d = new Date(date);
+            var day = d.getDate();
+            var monthIndex = d.getMonth();
+            var year = d.getFullYear() + 543;
+
+            return day + ' ' + monthNames[monthIndex] + ' ' + year;
         },
         fieldClassName: function (field) {
             if (!field) {
@@ -661,6 +682,7 @@ var app = new Vue({
                             $("#ConfirmForm").slideUp(300);
                             $("#FinalForm").slideDown(300);
 
+                            self.result.CreateDate = response[0].CreateDate;
                             self.result.InvoiceID = response[0].InvoiceID;
 
                             self.result.BranchProvince = self.model.BranchProvince;
@@ -701,6 +723,7 @@ var app = new Vue({
                             //self.result.GrandTotal = response[0].Amount;
 
                             self.Calculate();
+                            $("html, body").animate({ scrollTop: 0 }, "slow");
                         }
                         else if (response[0].Result === 0) {
                             //Case Error slideUp AlertForm

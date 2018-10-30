@@ -55,6 +55,7 @@
             <input type="hidden" id="Suffix" name="Suffix" value="@Model.Fields["Suffix"]">
             <input type="hidden" id="ServiceCode" name="ServiceCode" value="@Model.Fields["ServiceCode"]">
             <input type="hidden" id="BillerName" name="BillerName" value="@Model.Fields["BillerName"]">
+            <input type="hidden" id="OutofStock" name="OutofStock" value="@Model.Fields["OutofStockLabel"]">
 
             <vue-form :state="formstate" v-model="formstate" @@submit.prevent="dummy" class="general-form" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
@@ -228,7 +229,7 @@
                         @Html.Raw(Model.Fields["Title"])
                     </div>
 
-                    <div class="row scroll-x" style="overflow-y: hidden;margin-bottom:14px;">
+                    <div class="row">
                         <validate auto-label class="required-field" :class="fieldClassName(formstate.Type)">
                             <div class="col-md-4 col-sm-4 text-center">
                                 <div class="frame form-group">
@@ -631,7 +632,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row pad-top">
                 <div id="divstg" class="col-md-12">
                     <h4 class="text-label SubHead">@Model.Fields["ReceiptText"]</h4>
                 </div>
@@ -666,12 +667,25 @@
         *@
         <div id="FinalForm" class="general-form" v-show="false">
 
-            <div class="row">
+            @*<div class="row">
                 <div class="col-md-12">
                         <h4 class="text-label TitleHead">@Model.Fields["InvoiceIDLabel"] {{InvoiceNo(result.InvoiceID,7)}}</h4>
                 </div>
+            </div>*@
+            <div class="row">
+                <div class="col-md-6"><p class="result-label">@Model.Fields["InvoiceIDLabel"]</p> <p class="result-label">{{InvoiceNo(result.InvoiceID,7)}}</p></div>
+                @{
+                    var language = Sitecore.Context.Culture.Name.ToLower();
+                    if (language == "th-th")
+                    {
+                        <div class="col-md-6"><p class="result-label">@Model.Fields["CreateDate"] </p> <p class="result-label">{{formatThaiDate(result.CreateDate)}}</p></div>
+                    }
+                    else
+                    {
+                        <div class="col-md-6"><p class="result-label">@Model.Fields["CreateDate"] </p> <p class="result-label">{{formatDate(result.CreateDate)}}</p></div>
+                    }
+                }
             </div>
-
             <div class="row">
                 <div class="col-md-12">
                         <h4 class="text-label SubHead">@Model.Fields["PersonalLabel"]</h4>

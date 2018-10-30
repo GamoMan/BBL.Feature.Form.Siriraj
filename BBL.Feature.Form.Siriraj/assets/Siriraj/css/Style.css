@@ -1,5 +1,5 @@
 ﻿.general-form {
-    max-width: 840px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -40,8 +40,20 @@ opacity:.3;
     padding-right: 10px;
 }
 
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
+input[type=number] {
+    -moz-appearance:textfield;
+}
 
+input[type="number"]:hover,
+input[type="number"]:focus {
+    -moz-appearance: number-input;
+}
 
 .panel-body {
     margin-top: 110px;
@@ -860,7 +872,12 @@ input[disabled].form-control {
     text-align: left;
     padding:15px;
 }
-
+.pad-top {
+    padding-top: 10px;
+}
+.pad-bot {
+    padding-bottom: 10px;
+}
     .result-table td.right {
         text-align: right;
     }
@@ -871,7 +888,7 @@ input[disabled].form-control {
     font-size: 1.2rem;
     padding: 0px;
     border-radius: 35px;
-    text-align: center;
+    text-align: left;
 }
 .SubHead {
     background-color: #b1c0df;
@@ -881,7 +898,7 @@ input[disabled].form-control {
     font-size: 1.2rem;
     padding: 0px;
     border-radius: 35px;
-    text-align: center
+    text-align: left
 }
 #app{margin-top:0in}
 #FinalForm table, #FinalForm table th,#FinalForm table tr,#FinalForm table td{border:0 !important;padding-top:5px;padding-bottom:5px;}

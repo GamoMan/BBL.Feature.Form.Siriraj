@@ -124,7 +124,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6"></div>
-                <div class="col-md-6 col-sm-6 showdate"><p class="result-label">ใบสมัครเลขที่</p> <p class="result-label">{{InvoiceNo(result.InvoiceID,7)}}</p></div>
+                <div class="col-md-6 col-sm-6 showdate"><p class="result-label">@Model.Fields["CreateDateLabel"]</p> <p class="result-label">{{InvoiceNo(result.InvoiceID,7)}}</p></div>
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{model.PersonalID}}</p></div>

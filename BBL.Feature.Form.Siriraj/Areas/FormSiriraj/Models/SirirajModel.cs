@@ -75,9 +75,11 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
 
         [StringLength(50)]
         public string Building_CZ { get; set; }
-      
+
         [StringLength(50)]
         public string Soi_CZ { get; set; }
+        [StringLength(50)]
+        public string Road_CZ { get; set; }
 
         [StringLength(50)]
         public string Subdistrict_CZ { get; set; }
@@ -117,6 +119,8 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
 
         [StringLength(50)]
         public string Soi_Post { get; set; }
+        [StringLength(50)]
+        public string Road_Post { get; set; }
 
         [StringLength(50)]
         public string Subdistrict_Post { get; set; }
