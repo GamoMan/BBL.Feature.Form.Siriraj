@@ -106,7 +106,9 @@ var app = new Vue({
             Summary: '',
             car: 0,
             Radio: 0,
-            Camera: 0
+            Camera: 0,
+            Ref1: '',
+            Ref2: ''
         },
         required: {
             Type: true,
@@ -118,17 +120,15 @@ var app = new Vue({
     mounted: function () {
         this.getAllBranches();
 
-        this.getAvailableItems();
-
         this.model.TypeText[0] = $('#Type1').val();
-        this.model.TypeText[1] = $('#Type2').val();
-        this.model.TypeText[2] = $('#Type3').val();
+        this.model.TypeText[1] = $('#Type3').val();
+        this.model.TypeText[2] = $('#Type2').val();
         this.model.Summary = $('#Summary').val();
         this.model.TaxID = $('#TaxID').val();
         this.model.Suffix = $('#Suffix').val();
         this.model.ServiceCode = $('#ServiceCode').val();
         this.model.BillerName = $('#BillerName').val();
-        this.model.OutofStock = $('#OutofStockLabel').val();
+        this.model.OutofStock = $('#OutofStock').val();
 
         $(document).ready(function () {
             $('#selProvince').selectmenu({
@@ -159,6 +159,7 @@ var app = new Vue({
             });
         });
         $("#app").css("display", "block");
+        this.getAvailableItems();
     },
     methods: {
         dummy: function () {
@@ -179,12 +180,10 @@ var app = new Vue({
                         if ((i === 0) && (this.result.Car === 0)) {
                             Amount = 0;
                             Count = OutOfStockMessage;
-                        }
-                        else if ((i === 1) && (this.result.Radio === 0)) {
+                        } else if ((i === 1) && (this.result.Camera === 0)) {
                             Amount = 0;
                             Count = OutOfStockMessage;
-                        }
-                        else if ((i === 2) && (this.result.Camera === 0)) {
+                        } else if ((i === 2) && (this.result.Radio === 0)) {
                             Amount = 0;
                             Count = OutOfStockMessage;
                         } else {
@@ -213,9 +212,9 @@ var app = new Vue({
         },
         ClickBtn: function (val) {
             //Set Non Check
-            if (this.haveCar === false && val === 1) { return; }
-            if (this.haveRadio === false && val === 2) { return; }
-            if (this.haveCamera === false && val === 3) { return; }
+            //if (this.haveCar === false && val === 1) { return; }
+            //if (this.haveCamera === false && val === 2) { return; }
+            //if (this.haveRadio === false && val === 3) { return; }
 
             this.model.Type[val - 1] = !this.model.Type[val - 1];
 
@@ -244,8 +243,8 @@ var app = new Vue({
             var ret = false;
             for (var i = 0; i < this.model.Type.length; i++) {
                 if (this.haveCar === false && val === 0) { continue; }
-                if (this.haveRadio === false && val === 1) { continue; }
-                if (this.haveCamera === false && val === 2) { continue; }
+                if (this.haveCamera === false && val === 1) { continue; }
+                if (this.haveRadio === false && val === 2) { continue; }
 
                 if (this.model.Type[i] === true) {
                     ret = true;
@@ -349,9 +348,10 @@ var app = new Vue({
             return str;
         },
         maskID: function (id) {
-            if (id !== '')
-                return id.replace(id.substring(7, 10), "xxxx")
-            else return '';
+            if (id !== '') {
+                id = id.replace(/^(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})$/g, '$1-$2-$3-$4-$5');
+                return id.replace(id.substring(8, 12), "xxxx")
+            } else return '';
         },
         maskPhone: function (id) {
             if (id !== '')
@@ -401,14 +401,16 @@ var app = new Vue({
             }
         },
         copyAddress: function () {
-            this.model.PostAddress = this.model.Address;
-            this.model.PostBuilding = this.model.Building;
-            this.model.PostSoi = this.model.Soi;
-            this.model.PostRoad = this.model.Road;
-            this.model.PostSubdistrict = this.model.Subdistrict;
-            this.model.PostDistrict = this.model.District;
-            this.model.PostProvince = this.model.Province;
-            this.model.PostZip = this.model.Zip;
+            if (this.model.AddressOption === '0') {
+                this.model.PostAddress = this.model.Address;
+                this.model.PostBuilding = this.model.Building;
+                this.model.PostSoi = this.model.Soi;
+                this.model.PostRoad = this.model.Road;
+                this.model.PostSubdistrict = this.model.Subdistrict;
+                this.model.PostDistrict = this.model.District;
+                this.model.PostProvince = this.model.Province;
+                this.model.PostZip = this.model.Zip;
+            }
         },
         copyAddressBack: function () {
             if (this.model.AddressOption === '0') {
@@ -490,8 +492,8 @@ var app = new Vue({
                 var data = {
                     "CitizenID": this.model.PersonalID,//.replace(SpacialCharacter, ''),
                     "Car": this.model.Type[0] === true ? 1 : 0,
-                    "Camera": this.model.Type[2] === true ? 1 : 0,
-                    "Radio": this.model.Type[1] === true ? 1 : 0,
+                    "Camera": this.model.Type[1] === true ? 1 : 0,
+                    "Radio": this.model.Type[2] === true ? 1 : 0,
                     "Receipt": this.model.Receipt,
                     "DeliveryType": this.model.Delivery,
                     "BranchCode": this.model.BranchCode,
@@ -613,8 +615,8 @@ var app = new Vue({
                         "Province_Post": this.model.PostProvince,
                         "Postcode_Post": this.model.PostZip,
                         "Car": this.model.Type[0] === true ? 1 : 0,
-                        "Camera": this.model.Type[2] === true ? 1 : 0,
-                        "Radio": this.model.Type[1] === true ? 1 : 0,
+                        "Camera": this.model.Type[1] === true ? 1 : 0,
+                        "Radio": this.model.Type[2] === true ? 1 : 0,
                         "Piggy": this.model.Piggy,
                         "Type": this.model.Type,
                         "TypeText": this.model.TypeText,
@@ -638,8 +640,8 @@ var app = new Vue({
 
                     "CitizenID": this.model.PersonalID,//.replace(SpacialCharacter, ''),
                     "Car": this.model.Type[0] === true ? 1 : 0,
-                    "Camera": this.model.Type[2] === true ? 1 : 0,
-                    "Radio": this.model.Type[1] === true ? 1 : 0,
+                    "Camera": this.model.Type[1] === true ? 1 : 0,
+                    "Radio": this.model.Type[2] === true ? 1 : 0,
                     "Receipt": this.model.Receipt,
                     "DeliveryType": this.model.Delivery,
                     "BranchCode": this.model.BranchCode,
@@ -670,15 +672,10 @@ var app = new Vue({
                         }
                         //Sucess
                         if (response[0].Result === 1) {
-                            self.result.Ref1 = response[0].Barcode.substring(14, 25);
+                            //self.result.Ref1 = response[0].Barcode.substring(14, 25);
 
                             var strHTML = '';
-                            //strHTML += ReserveHeader + "<br><br>";
-                            //strHTML += ActivityName + "<br>";
-                            //strHTML += ActivityDetail + "<br><br>";
-                            //strHTML += ReserveFooter;
-                            //$("#MainResult").html(strHTML);
-                            // this.resetForm();
+
                             $("#ConfirmForm").slideUp(300);
                             $("#FinalForm").slideDown(300);
 
@@ -720,7 +717,8 @@ var app = new Vue({
                             self.result.Radio = response[0].Radio;
                             self.result.Camera = response[0].Camera;
 
-                            //self.result.GrandTotal = response[0].Amount;
+                            self.result.Ref1 = response[0].Ref1;
+                            self.result.Ref2 = response[0].Ref2;
 
                             self.Calculate();
                             $("html, body").animate({ scrollTop: 0 }, "slow");
@@ -771,10 +769,10 @@ var app = new Vue({
                 if (btn === 1) {
                     str = vm.model.Type1Text;
                 }
-                if (btn === 2) {
+                if (btn === 3) {
                     str = vm.model.Type2Text;
                 }
-                if (btn === 3) {
+                if (btn === 2) {
                     str = vm.model.Type3Text;
                 }
                 return String.format(str, prc);

@@ -55,8 +55,8 @@ var app = new Vue({
         this.DeleteFailed = $('#DeleteFailed').val();
         this.result.ServiceCode = $('#ServiceCode').val();
         this.result.TypeText[0] = $('#Type1').val();
-        this.result.TypeText[1] = $('#Type2').val();
-        this.result.TypeText[2] = $('#Type3').val();
+        this.result.TypeText[1] = $('#Type3').val();
+        this.result.TypeText[2] = $('#Type2').val();
     },
     methods: {
         dummy: function () {
@@ -122,9 +122,10 @@ var app = new Vue({
             return str;
         },
         maskID: function (id) {
-            if (id !== '')
-                return id.replace(id.substring(7, 10), "xxxx")
-            else return '';
+            if (id !== '') {
+                id = id.replace(/^(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})$/g, '$1-$2-$3-$4-$5');
+                return id.replace(id.substring(8, 12), "xxxx")
+            } else return '';
         },
         maskPhone: function (id) {
             if (id !== '')
@@ -208,8 +209,8 @@ var app = new Vue({
                         if (response.length > 0) {
                             //self.hash = response;
                             self.result.Type[0] = response[0].Car === 1? true: false;
-                            self.result.Type[1] = response[0].Radio === 1 ? true : false;
-                            self.result.Type[2] = response[0].Camera === 1 ? true : false;
+                            self.result.Type[1] = response[0].Camera === 1 ? true : false;
+                            self.result.Type[2] = response[0].Radio === 1 ? true : false;
                             self.result.InvoiceID = response[0].InvoiceID;
                             self.result.CreateDate = response[0].CreateDate;
                             self.result.Receipt = response[0].Receipt.toString();

@@ -55,7 +55,7 @@
             <input type="hidden" id="Suffix" name="Suffix" value="@Model.Fields["Suffix"]">
             <input type="hidden" id="ServiceCode" name="ServiceCode" value="@Model.Fields["ServiceCode"]">
             <input type="hidden" id="BillerName" name="BillerName" value="@Model.Fields["BillerName"]">
-            <input type="hidden" id="OutofStock" name="OutofStock" value="@Model.Fields["OutofStockLabel"]">
+            <input type="hidden" id="OutofStock" name="OutofStock" value="@Model.Fields["OutofStockMsg"]">
 
             <vue-form :state="formstate" v-model="formstate" @@submit.prevent="dummy" class="general-form" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
@@ -234,7 +234,6 @@
                             <div class="col-md-4 col-sm-4 text-center">
                                 <div class="frame form-group">
                                     <label for="squaredTwo">
-                                        @*<input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" :required="required.Type"  :disabled="!this.haveCar"   >*@
                                         <input name="Type" type="checkbox" class="checkbox" value="car" v-on:change="Calculate" v-model="model.Type[0]" v-show="this.haveCar" :required="this.haveCar" :disabled="!this.haveCar">
                                         <span id="spncar" class="checkmark">
                                             <img class="img-responsive pointer" v-on:click="ClickBtn(1)" src="@GetImageURL(Model.Fields["Type1"])">
@@ -243,45 +242,37 @@
                                 </div>
                                 <span id="txtTipCar">@Html.Raw(Model.Fields["CarLabel"])</span>
                             </div>
+                            <div class="col-md-4 col-sm-4 text-center" style="overflow:visible">
+                                <div class="frame form-group">
+                                    <label for="squaredTwo">
+                                        <input name="Type" type="checkbox" class="checkbox" value="camera" v-on:change="Calculate" v-model="model.Type[1]" v-show="this.haveCamera" :required="this.haveCamera" :disabled="!this.haveCamera">
+                                        <span id="spncamera" class="checkmark">
+                                            <img class="img-responsive pointer" v-on:click="ClickBtn(2)" src="@GetImageURL(Model.Fields["Type3"])">
+                                        </span>
+                                    </label>
+                                </div>
+                                <span id="txtTipCamera">@Html.Raw(Model.Fields["CameraLabel"])</span>
+                            </div>                            
                             <div class="col-md-4 col-sm-4 text-center">
                                 <div class="frame form-group">
                                     <label for="squaredTwo">
-                                        <input name="Type" type="checkbox" class="checkbox" value="radio" v-on:change="Calculate" v-model="model.Type[1]" v-show="this.haveRadio" :required="this.haveRadio" :disabled="!this.haveRadio">
+                                        <input name="Type" type="checkbox" class="checkbox" value="radio" v-on:change="Calculate" v-model="model.Type[2]" v-show="this.haveRadio" :required="this.haveRadio" :disabled="!this.haveRadio">
                                         <span id="spnradio" class="checkmark">
-                                            <img class="img-responsive pointer" v-on:click="ClickBtn(2)" src="@GetImageURL(Model.Fields["Type2"])">
+                                            <img class="img-responsive pointer" v-on:click="ClickBtn(3)" src="@GetImageURL(Model.Fields["Type2"])">
                                         </span>
                                     </label>
                                 </div>
                                 <span id="txtTipRadio">@Html.Raw(Model.Fields["RadioLabel"])</span>
                             </div>
-                            <div class="col-md-4 col-sm-4 text-center" style="overflow:visible">
-                                <div class="frame form-group">
-                                    <label for="squaredTwo">
-                                        <input name="Type" type="checkbox" class="checkbox" value="camera" v-on:change="Calculate" v-model="model.Type[2]" v-show="this.haveCamera" :required="this.haveCamera" :disabled="!this.haveCamera">
-                                        <span id="spncamera" class="checkmark">
-                                            <img class="img-responsive pointer" v-on:click="ClickBtn(3)" src="@GetImageURL(Model.Fields["Type3"])">
-                                        </span>
-                                    </label>
-                                </div>
-                                <span id="txtTipCamera" style=" white-space: nowrap;">@Html.Raw(Model.Fields["CameraLabel"])</span>
-                            </div>
+
                             <field-messages auto-label name="Type" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                 @*<div class="text-center small-pad" slot="validateType">@Model.Fields["ReqType"]</div>*@
-                                <div class="text-center small-pad pad-bot" slot="required" v-if="validateType">@Model.Fields["ReqType"]</div>
+                                <div class="text-center small-pad" slot="required" v-if="validateType">@Model.Fields["ReqType"]</div>
                             </field-messages>
                         </validate>
                     </div>
 
                     <div class="row">
-                        @*<div class="col-md-12">
-                                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Donate)">
-                                    <input type="number" name="Donate" class="form-control" placeholder="@Model.Fields["Donate"]" v-on:keyup="Calculate" v-model="model.Donate" size="50" maxlength="50" v-model="model.Donate">
-
-                                    <field-messages auto-label name="Donate" show="$dirty || $touched || $submitted" class="form-control-feedback">
-                                <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
-                            </field-messages>
-                                </validate>
-                            </div>*@
                         <div id="divstg" class="col-md-12">
                             <h4 class="text-label">@Model.Fields["DeliverLabel"]</h4>
                         </div>
@@ -532,7 +523,7 @@
                 <div class="col-md-6"><p class="result-label">@Model.Fields["Surname"] </p> <p class="result-label">{{model.Surname}}</p></div>
             </div>
             <div class="row">
-                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{model.PersonalID}}</p></div>
+                <div class="col-md-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{this.maskID(model.PersonalID)}}</p></div>
                 <div class="col-md-6"><p class="result-label">@Model.Fields["Mobile"] </p> <p class="result-label">{{model.Mobile}}</p></div>
             </div>
             <div class="row">
@@ -849,6 +840,8 @@
                 </div>
 
                 <div class="text-center"><span>@Model.Fields["BarcodeNoteLabel"]</span></div>
+                <div class="row pad-bot"></div>
+                <div class="text-center"><span>@Model.Fields["NoteLabel"]</span></div>
                 <div class="row lineSection"><hr></div>
             </div>
             <div class="text-label">

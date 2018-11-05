@@ -139,6 +139,8 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
                              QRCode = temp.Field<String>("QRCode"),
                              Amount = temp.Field<Double>("Amount"),
                              Donate = temp.Field<Double>("Donate"),
+                             Ref1 = temp.Field<String>("Ref1"),
+                             Ref2 = temp.Field<String>("Ref2"),
                              CreateDate = temp.Field<DateTime>("CreateDate").ToString("yyyy/MM/dd HH:mm:ss")
                          });
 
@@ -201,6 +203,8 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
                                  QRcode = temp.Field<String>("QRcode"),
                                  Amount = temp.Field<Double>("Amount"),
                                  Donate = temp.Field<Double>("Donate"),
+                                 Ref1 = temp.Field<String>("Ref1"),
+                                 Ref2 = temp.Field<String>("Ref2"),
 
                                  CreateDate = temp.Field<DateTime>("CreateDate").ToString("yyyy/MM/dd HH:mm:ss")
                              });

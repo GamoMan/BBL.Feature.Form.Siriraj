@@ -1,4 +1,5 @@
-﻿using bbl.AzureUtility.Helpers;
+﻿#define DEV
+using bbl.AzureUtility.Helpers;
 using bbl.BBLSecurity.Cryptography;
 using BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models;
 
@@ -398,6 +399,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 
         private void Init()
         {
+#if DEV
             var webappKey = "";
             if (AppSettings.HasKey == false)
             {
@@ -408,19 +410,20 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 
                 AppSettings.HasKey = true;
             }
+#else
+            if (AppSettings.HasKey == false)
+            {
+                var akvHelper = new AkvHelper();
+                var webappKey = akvHelper.GetSecret("WEBAPPKey").Value;
+                // var webappConnectionString = akvHelper.GetSecret("ReportConnectionString").Value;
+                //var aes = new AES(webappKey);
+                // AppSettings.FormConnectionString = aes.Decrypt(webappConnectionString);
+                AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["SirirajConnectionString"].ConnectionString;
+                AppSettings.FormKey = akvHelper.GetSecret("WEBFORMKey").Value;
 
-            //if (AppSettings.HasKey == false)
-            //{
-            //    var akvHelper = new AkvHelper();
-            //    var webappKey = akvHelper.GetSecret("WEBAPPKey").Value;
-            //    // var webappConnectionString = akvHelper.GetSecret("ReportConnectionString").Value;
-            //    //var aes = new AES(webappKey);
-            //    // AppSettings.FormConnectionString = aes.Decrypt(webappConnectionString);
-            //    AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["SirirajConnectionString"].ConnectionString;
-            //    AppSettings.FormKey = akvHelper.GetSecret("WEBFORMKey").Value;
-
-            //    AppSettings.HasKey = true;
-            //}
+                AppSettings.HasKey = true;
+            }
+#endif
         }
     }
 }

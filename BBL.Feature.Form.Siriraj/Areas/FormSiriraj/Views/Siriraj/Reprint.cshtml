@@ -65,7 +65,7 @@
                         @Html.Raw(Model.Fields["Title"])
                     </div>
                     <div id="divstg">
-                        <h4 class="text-label text-center small-pad-top small-pad-bot">@Model.Fields["DeleteLabel"]</h4>
+                        <h4 class="text-label text-center small-pad-top small-pad-bot">@Model.Fields["ReprintLabel"]</h4>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-md-offset-3">
@@ -126,7 +126,7 @@
                 <div class="col-md-6 col-sm-6 showdate"><p class="result-label">@Model.Fields["CreateDateLabel"]</p> <p class="result-label">{{InvoiceNo(result.InvoiceID,7)}}</p></div>
             </div>
                 <div class="row">
-                    <div class="col-md-6 col-sm-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{model.PersonalID}}</p></div>
+                    <div class="col-md-6 col-sm-6"><p class="result-label">@Model.Fields["PersonalID"] </p> <p class="result-label">{{this.maskID(model.PersonalID)}}</p></div>
                     @{
                         var language = Sitecore.Context.Culture.Name.ToLower();
                         if (language == "th-th")
@@ -211,32 +211,38 @@
                     }
                 </div>
 
-                <div class="row pad-top">
-                    <div class="col-md-6 col-sm-6 pad-bot">
-                        <div class="row">
-                            <div class="col-md-6 result-label">@Model.Fields["ServiceCodeLabel"]</div><div class="col-md-6 result-label">{{result.ServiceCode}}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 result-label">@Model.Fields["RefNoLabel"]</div><div class="col-md-6 result-label">{{result.Ref1}}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 result-label">@Model.Fields["BillerNameLabel"]</div><div class="col-md-6 result-label">{{result.BillerName}}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 result-label">@Model.Fields["AmountLabel"]</div><div class="col-md-6 result-label">{{this.twoDigit(result.GrandTotal)}}</div>
-                        </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-6 pad-bot">
+                    <div class="row">
+                        <div class="col-md-6 result-label">@Model.Fields["ServiceCodeLabel"] </div><div class="col-md-6 result-label">{{result.ServiceCode}}</div>
                     </div>
-                    <div class="col-md-6 col-sm-6 text-center pad-bot">
-                        <qrcode v-bind:value="result.QRCode" :options="{ size: 150 }"></qrcode>
+                    <div class="row">
+                        <div class="col-md-6 result-label">@Model.Fields["RefNoLabel"]</div><div class="col-md-6 result-label">{{result.Ref1}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 result-label">@Model.Fields["BillerNameLabel"]</div><div class="col-md-6 result-label">{{result.BillerName}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 result-label">@Model.Fields["AmountLabel"]</div><div class="col-md-6 result-label">{{this.twoDigit(result.GrandTotal)}}</div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12 text-center pad-top pad-bot">
-                    </div>
-                    <div class="col-md-12 text-center fit-width pad-top pad-bot">
-                        <barcode v-bind:value="result.Barcode" tag="img"></barcode>
-                    </div>
+                <div class="col-md-6 col-sm-6 text-center pad-bot">
+                    <qrcode v-bind:value="result.QRcode" :options="{ size: 150 }"></qrcode>
                 </div>
+                <div class="text-center"><span>@Model.Fields["QRNoteLabel"]  </span></div>
+                <div class="row lineSection"><hr></div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-12 text-center fit-width  pad-bot">
+                    <barcode v-bind:value="result.Barcode" tag="img"></barcode>
+                </div>
+
+                <div class="text-center"><span>@Model.Fields["BarcodeNoteLabel"]</span></div>
+                <div class="row pad-bot"></div>
+                <div class="text-center"><span>@Model.Fields["NoteLabel"]</span></div>
+                <div class="row lineSection"><hr></div>
+            </div>
                 <div class="text-label pad-top">
                     <div class="row text-center">
                         <div class="col-md-12 col-sm-12 col-xs-12"><button class="btn btn-primary" v-on:click="onPrint" type="submit">@Model.Fields["PrintButton"]</button></div>
