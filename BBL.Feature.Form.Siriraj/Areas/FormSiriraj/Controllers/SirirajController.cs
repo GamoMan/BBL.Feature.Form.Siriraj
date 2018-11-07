@@ -263,41 +263,41 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SaveData(FormSiriraj.Models.SirirajModel model)
-        {
-            try
-            {
-                Init();
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> SaveData(FormSiriraj.Models.SirirajModel model)
+        //{
+        //    try
+        //    {
+        //        Init();
 
-                var modeljson = FromString.JsonToString(model);
+        //        var modeljson = FromString.JsonToString(model);
 
-                var jsonEncrypt = Encryption.Encrypt(AppSettings.FormKey, modeljson);
+        //        var jsonEncrypt = Encryption.Encrypt(AppSettings.FormKey, modeljson);
 
-                var SirirajDb = new SirirajDb { JsonData = jsonEncrypt };
-                //var eBookDb = new eBookDb { JsonData = modeljson };
+        //        var SirirajDb = new SirirajDb { JsonData = jsonEncrypt };
+        //        //var eBookDb = new eBookDb { JsonData = modeljson };
 
-                SirirajDb.Insert();
+        //        SirirajDb.Insert();
 
-                //byte[] encryptedBytes = System.Convert.FromBase64String(model.id);
-                //var id = Encoding.UTF8.GetString(encryptedBytes);
+        //        //byte[] encryptedBytes = System.Convert.FromBase64String(model.id);
+        //        //var id = Encoding.UTF8.GetString(encryptedBytes);
 
-                //MediaItem mediaItem = Sitecore.Context.Database.Items.GetItem(id);
+        //        //MediaItem mediaItem = Sitecore.Context.Database.Items.GetItem(id);
 
-                //var theURL = Sitecore.Resources.Media.MediaManager.GetMediaUrl(mediaItem);
+        //        //var theURL = Sitecore.Resources.Media.MediaManager.GetMediaUrl(mediaItem);
 
-                var success = new { Success = "true" };
+        //        var success = new { Success = "true" };
 
-                return Json(success, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                var resultFail = new { Success = "false", e.Message };
+        //        return Json(success, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        var resultFail = new { Success = "false", e.Message };
 
-                return Json(resultFail, JsonRequestBehavior.AllowGet);
-            }
-        }
+        //        return Json(resultFail, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -415,10 +415,9 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             {
                 var akvHelper = new AkvHelper();
                 var webappKey = akvHelper.GetSecret("WEBAPPKey").Value;
-                // var webappConnectionString = akvHelper.GetSecret("ReportConnectionString").Value;
-                //var aes = new AES(webappKey);
-                // AppSettings.FormConnectionString = aes.Decrypt(webappConnectionString);
-                AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["SirirajConnectionString"].ConnectionString;
+                var webappConnectionString = akvHelper.GetSecret("SirirajConnectionString").Value;
+                var aes = new AES(webappKey);
+                AppSettings.FormConnectionString = aes.Decrypt(webappConnectionString);
                 AppSettings.FormKey = akvHelper.GetSecret("WEBFORMKey").Value;
 
                 AppSettings.HasKey = true;

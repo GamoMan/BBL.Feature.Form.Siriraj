@@ -38,6 +38,8 @@ var app = new Vue({
         haveCamera: false,
         haveRadio: false,
         showModal: false,
+        LandingPage: '',
+        Pattern: '^[\w\s^~;*<>\"|+=%]+$',
         model: {
             Name: '',
             Surname: '',
@@ -114,12 +116,12 @@ var app = new Vue({
             Type: true,
             Post: false,
             Receipt: true,
-            Branch: false
+            Branch: true,
+            EditForm: false,
+            CancelForm: false
         },
     },
     mounted: function () {
-        this.getAllBranches();
-
         this.model.TypeText[0] = $('#Type1').val();
         this.model.TypeText[1] = $('#Type3').val();
         this.model.TypeText[2] = $('#Type2').val();
@@ -129,6 +131,7 @@ var app = new Vue({
         this.model.ServiceCode = $('#ServiceCode').val();
         this.model.BillerName = $('#BillerName').val();
         this.model.OutofStock = $('#OutofStock').val();
+        this.LandingPage = $('#LandingPage').val();
 
         $(document).ready(function () {
             $('#selProvince').selectmenu({
@@ -159,6 +162,7 @@ var app = new Vue({
             });
         });
         $("#app").css("display", "block");
+        this.getAllBranches();
         this.getAvailableItems();
     },
     methods: {
@@ -212,9 +216,9 @@ var app = new Vue({
         },
         ClickBtn: function (val) {
             //Set Non Check
-            //if (this.haveCar === false && val === 1) { return; }
-            //if (this.haveCamera === false && val === 2) { return; }
-            //if (this.haveRadio === false && val === 3) { return; }
+            if (this.haveCar === false && val === 1) { return; }
+            if (this.haveCamera === false && val === 2) { return; }
+            if (this.haveRadio === false && val === 3) { return; }
 
             this.model.Type[val - 1] = !this.model.Type[val - 1];
 
@@ -256,7 +260,7 @@ var app = new Vue({
             this.Calculate();
         },
         AddressOptionClick: function () {
-            if (this.model.AddressOption === "1") {
+            if (this.model.AddressOption === "1" && this.model.DeliveryType === "1") {
                 this.resetPostAddress();
                 this.formstate._reset();
             } else {
@@ -293,7 +297,7 @@ var app = new Vue({
                 url: '/FormSiriraj/Siriraj/getAllBranches',
                 data: data,
                 success: function (response) {
-                    if(response.Success='true')
+                    if(response.Success!=='false')
                         self.Provinces = JSON.parse(response);
                 }
             });
@@ -317,6 +321,7 @@ var app = new Vue({
 
                     //OutofStock
                     if (self.haveRadio === false && self.haveCar === false && self.haveCamera === false) {
+                        self.required.CancelForm = true;
                         $('#AlertForm').slideDown(100);
                         $("#errorOutOfStock").slideDown();
                         $('#MainForm').slideUp(100);
@@ -466,12 +471,18 @@ var app = new Vue({
             this.model.Total = 0;
         },
         resetForm: function () {
+            this.required.EditForm = false;
+            this.required.CancelForm = false;
             this.resetAddress();
             this.resetPersonal();
             this.resetPostAddress();
             this.resetReserve();
-            //$("#MainForm").slideUp(300);
-            //$("#ConfirmForm").slideDown(300);
+            this.model.Receipt='0';
+            this.model.Delivery='0';
+            this.model.AddressOption='1';
+            this.ReceiptClick();
+            this.AddressOptionClick();
+            this.DeliveryClick();
         },
         onSelected: function (address) {
             this.model.Subdistrict = address.subdistrict;
@@ -488,6 +499,8 @@ var app = new Vue({
             this.copyAddressBack();
         },
         onConfirm: function (e) {
+            $('#AlertForm').slideUp();
+            $("#errorOutOfStock").slideUp();
             if (!app.formstate.$invalid) {
                 var data = {
                     "CitizenID": this.model.PersonalID,//.replace(SpacialCharacter, ''),
@@ -510,6 +523,8 @@ var app = new Vue({
 
                 //dataCitizenID.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
                 var self = this;
+                self.required.EditForm = false;
+                self.required.CancelForm = false;
                 //check Register ไปแล้ว
                 $.ajax({
                     async: false,
@@ -517,28 +532,23 @@ var app = new Vue({
                     url: '/FormSiriraj/Siriraj/getRegister',
                     data: data,
                     success: function (response) {
-                        if (response.length > 0) {
-                            $('#AlertForm').slideDown(100);
-                            $("#errorDupplicateID").slideDown();
+                        if (response.Success !== "false") {
+                            if (response.length > 0) {
+                                $('#AlertForm').slideDown(100);
+                                $("#errorDupplicateID").slideDown();
 
-                            //Regist แล้ว
-                            $('#ConfirmForm').slideUp(100);
+                                //Regist แล้ว
+                                $('#ConfirmForm').slideUp(100);
+                                $('#MainForm').slideUp(100);
+                                self.required.EditForm = true;
+                                return;
+                            }
+                            var strHTML = '';
+                            strHTML += "<br><br>";
+                            $('#ConfirmForm').slideDown(100);
                             $('#MainForm').slideUp(100);
-                            return;
+                            $("html, body").animate({ scrollTop: 0 }, "slow");
                         }
-
-                        //self.result.Ref1 = response[0].Barcode.substring(14, 25);
-                        //if (response.Success === 'true') {
-                        var strHTML = '';
-                        //if (response.Success === 'true') {
-                        strHTML += "<br><br>";
-                        $('#ConfirmForm').slideDown(100);
-                        $('#MainForm').slideUp(100);
-                        $("html, body").animate({ scrollTop: 0 }, "slow");
-                        //} else {
-                        //  strHTML += "<br><br>";
-                        //}
-                        //}
                     }
                 });
             }
@@ -546,6 +556,18 @@ var app = new Vue({
         onCancelConfirm: function (e) {
             $('#MainForm').slideDown(100);
             $('#ConfirmForm').slideUp(100);
+            $('#AlertForm').slideUp(100);
+            $("#errorDupplicateID").slideUp(100);
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        },
+        onCancelForm: function(){
+            $(location).attr('href', this.LandingPage);
+        },
+        onDupCancel: function(){
+            $('#MainForm').slideDown(100);
+            $('#ConfirmForm').slideUp(100);
+            $('#AlertForm').slideUp();
+            $("#errorOutOfStock").slideUp();
             $("html, body").animate({ scrollTop: 0 }, "slow");
         },
         onPrint: function () {
@@ -558,6 +580,10 @@ var app = new Vue({
             };
 
             data.__RequestVerificationToken = $(':input[name="__RequestVerificationToken"]').val();
+            var self = this;
+            self.required.EditForm = false;
+            self.required.CancelForm = false;
+
             $.ajax({
                 async: false,
                 method: 'post',
@@ -572,7 +598,7 @@ var app = new Vue({
                         $('#errorDefualt').slideDown(100);
                         //$("#AlertCancel").slideDown();
                     }
-
+                    self.required.CancelForm = true;
                     $('#ConfirmForm').slideUp(100);
                     $('#MainForm').slideUp(100);
 
@@ -726,6 +752,7 @@ var app = new Vue({
                         else if (response[0].Result === 0) {
                             //Case Error slideUp AlertForm
                             //ของหมด
+                            self.required.CancelForm = true;
                             $("#ConfirmForm").slideUp(300);
 
                             $("#AlertForm").slideDown(300);

@@ -48,11 +48,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="bbl.AzureUtility">
-      <HintPath>..\..\BBL.Feature.Form.BualuangExclusive\BBL.Feature.Form.BualuangExclusive\bin\bbl.AzureUtility.dll</HintPath>
+    <Reference Include="bbl.AzureUtility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BBL.Feature.Form.SIP\bin\bbl.AzureUtility.dll</HintPath>
     </Reference>
-    <Reference Include="bbl.BBLSecurity">
-      <HintPath>..\..\BBL.Feature.Form.BualuangExclusive\BBL.Feature.Form.BualuangExclusive\bin\bbl.BBLSecurity.dll</HintPath>
+    <Reference Include="bbl.BBLSecurity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BBL.Feature.Form.SIP\bin\bbl.BBLSecurity.dll</HintPath>
     </Reference>
     <Reference Include="CoreDb">
       <HintPath>..\..\BBL.Feature.Form.BualuangExclusive\BBL.Feature.Form.BualuangExclusive\bin\CoreDb.dll</HintPath>
@@ -85,17 +87,23 @@
       <HintPath>..\packages\Microsoft.ApplicationInsights.1.2.3\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Azure.KeyVault">
-      <HintPath>..\..\BBL.Feature.Form.BualuangExclusive\BBL.Feature.Form.BualuangExclusive\bin\Microsoft.Azure.KeyVault.dll</HintPath>
+    <Reference Include="Microsoft.Azure.KeyVault, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BBL.Feature.Form.SIP\bin\Microsoft.Azure.KeyVault.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.KeyVault.WebKey">
-      <HintPath>..\..\BBL.Feature.Form.BualuangExclusive\BBL.Feature.Form.BualuangExclusive\bin\Microsoft.Azure.KeyVault.WebKey.dll</HintPath>
+    <Reference Include="Microsoft.Azure.KeyVault.WebKey, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BBL.Feature.Form.SIP\bin\Microsoft.Azure.KeyVault.WebKey.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.17.2.31801, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BBL.Feature.Form.SIP\bin\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BBL.Feature.Form.BualuangExclusive\BBL.Feature.Form.BualuangExclusive\bin\Newtonsoft.Json.dll</HintPath>

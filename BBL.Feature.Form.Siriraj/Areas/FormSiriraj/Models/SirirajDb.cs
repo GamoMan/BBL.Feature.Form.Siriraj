@@ -218,27 +218,29 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Models
                 //Set Strovk in Memory
                 SetItemsStock(CarStock, CameraStock, RadioStock);
 
+                bool IsbookItem = (Convert.ToInt32(dt.Rows[0]["Result"]) == 1);
+
+                if (IsbookItem)
+                {
+                    //Save PerSonale ============================================================================
+                    model.personal.InvoiceID = Convert.ToInt32(dt.Rows[0]["InvoiceID"]);
+
+                    model.personal.CreateDate = Convert.ToDateTime(dt.Rows[0]["CreateDate"]);
+
+                    String JsonData = FromString.JsonToString(model.personal);
 
 
-                //Save PerSonale ============================================================================
-                model.personal.InvoiceID = Convert.ToInt32(dt.Rows[0]["InvoiceID"]);
+                    List<IDataParameter> parmsData = new List<IDataParameter>();
 
-                model.personal.CreateDate = Convert.ToDateTime(dt.Rows[0]["CreateDate"]);
+                    var jsonEncrypt = Encryption.Encrypt(AppSettings.FormKey, JsonData);
 
-                String JsonData = FromString.JsonToString(model.personal);
+                    //parmsData.Add(Db.CreateParameterDb("@Data", JsonData));
+                    parmsData.Add(new SqlParameter("@Data", jsonEncrypt));
 
+                    Db.FbExecuteNonQuery("INSERT INTO [Personal]([Data],[CreateDate],[Status])VALUES(@Data, GETDATE(), 0)", parmsData, CommandType.Text);
 
-                List<IDataParameter> parmsData = new List<IDataParameter>();
-
-                var jsonEncrypt = Encryption.Encrypt(AppSettings.FormKey, JsonData);
-
-                //parmsData.Add(Db.CreateParameterDb("@Data", JsonData));
-                parmsData.Add(new SqlParameter("@Data", jsonEncrypt));
-
-                 Db.FbExecuteNonQuery("INSERT INTO [Personal]([Data],[CreateDate],[Status])VALUES(@Data, GETDATE(), 0)", parmsData, CommandType.Text );
-
-                //=============================================================================================
-            
+                    //=============================================================================================
+                }
 
 
                 Db.CommitTransaction();

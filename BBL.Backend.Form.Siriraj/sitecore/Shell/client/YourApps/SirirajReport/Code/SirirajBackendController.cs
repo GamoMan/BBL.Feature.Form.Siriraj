@@ -1,4 +1,5 @@
-﻿using bbl.AzureUtility.Helpers;
+﻿#define DEV
+using bbl.AzureUtility.Helpers;
 using bbl.BBLSecurity.Cryptography;
 using BBL.Backend.Form.Siriraj.Config;
 using System;
@@ -27,6 +28,7 @@ namespace BBL.Backend.Form.Siriraj.sitecore.Shell.client.YourApps.SirirajReport.
 
         private void Init()
         {
+#if DEV
             var webappKey = "";
             if (AppSettings.HasKey == false)
             {
@@ -37,19 +39,17 @@ namespace BBL.Backend.Form.Siriraj.sitecore.Shell.client.YourApps.SirirajReport.
 
                 AppSettings.HasKey = true;
             }
+#else
+            if (AppSettings.HasKey == false)
+            {
+                var akvHelper = new AkvHelper();
+                var webappKey = akvHelper.GetSecret("WEBAPPKey").Value;
+                AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["SirirajConnectionString"].ConnectionString;
+                AppSettings.FormKey = akvHelper.GetSecret("WEBFORMKey").Value;
 
-            //if (AppSettings.HasKey == false)
-            //{
-            //    var akvHelper = new AkvHelper();
-            //    var webappKey = akvHelper.GetSecret("WEBAPPKey").Value;
-            //    // var webappConnectionString = akvHelper.GetSecret("ReportConnectionString").Value;
-            //    //var aes = new AES(webappKey);
-            //    // AppSettings.FormConnectionString = aes.Decrypt(webappConnectionString);
-            //    AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["SirirajConnectionString"].ConnectionString;
-            //    AppSettings.FormKey = akvHelper.GetSecret("WEBFORMKey").Value;
-
-            //    AppSettings.HasKey = true;
-            //}
+                AppSettings.HasKey = true;
+            }
+#endif        
         }
     }
 }
