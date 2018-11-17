@@ -50,13 +50,14 @@ var app = new Vue({
         },
     },
     mounted: function () {
-        this.result.Summary = $('#Summary').val();
+        this.result.Summary = $('#Summary').val(); 
         this.DeleteSuccess = $('#DeleteSuccess').val();
         this.DeleteFailed = $('#DeleteFailed').val();
         this.result.ServiceCode = $('#ServiceCode').val();
         this.result.TypeText[0] = $('#Type1').val();
         this.result.TypeText[1] = $('#Type3').val();
         this.result.TypeText[2] = $('#Type2').val();
+        $("#app").css("display", "block");
     },
     methods: {
         dummy: function () {

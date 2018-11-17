@@ -17,6 +17,7 @@ using System;
 using System.Configuration;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 {
@@ -113,6 +114,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[OutputCache(Duration = 604800, VaryByParam = "none", Location = OutputCacheLocation.Any)]
         public async Task<ActionResult> getAllBranches()
         {
             try
@@ -405,7 +407,7 @@ namespace BBL.Feature.Form.Siriraj.Areas.FormSiriraj.Controllers
             {
                 webappKey = "Landlord#1";
                 //AppSettings.FormConnectionString = ConfigurationManager.ConnectionStrings["ReportConnectionString"].ConnectionString;
-                AppSettings.FormConnectionString = "Data Source = (local); Initial Catalog = Siriraj; Integrated Security = False; User ID = sa; Password = P@ssw0rd";
+                AppSettings.FormConnectionString = "Data Source = (local); MultipleActiveResultSets=true; Initial Catalog = Siriraj; Integrated Security = False; User ID = sa; Password = P@ssw0rd";
                 AppSettings.FormKey = "x8r9ho0GGR";// x8r9ho0GGR";
 
                 AppSettings.HasKey = true;

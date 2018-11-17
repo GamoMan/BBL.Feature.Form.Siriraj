@@ -31,6 +31,7 @@ var app = new Vue({
         image: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
         Price: 450,
         Province: '',
+        bid:0,
         Branches: [],
         Provinces: [],
         AvailableItems: [],
@@ -133,37 +134,47 @@ var app = new Vue({
         this.model.OutofStock = $('#OutofStock').val();
         this.LandingPage = $('#LandingPage').val();
 
-        $(document).ready(function () {
-            $('#selProvince').selectmenu({
-                change: function (event, ui) {
-                    app.Branches = app.Provinces[ui.item.index - 1].Data;
-
-                    app.model.BranchProvince = $('#selProvince').val();
-                    Vue.nextTick(function () {
-                        // DOM updated
-                        $('#selBranch').selectmenu();
-                        //$('#selBranch').val('dflkjdk');
-                        $('#selBranch').selectmenu('refresh');
-                    })
-                }
-            });
-
-            $('#selBranch').selectmenu({
-                change: function (event, ui) {
-                    app.model.BranchCode = $('#selBranch').val();
-                    Vue.nextTick(function () {
-                        // DOM updated
-
-                        app.model.BranchName = $('#selBranch option:selected').text();
-
-                        //$('#selBranch').selectmenu('refresh');
-                    })
-                }
-            });
-        });
-        $("#app").css("display", "block");
         this.getAllBranches();
         this.getAvailableItems();
+
+        $('#selProvince').on('select2:select', function (e) {
+            $('#selBranch').val('').trigger('change');
+            var ph = $('#selBranch')[0][0].label;
+            $('#selBranch').empty().trigger("change");
+            var newOption = new Option(ph, '', true, true);
+            $('#selBranch').append(newOption).trigger('change');
+            for (i = 0; i < app.Provinces[app.bid - 1].Data.length; i++) {
+                newOption = new Option(app.Provinces[app.bid - 1].Data[i].BranchName, app.Provinces[app.bid - 1].Data[i].BranchCode, true, true);
+                $('#selBranch').append(newOption).trigger('change');
+            }
+            Vue.nextTick(function () {
+                $('#selBranch').val('').trigger('change');
+            });
+        });
+
+        $("#selProvince").select2({
+            templateSelection: function (data) {
+                if (data.id === '') { 
+                    return data.text;
+                }
+                app.bid = data.element.index;
+                app.model.BranchProvince = data.text;
+                return data.text;
+            }
+        });
+
+        $("#selBranch").select2({
+            templateSelection: function (data) {
+                if (data.id === '') { 
+                    return data.text;
+                }
+                app.model.BranchCode = data.element.value;
+                app.model.BranchName = data.text;
+                return data.text;
+            }
+        });
+
+        $("#app").css("display", "block");
     },
     methods: {
         dummy: function () {
@@ -260,7 +271,7 @@ var app = new Vue({
             this.Calculate();
         },
         AddressOptionClick: function () {
-            if (this.model.AddressOption === "1" && this.model.DeliveryType === "1") {
+            if (this.model.AddressOption === "1" && this.model.Delivery === "1") {
                 this.resetPostAddress();
                 this.formstate._reset();
             } else {
@@ -272,13 +283,21 @@ var app = new Vue({
                 $('#AddressOption').slideUp(300);
                 $('#PostNote').slideUp(300);
                 $('#ShowBranch').slideDown(300);
+                this.resetPostAddress();
                 this.model.DeliveryAmount = 0;
                 this.required.Branch = true;
                 this.required.Post = false;
-            } else {
+            } else {               
                 $('#AddressOption').slideDown(300);
                 $('#ShowBranch').slideUp(300);
                 $('#PostNote').slideDown(300);
+                this.model.BranchProvince = '';
+                this.model.BranchName = '';
+                this.model.BranchCode = '';
+                $('#selProvince').val('');
+                $('#selProvince').selectmenu("refresh");
+                $('#selBranch').val('');
+                $('#selBranch').selectmenu("refresh");
                 this.model.DeliveryAmount = 70;
                 this.required.Post = true;
                 this.required.Branch = false;
@@ -460,7 +479,6 @@ var app = new Vue({
         },
         resetReserve: function () {
             this.model.Type = [];
-            this.model.TypeText = [];
             this.model.BranchProvince = '';
             this.model.BranchCode = '';
             this.model.BranchName = '';
@@ -719,6 +737,7 @@ var app = new Vue({
                             self.result.Email = self.model.Email;
 
                             self.result.Address = self.model.Address;
+                            self.result.Building = self.model.Building;
                             self.result.Soi = self.model.Soi;
                             self.result.Road = self.model.Road;
                             self.result.Subdistrict = self.model.Subdistrict;

@@ -1,6 +1,8 @@
 ﻿@model Sitecore.Data.Items.Item
 
+@using System;
 @using System.Collections.Specialized;
+
 @using Sitecore.Data.Fields
 @using Sitecore.Data.Items
 @using Sitecore.Resources.Media
@@ -11,11 +13,13 @@
 <script src="~/assets/Siriraj/js/axios.min.js"></script>
 <script src="~/assets/Siriraj/js/stringformat.js"></script>
 <script src="~/assets/Siriraj/js/vue-thai-address-input.js"></script>
+<script src="~/assets/Siriraj/js/select2.min.js"></script>
 
 <script src="~/assets/Siriraj/js/vue-qrcode.js"></script>
 <script src="~/assets/Siriraj/js/vue-barcode.js"></script>
 <link href="~/assets/Siriraj/css/Style.css" rel="stylesheet" />
 <link href="~/assets/Siriraj/css/vue-thai-address-input.css" rel="stylesheet" />
+<link href="~/assets/Siriraj/css/select2.css" rel="stylesheet" />
 
 @functions{
     public static string GetImageURL(Sitecore.Data.Fields.ImageField imageField)
@@ -111,7 +115,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Mobile2)">
-                                <input type="number" name="Mobile2" onwheel="this.blur()" class="form-control" placeholder="@Model.Fields["Mobile2"]" pattern="^0\d{9,11}$" size="10" maxlength="10" v-model="model.Mobile2">
+                                <input type="number" name="Mobile2" onwheel="this.blur()" class="form-control" placeholder="@Model.Fields["Mobile2"]" pattern="^0\d{8,11}$" size="10" maxlength="10" v-model="model.Mobile2">
 
                                 <field-messages auto-label name="Mobile2" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                     <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
@@ -150,7 +154,7 @@
 
                             <div class="col-md-6">
                                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Building)">
-                                    <input type="text" name="Building" class="form-control" placeholder="@Model.Fields["Building"] *" v-on:keyup="AddressOptionClick" :required="required.Receipt" pattern='^[^~;*<>\"|+=%]+$' size="50" maxlength="50" v-model="model.Building">
+                                    <input type="text" name="Building" class="form-control" placeholder="@Model.Fields["Building"]" v-on:keyup="AddressOptionClick" pattern='^[^~;*<>\"|+=%]+$' size="50" maxlength="50" v-model="model.Building">
 
                                     <field-messages auto-label name="Building" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                         <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
@@ -162,7 +166,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Soi)">
-                                    <input type="text" name="Soi" class="form-control" placeholder="@Model.Fields["Soi"] *" v-on:keyup="AddressOptionClick" :required="required.Receipt" pattern='^[^~;*<>\"|+=%]+$' size="20" maxlength="20" v-model="model.Soi">
+                                    <input type="text" name="Soi" class="form-control" placeholder="@Model.Fields["Soi"]" v-on:keyup="AddressOptionClick" pattern='^[^~;*<>\"|+=%]+$' size="20" maxlength="20" v-model="model.Soi">
 
                                     <field-messages auto-label name="Soi" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                         <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
@@ -173,7 +177,7 @@
 
                             <div class="col-md-6">
                                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.Road)">
-                                    <input type="text" name="Road" class="form-control" placeholder="@Model.Fields["Road"] *" v-on:keyup="AddressOptionClick" :required="required.Receipt" pattern='^[^~;*<>\"|+=%]+$' size="50" maxlength="50" v-model="model.Road">
+                                    <input type="text" name="Road" class="form-control" placeholder="@Model.Fields["Road"]" v-on:keyup="AddressOptionClick" pattern='^[^~;*<>\"|+=%]+$' size="50" maxlength="50" v-model="model.Road">
 
                                     <field-messages auto-label name="Road" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                         <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
@@ -313,7 +317,7 @@
                                 <h4 class="text-label">@Model.Fields["BranchLabel"]</h4>
                         </div>*@
                         <div class="col-md-6">
-                            <validate auto-label class="form-group cust-select required-field" :class="fieldClassName(formstate.SelectProvince)">
+                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.SelectProvince)">
                                 <select name="SelectProvince" :required="required.Branch" class="form-control none-bgd" id="selProvince" v-model="model.BranchProvince">
                                     <option value="" selected disabled>@Model.Fields["BranchProvince"]</option>
                                     <option v-for="(p, index) in Provinces" v-bind:value="p.Province" v-bind:key="index">{{p.Province}}</option>
@@ -324,10 +328,10 @@
                             </validate>
                         </div>
                         <div class="col-md-6">
-                            <validate auto-label class="form-group cust-select required-field" :class="fieldClassName(formstate.SelectBranch)">
+                            <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.SelectBranch)">
                                 <select name="SelectBranch" :required="required.Branch" class="form-control none-bgd" id="selBranch" v-model="model.BranchName">
                                     <option value="" selected disabled>@Model.Fields["Branch"]</option>
-                                    <option v-for="(c, index) in Branches" v-bind:value="c.BranchCode" v-bind:key="index">{{c.BranchName}}</option>
+                                    @*<option v-for="(c, index) in Branches" v-bind:value="c.BranchCode" v-bind:key="index">{{c.BranchName}}</option>*@
                                 </select>
 
                                 <field-messages auto-label name="SelectBranch" show="$dirty || $touched || $submitted" class="form-control-feedback">
@@ -392,7 +396,7 @@
 
                             <div class="col-md-6">
                                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostBuilding)">
-                                    <input type="text" name="PostBuilding" class="form-control" placeholder="@Model.Fields["Building"] *" v-on:keyup="copyAddressBack" :required="required.Post" size="50" pattern='^[^~;*<>\"|+=%]+$' maxlength="50" v-model="model.PostBuilding">
+                                    <input type="text" name="PostBuilding" class="form-control" placeholder="@Model.Fields["Building"]" v-on:keyup="copyAddressBack" size="50" pattern='^[^~;*<>\"|+=%]+$' maxlength="50" v-model="model.PostBuilding">
 
                                     <field-messages auto-label name="PostBuilding" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                         <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
@@ -404,7 +408,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostSoi)">
-                                    <input type="text" name="PostSoi" class="form-control" placeholder="@Model.Fields["Soi"] *" v-on:keyup="copyAddressBack" :required="required.Post" size="20" pattern='^[^~;*<>\"|+=%]+$' maxlength="20" v-model="model.PostSoi">
+                                    <input type="text" name="PostSoi" class="form-control" placeholder="@Model.Fields["Soi"]" v-on:keyup="copyAddressBack" size="20" pattern='^[^~;*<>\"|+=%]+$' maxlength="20" v-model="model.PostSoi">
 
                                     <field-messages auto-label name="PostSoi" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                         <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
@@ -415,7 +419,7 @@
 
                             <div class="col-md-6">
                                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.PostRoad)">
-                                    <input type="text" name="PostRoad" class="form-control" placeholder="@Model.Fields["Road"] *" v-on:keyup="copyAddressBack" :required="required.Post" size="50" pattern='^[^~;*<>\"|+=%]+$'  maxlength="50" v-model="model.PostRoad">
+                                    <input type="text" name="PostRoad" class="form-control" placeholder="@Model.Fields["Road"]" v-on:keyup="copyAddressBack" size="50" pattern='^[^~;*<>\"|+=%]+$'  maxlength="50" v-model="model.PostRoad">
 
                                     <field-messages auto-label name="PostRoad" show="$dirty || $touched || $submitted" class="form-control-feedback">
                                         <div class="small-pad" slot="required">@Model.Fields["ReqAllField"]</div>
@@ -660,7 +664,10 @@
                     }
                 }
             </div>
-
+			<div class="row pad-bot">
+                <div class="row lineSection"><hr></div>
+                <div class="text-center"><span>@Model.Fields["ConfirmNoteLabel"]  </span></div>
+			</div>
             <div class="text-label ">
                 <div class="row text-center">
                     <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onSubmit" type="submit">@Model.Fields["ConfirmButton"]</button></div>
@@ -864,8 +871,8 @@
             </div>
             <div class="text-label">
                 <div class="row text-center">
-                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="onPrint" type="submit">@Model.Fields["PrintButton"]</button></div>                   
-                    <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-primary" v-on:click="showModal = true">@Model.Fields["CancelLabel"]</button></div>                   
+                    <div class="col-md-12"><button class="btn btn-primary" v-on:click="onPrint" type="submit">@Model.Fields["PrintButton"]</button></div>                   
+                                   
                 </div>
             </div>
         </div>

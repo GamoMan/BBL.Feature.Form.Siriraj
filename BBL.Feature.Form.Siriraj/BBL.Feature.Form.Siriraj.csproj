@@ -141,6 +141,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\Siriraj\css\select2.css" />
+    <Content Include="assets\Siriraj\css\select2.min.css" />
     <Content Include="assets\Siriraj\css\Style.css" />
     <Content Include="assets\Siriraj\css\vue-thai-address-input.css" />
     <Content Include="assets\Siriraj\css\vue-thailand-address.min.css" />
@@ -150,6 +152,7 @@
     <Content Include="assets\Siriraj\js\delete.js" />
     <Content Include="assets\Siriraj\js\jquery-1.10.2.min.js" />
     <Content Include="assets\Siriraj\js\botqrcode.js" />
+    <Content Include="assets\Siriraj\js\select2.min.js" />
     <Content Include="assets\Siriraj\js\stringformat.js" />
     <Content Include="assets\Siriraj\js\vue-barcode.common.js" />
     <Content Include="assets\Siriraj\js\vue-barcode.esm.js" />

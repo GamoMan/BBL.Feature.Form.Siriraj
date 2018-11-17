@@ -57,6 +57,7 @@ var app = new Vue({
         this.result.TypeText[0] = $('#Type1').val();
         this.result.TypeText[1] = $('#Type3').val();
         this.result.TypeText[2] = $('#Type2').val();
+        $("#app").css("display", "block");  
     },
     methods: {
         dummy: function () {
